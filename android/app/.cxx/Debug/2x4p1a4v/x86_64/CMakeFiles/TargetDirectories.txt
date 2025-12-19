@@ -1,0 +1,2 @@
+/Users/mac/flutterProjects/openworld/android/app/.cxx/Debug/2x4p1a4v/x86_64/CMakeFiles/edit_cache.dir
+/Users/mac/flutterProjects/openworld/android/app/.cxx/Debug/2x4p1a4v/x86_64/CMakeFiles/rebuild_cache.dir

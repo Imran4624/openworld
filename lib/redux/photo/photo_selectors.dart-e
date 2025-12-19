@@ -1,0 +1,106 @@
+import 'package:flutter_boilerplate/redux/static/static_state.dart';
+import 'package:flutter_boilerplate/redux/app/app_state.dart';
+import 'package:memoize/memoize.dart';
+import 'package:built_collection/built_collection.dart';
+import 'package:flutter_boilerplate/data/models/models.dart';
+import 'package:flutter_boilerplate/redux/ui/list_ui_state.dart';
+
+var memoizedDropdownPhotoList = memo5(
+    (BuiltMap<String, PhotoEntity> photoMap, BuiltList<String> photoList,
+            StaticState staticState, BuiltMap<String, UserEntity> userMap,
+            String? clientId) =>
+        dropdownPhotosSelector(photoMap, photoList, staticState, userMap, clientId));
+
+List<String> dropdownPhotosSelector(
+    BuiltMap<String, PhotoEntity> photoMap,
+    BuiltList<String> photoList,
+    StaticState staticState,
+    BuiltMap<String, UserEntity> userMap,
+    String? clientId) {
+  final list = photoList.where((photoId) {
+    final photo = photoMap[photoId];
+    if (photo == null) {
+      return false;
+    }
+    /*
+    if (clientId != null && clientId > 0 && photo.clientId != clientId) {
+      return false;
+    }
+    */
+    return photo.isActive;
+  }).toList();
+
+  list.sort((photoAId, photoBId) {
+    final photoA = photoMap[photoAId]!;
+    final photoB = photoMap[photoBId]!;
+
+    // STARTER: primary field - do not remove comment
+  });
+
+  return list;
+}
+
+var memoizedFilteredPhotoList = memo4((SelectionState selectionState,
+        BuiltMap<String, PhotoEntity> photoMap,
+        BuiltList<String> photoList,
+        ListUIState photoListState) =>
+    filteredPhotosSelector(selectionState, photoMap, photoList, photoListState));
+
+List<String> filteredPhotosSelector(
+    SelectionState selectionState,
+    BuiltMap<String, PhotoEntity> photoMap,
+    BuiltList<String> photoList,
+    ListUIState photoListState) {
+  final filterEntityId = selectionState.filterEntityId;
+  // final filterEntityType = selectionState.filterEntityType;
+
+  final filteredList = photoList.where((photoId) {
+    final photo = photoMap[photoId];
+    if (photo == null) {
+      return false;
+    }
+
+    if (filterEntityId != null && photo.id != filterEntityId) {
+      return false;
+    }
+
+    if (!photo.matchesStates(photoListState.stateFilters)) {
+      return false;
+    }
+
+    // Uncomment if using custom filters in future
+    // if (photoListState.custom1Filters.isNotEmpty &&
+    //     !photoListState.custom1Filters.contains(photo.customValue1)) {
+    //   return false;
+    // } else if (photoListState.custom2Filters.isNotEmpty &&
+    //     !photoListState.custom2Filters.contains(photo.customValue2)) {
+    //   return false;
+    // } else if (photoListState.custom3Filters.isNotEmpty &&
+    //     !photoListState.custom3Filters.contains(photo.customValue3)) {
+    //   return false;
+    // } else if (photoListState.custom4Filters.isNotEmpty &&
+    //     !photoListState.custom4Filters.contains(photo.customValue4)) {
+    //   return false;
+    // }
+
+    return photo.matchesFilter(photoListState.filter);
+  }).toList();
+
+  final uniquePhotos = <String, String>{};
+  for (final photoId in filteredList) {
+    final photo = photoMap[photoId];
+    if (photo != null) {
+      uniquePhotos[photo.id] = photoId; 
+    }
+  }
+
+  final sortedList = uniquePhotos.values.toList();
+    // ..sort((photoAId, photoBId) {
+    //   final photoA = photoMap[photoAId]!;
+    //   final photoB = photoMap[photoBId]!;
+    //   return photoA.compareTo(
+    //       photoB, photoListState.sortField, photoListState.sortAscending);
+    // });
+
+  return sortedList;
+}

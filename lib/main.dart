@@ -1,0 +1,388 @@
+// Dart imports:
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
+// Flutter imports:
+import 'package:flutter_boilerplate/project_config.dart';
+import 'package:flutter_boilerplate/redux/logging/logging_middleware.dart';
+import 'package:flutter_boilerplate/utils/platforms.dart';
+import 'package:device_preview/device_preview.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:flutter_boilerplate/redux/dynamicField/dynamic_field_middleware.dart';
+import 'package:flutter_boilerplate/.env.dart';
+
+// Package imports:
+import 'package:redux/redux.dart';
+import 'package:redux_logging/redux_logging.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:bitsdojo_window/bitsdojo_window.dart';
+
+// Project imports:
+import 'package:flutter_boilerplate/ui/app/shared.dart';
+import 'package:flutter_boilerplate/constants.dart';
+import 'package:flutter_boilerplate/data/models/serializers.dart';
+import 'package:flutter_boilerplate/main_app.dart';
+import 'package:flutter_boilerplate/redux/app/app_middleware.dart';
+import 'package:flutter_boilerplate/redux/app/app_reducer.dart';
+import 'package:flutter_boilerplate/redux/app/app_state.dart';
+import 'package:flutter_boilerplate/redux/auth/auth_middleware.dart';
+import 'package:flutter_boilerplate/redux/dashboard/dashboard_middleware.dart';
+import 'package:flutter_boilerplate/redux/design/design_middleware.dart';
+import 'package:flutter_boilerplate/redux/settings/settings_middleware.dart';
+import 'package:flutter_boilerplate/redux/ui/pref_state.dart';
+import 'package:flutter_boilerplate/redux/user/user_middleware.dart';
+import 'package:window_manager/window_manager.dart';
+// STARTER: import - do not remove comment
+import 'package:flutter_boilerplate/redux/payment/payment_middleware.dart';
+
+import 'package:flutter_boilerplate/redux/product/product_middleware.dart';
+
+import 'package:flutter_boilerplate/redux/social/social_middleware.dart';
+
+import 'package:flutter_boilerplate/redux/photo/photo_middleware.dart';
+
+import 'package:flutter_boilerplate/redux/workout/workout_middleware.dart';
+
+import 'package:flutter_boilerplate/redux/notification/notification_middleware.dart';
+
+import 'package:flutter_boilerplate/redux/profile_operation/profile_operation_middleware.dart';
+
+import 'package:flutter_boilerplate/redux/profile/profile_middleware.dart';
+
+import 'package:flutter_boilerplate/redux/event/event_middleware.dart';
+
+import 'package:flutter_boilerplate/redux/chat/chat_middleware.dart';
+
+import 'package:flutter_boilerplate/redux/company/company_middleware.dart';
+
+import 'package:flutter_boilerplate/utils/web_stub.dart'
+    if (dart.library.html) 'package:flutter_boilerplate/utils/web.dart';
+
+// https://github.com/dart-lang/io/issues/83#issuecomment-940617222
+const isrgRootX1 = '''-----BEGIN CERTIFICATE-----
+MIIFazCCA1OgAwIBAgIRAIIQz7DSQONZRGPgu2OCiwAwDQYJKoZIhvcNAQELBQAw
+TzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2Vh
+cmNoIEdyb3VwMRUwEwYDVQQDEwxJU1JHIFJvb3QgWDEwHhcNMTUwNjA0MTEwNDM4
+WhcNMzUwNjA0MTEwNDM4WjBPMQswCQYDVQQGEwJVUzEpMCcGA1UEChMgSW50ZXJu
+ZXQgU2VjdXJpdHkgUmVzZWFyY2ggR3JvdXAxFTATBgNVBAMTDElTUkcgUm9vdCBY
+MTCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBAK3oJHP0FDfzm54rVygc
+h77ct984kIxuPOZXoHj3dcKi/vVqbvYATyjb3miGbESTtrFj/RQSa78f0uoxmyF+
+0TM8ukj13Xnfs7j/EvEhmkvBioZxaUpmZmyPfjxwv60pIgbz5MDmgK7iS4+3mX6U
+A5/TR5d8mUgjU+g4rk8Kb4Mu0UlXjIB0ttov0DiNewNwIRt18jA8+o+u3dpjq+sW
+T8KOEUt+zwvo/7V3LvSye0rgTBIlDHCNAymg4VMk7BPZ7hm/ELNKjD+Jo2FR3qyH
+B5T0Y3HsLuJvW5iB4YlcNHlsdu87kGJ55tukmi8mxdAQ4Q7e2RCOFvu396j3x+UC
+B5iPNgiV5+I3lg02dZ77DnKxHZu8A/lJBdiB3QW0KtZB6awBdpUKD9jf1b0SHzUv
+KBds0pjBqAlkd25HN7rOrFleaJ1/ctaJxQZBKT5ZPt0m9STJEadao0xAH0ahmbWn
+OlFuhjuefXKnEgV4We0+UXgVCwOPjdAvBbI+e0ocS3MFEvzG6uBQE3xDk3SzynTn
+jh8BCNAw1FtxNrQHusEwMFxIt4I7mKZ9YIqioymCzLq9gwQbooMDQaHWBfEbwrbw
+qHyGO0aoSCqI3Haadr8faqU9GY/rOPNk3sgrDQoo//fb4hVC1CLQJ13hef4Y53CI
+rU7m2Ys6xt0nUW7/vGT1M0NPAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNV
+HRMBAf8EBTADAQH/MB0GA1UdDgQWBBR5tFnme7bl5AFzgAiIyBpY9umbbjANBgkq
+hkiG9w0BAQsFAAOCAgEAVR9YqbyyqFDQDLHYGmkgJykIrGF1XIpu+ILlaS/V9lZL
+ubhzEFnTIZd+50xx+7LSYK05qAvqFyFWhfFQDlnrzuBZ6brJFe+GnY+EgPbk6ZGQ
+3BebYhtF8GaV0nxvwuo77x/Py9auJ/GpsMiu/X1+mvoiBOv/2X/qkSsisRcOj/KK
+NFtY2PwByVS5uCbMiogziUwthDyC3+6WVwW6LLv3xLfHTjuCvjHIInNzktHCgKQ5
+ORAzI4JMPJ+GslWYHb4phowim57iaztXOoJwTdwJx4nLCgdNbOhdjsnvzqvHu7Ur
+TkXWStAmzOVyyghqpZXjFaH3pO3JLF+l+/+sKAIuvtd7u+Nxe5AW0wdeRlN8NwdC
+jNPElpzVmbUq4JUagEiuTDkHzsxHpFKVK7q4+63SM1N95R1NbdWhscdCb+ZAJzVc
+oyi3B43njTOQ5yOf+1CceWxG1bQVs5ZufpsMljq4Ui0/1lvh+wjChP4kqKOJ2qxq
+4RgqsahDYVvTH9w7jXbyLeiNdd8XM2w9U/t7y0Ff/9yi0GE44Za4rF2LN9d11TPA
+mRGunUHBcnWEvgJBQl9nJEiU0Zsnvgc/ubhPgXRR4Xq37Z0j4r7g1SgEEzwxA57d
+emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=
+-----END CERTIFICATE-----
+''';
+
+// https://www.reddit.com/r/flutterhelp/comments/1cnb3q0/certificate_verify_failed_whats_the_right/
+class MyHttpOverrides extends HttpOverrides {
+  MyHttpOverrides(this.host);
+  final String host;
+
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) {
+        return this.host == host;
+      };
+  }
+}
+
+void main({bool isTesting = false}) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  if (isWeb()) {
+    await Firebase.initializeApp(
+      options: const FirebaseOptions(
+          apiKey: Config.API_KEY,
+          authDomain: Config.AUTH_DOMAIN,
+          projectId: Config.PROJECT_ID,
+          storageBucket: Config.STORAGE_BUCKET,
+          messagingSenderId: Config.MESSAGING_SENDER_ID,
+          appId: Config.APP_ID,
+          measurementId: Config.MEASUREMENT_ID),
+    );
+  } else if (isAndroid() || isIOS()) {
+    await Firebase.initializeApp();
+  }
+
+  try {
+    Stripe.publishableKey = Config.STRIPE_PUBLISHABLE_KEY;
+    if (kDebugMode) {
+      logInfo('Stripe initialized successfully');
+    }
+  } catch (e) {
+    if (kDebugMode) {
+      logError('Error initializing Stripe: $e');
+    }
+  }
+
+  if (ProjectConfig.enableGoogleAnalytics) {
+    try {
+      final analytics = FirebaseAnalytics.instance;
+      await analytics.setAnalyticsCollectionEnabled(true);
+      
+      await analytics.logEvent(
+        name: 'app_launched',
+        parameters: {
+          'app_version': '1.0.0',
+          'platform': 'flutter',
+          'timestamp': DateTime.now().millisecondsSinceEpoch,
+          'debug_mode': 'true',
+        },
+      );
+    } catch (e) {
+      logError('Error initializing Firebase Analytics: $e');
+    }
+  }
+
+  final prefs = await SharedPreferences.getInstance();
+  HttpOverrides.global =
+      MyHttpOverrides(prefs.getString(kSharedPrefHostOverride) ?? '');
+
+  _registerErrorHandlers();
+
+  try {
+    SecurityContext.defaultContext.setTrustedCertificatesBytes(
+      Uint8List.fromList(isrgRootX1.codeUnits),
+    );
+  } catch (e) {
+    // Ignore CERT_ALREADY_IN_HASH_TABLE
+  }
+
+  if (isDesktopOS()) {
+    await windowManager.ensureInitialized();
+
+    windowManager.waitUntilReadyToShow(
+        WindowOptions(
+          center: true,
+          size: Size(
+            prefs.getDouble(kSharedPrefWidth) ?? 800,
+            prefs.getDouble(kSharedPrefHeight) ?? 600,
+          ),
+        ), () async {
+      await windowManager.show();
+      await windowManager.focus();
+
+      if (prefs.getBool(kSharedPrefMaximized) == true) {
+        windowManager.maximize();
+      }
+    });
+  }
+
+  final store = Store<AppState>(appReducer,
+      initialState: await _initialState(isTesting, prefs),
+      middleware: []
+        ..addAll(createStoreAuthMiddleware())
+        ..addAll(createStoreDashboardMiddleware())
+        ..addAll(createStoreSettingsMiddleware())
+        // STARTER: middleware - do not remove comment
+        ..addAll(createStorePaymentsMiddleware())
+        ..addAll(createStoreProductsMiddleware())
+        ..addAll(createStoreSocialsMiddleware())
+        ..addAll(createStorePhotosMiddleware())
+        ..addAll(createStoreWorkoutsMiddleware())
+        ..addAll(createStoreNotificationsMiddleware())
+        ..addAll(createStoreProfileOperationsMiddleware())
+        ..addAll(createStoreProfilesMiddleware())
+        ..addAll(createStoreEventsMiddleware())
+        ..addAll(createStoreChatsMiddleware())
+        ..addAll(createStoreCompanyMiddleware())
+        ..addAll(createDynamicFieldMiddleware())
+        ..addAll(createStoreDesignsMiddleware())
+        ..addAll(createStoreUsersMiddleware())
+        ..addAll(createStorePersistenceMiddleware())
+        ..addAll(createLoggingMiddleware())
+        ..addAll(isTesting || kReleaseMode || !Config.DEBUG_EVENTS
+            ? []
+            : [
+                LoggingMiddleware<dynamic>.printer(
+                  formatter: LoggingMiddleware.multiLineFormatter,
+                ),
+              ]));
+
+  runApp(
+    DevicePreview(
+      enabled: ProjectConfig.devicePreviewEnabled,
+      backgroundColor: Colors.blueGrey,
+      // tools: const [
+      //   DeviceSection(),
+      //   SystemSection(
+      //     locale: false,
+      //   ),
+      //   AccessibilitySection(),
+      // ],
+      builder: (context) => FlutterBoilerplateApp(store: store),
+    ),
+  );
+
+  // if (!kReleaseMode) {
+  //   runApp(
+  //     DevicePreview(
+  //       enabled: true, //set to false in production
+  //       tools: [
+  //         const DeviceSection(),
+  //         const SystemSection(
+  //           locale: false,
+  //         ),
+  //         const AccessibilitySection(),
+  //       ],
+  //       builder: (context) => FlutterBoilerplateApp(store: store),
+  //     ),
+  //   );
+  // } else {
+  //   await SentryFlutter.init(
+  //     (options) {
+  //       options.dsn = Config.SENTRY_DNS;
+  //       options.release = const String.fromEnvironment('SENTRY_RELEASE',
+  //           defaultValue: kClientVersion);
+  //       options.dist = kClientVersion;
+  //       options.beforeSend = (SentryEvent event, {dynamic hint}) {
+  //         final state = store.state;
+  //         final account = state.account;
+  //         final reportErrors = account.reportErrors;
+
+  //         if (!reportErrors) {
+  //           return null;
+  //         }
+
+  //         event = event.copyWith(
+  //           environment: '${store.state.environment}'.split('.').last,
+  //           /*
+  //           extra: <String, dynamic>{
+  //             'server_version': account.currentVersion,
+  //             'route': state.uiState.currentRoute,
+  //           },
+  //           */
+  //         );
+
+  //         return event;
+  //       } as BeforeSendCallback?;
+  //     },
+  //     appRunner: () => runApp(FlutterBoilerplateApp(store: store)),
+  //   );
+  // }
+
+  /*
+  if (isWindows()) {
+    doWhenWindowReady(() {
+      final win = appWindow;
+      win.title = 'Flutter Boilerplate';
+      win.show();
+    });
+  }
+  */
+}
+
+Future<AppState> _initialState(bool isTesting, SharedPreferences prefs) async {
+  final prefString = prefs.getString(kSharedPrefs);
+
+  final url = WebUtils.apiUrl ?? prefs.getString(kSharedPrefUrl) ?? '';
+  if (!kReleaseMode) {
+    //url = kAppStagingUrl;
+    //url = kAppProductionUrl;
+    //url = kAppDemoUrl;
+  }
+
+  PrefState? prefState = PrefState();
+  if (prefString != null) {
+    try {
+      prefState = serializers.deserializeWith(
+          PrefState.serializer, json.decode(prefString));
+    } catch (e) {
+      logError('Failed to load prefs: $e');
+    }
+  }
+
+  final defaultTheme = ProjectConfig.defaultThemeLightOrDark();
+
+  prefState = prefState!.rebuild((b) => b
+    ..enableDarkModeSystem = defaultTheme == null
+        ? PlatformDispatcher.instance.platformBrightness == Brightness.dark
+        : defaultTheme == kBrightnessDark
+    ..darkModeType = defaultTheme ?? kBrightnessSytem);
+
+  String? browserRoute;
+  if (isWeb() && prefState.isDesktop) {
+    browserRoute = WebUtils.browserRoute;
+    if (browserRoute!.isNotEmpty && browserRoute.length > 4) {
+      if (browserRoute == '/kanban') {
+        browserRoute = '/task';
+        prefState = prefState.rebuild((b) => b..showKanban = true);
+      }
+    } else {
+      browserRoute = null;
+    }
+  }
+
+  bool reportErrors = false;
+  bool whiteLabeled = false;
+  String? referralCode = '';
+
+  if (isWeb()) {
+    reportErrors = WebUtils.getHtmlValue('report-errors') == '1';
+    whiteLabeled = WebUtils.getHtmlValue('white-label') == '1';
+    referralCode = WebUtils.getHtmlValue('rc');
+    if (reportErrors) {
+      logError('Reporting is not enabled');
+    }
+  }
+
+  return AppState(
+    prefState: prefState,
+    url: Config.DEMO_MODE ? '' : url,
+    referralCode: referralCode,
+    reportErrors: reportErrors,
+    isWhiteLabeled: whiteLabeled,
+    currentRoute: browserRoute,
+  );
+}
+
+void _registerErrorHandlers() {
+  /*
+  // * Show some error UI if any uncaught exception happens
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+    //errorLogger.logError(details.exception, details.stack);
+  };
+  // * Handle errors from the underlying platform/OS
+  PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
+    //errorLogger.logError(error, stack);
+    return true;
+  };
+  */
+
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    return Material(
+      color: Colors.grey.shade100,
+      child: Center(
+        child: Text(
+          details.toString(),
+          style: const TextStyle(color: Colors.black),
+        ),
+      ),
+    );
+  };
+}

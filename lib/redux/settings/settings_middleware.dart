@@ -1,0 +1,360 @@
+// Flutter imports:
+import 'package:flutter/material.dart';
+import 'package:flutter_boilerplate/project_config.dart';
+import 'package:flutter_boilerplate/redux/user/user_actions.dart';
+import 'package:flutter_boilerplate/utils/widgets.dart';
+import 'package:flutter_boilerplate/ui/app/shared.dart';
+
+// Package imports:
+import 'package:redux/redux.dart';
+
+// Project imports:
+import 'package:flutter_boilerplate/constants.dart';
+import 'package:flutter_boilerplate/data/models/company_model.dart';
+import 'package:flutter_boilerplate/data/repositories/profile_repository.dart';
+import 'package:flutter_boilerplate/data/repositories/settings_repository.dart';
+import 'package:flutter_boilerplate/main_app.dart';
+import 'package:flutter_boilerplate/redux/app/app_actions.dart';
+import 'package:flutter_boilerplate/redux/app/app_state.dart';
+import 'package:flutter_boilerplate/redux/auth/auth_actions.dart';
+import 'package:flutter_boilerplate/redux/company/company_actions.dart';
+import 'package:flutter_boilerplate/redux/settings/settings_actions.dart';
+import 'package:flutter_boilerplate/redux/ui/ui_actions.dart';
+import 'package:flutter_boilerplate/ui/settings/settings_screen.dart';
+
+List<Middleware<AppState>> createStoreSettingsMiddleware([
+  SettingsRepository repository = const SettingsRepository(),
+  ProfileRepository profileRepository = const ProfileRepository(),
+]) {
+  final viewSettings = _viewSettings();
+  final saveCompany = _saveCompany(repository);
+  final saveEInvoiceCertificate = _saveEInvoiceCertificate(repository);
+  final saveAuthUser = _saveAuthUser(repository);
+  final connectOAuthUser = _connectOAuthUser(repository);
+  final disconnectOAuthUser = _disconnectOAuthUser(repository);
+  final disconnectOAuthMailer = _disconnectOAuthMailer(repository);
+  final connectGmailUser = _connectGmailUser(repository);
+  final saveSettings = _saveSettings(repository);
+  final uploadLogo = _uploadLogo(repository);
+  final disableTwoFactor = _disableTwoFactor(repository);
+
+  return [
+    TypedMiddleware<AppState, ViewSettings>(viewSettings),
+    TypedMiddleware<AppState, SaveCompanyRequest>(saveCompany),
+    TypedMiddleware<AppState, SaveEInvoiceCertificateRequest>(
+        saveEInvoiceCertificate),
+    TypedMiddleware<AppState, SaveAuthUserRequest>(saveAuthUser),
+    TypedMiddleware<AppState, ConnecOAuthUserRequest>(connectOAuthUser),
+    TypedMiddleware<AppState, DisconnecOAuthUserRequest>(disconnectOAuthUser),
+    TypedMiddleware<AppState, DisconnectOAuthMailerRequest>(
+        disconnectOAuthMailer),
+    TypedMiddleware<AppState, ConnecGmailUserRequest>(connectGmailUser),
+    TypedMiddleware<AppState, DisableTwoFactorRequest>(disableTwoFactor),
+    TypedMiddleware<AppState, SaveUserSettingsRequest>(saveSettings),
+    TypedMiddleware<AppState, UploadLogoRequest>(uploadLogo),
+  ];
+}
+
+Middleware<AppState> _viewSettings() {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as ViewSettings;
+    final uiState = store.state.uiState;
+
+    checkForChanges(
+        store: store,
+        force: action.force,
+        callback: () {
+          String route = SettingsScreen.route;
+
+          if (action.section != null) {
+            route += '/${action.section}';
+          } else if (uiState.mainRoute == kSettings) {
+            route += '/${ProjectConfig.defaultSettingsToOpenInDesktopView()}';
+          } else {
+            route += '/${uiState.settingsUIState.section}';
+          }
+
+          // if (store.state.isStale) {
+          //   store.dispatch(RefreshData());
+          // }
+          if (action.section == 'user_management') {
+            store.dispatch(LoadUsers());
+          }
+          store.dispatch(UpdateCurrentRoute(route));
+
+          next(action);
+
+          if (store.state.prefState.isMobile) {
+            if (action.section == null) {
+              navigatorKey.currentState!.pushNamedAndRemoveUntil(
+                  SettingsScreen.route, (Route<dynamic> route) => false);
+            } else {
+              navigatorKey.currentState!.pushNamed(route);
+            }
+          }
+        });
+  };
+}
+
+Middleware<AppState> _saveCompany(SettingsRepository settingsRepository) {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as SaveCompanyRequest;
+
+    settingsRepository
+        .saveCompany(store.state.credentials, action.company!)
+        .then((company) {
+      store.dispatch(SaveCompanySuccess(company));
+      action.completer!.complete();
+      WidgetUtils.updateData();
+    }).catchError((Object error) {
+      logError(' Error in saveCompany middleware: $error');
+      store.dispatch(SaveCompanyFailure(error));
+      action.completer!.completeError(error);
+    });
+
+    next(action);
+  };
+}
+
+Middleware<AppState> _saveEInvoiceCertificate(
+    SettingsRepository settingsRepository) {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as SaveEInvoiceCertificateRequest;
+
+    settingsRepository
+        .saveEInvoiceCertificate(
+      store.state.credentials,
+      action.company,
+      action.eInvoiceCertificate,
+    )
+        .then((company) {
+      store.dispatch(SaveEInvoiceCertificateSuccess(company));
+      action.completer.complete();
+    }).catchError((Object error) {
+      logError(' Error in saveEInvoiceCertificate middleware: $error');
+      store.dispatch(SaveEInvoiceCertificateFailure(error));
+      action.completer.completeError(error);
+    });
+
+    next(action);
+  };
+}
+
+Middleware<AppState> _saveAuthUser(SettingsRepository settingsRepository) {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as SaveAuthUserRequest;
+
+    settingsRepository
+        .saveAuthUser(store.state.credentials, action.user, action.password,
+            action.idToken)
+        .then((user) {
+      store.dispatch(SaveAuthUserSuccess(user));
+      if (action.completer != null) {
+        action.completer!.complete();
+      }
+      WidgetUtils.updateData();
+    }).catchError((Object error) {
+      logError(' Error in saveAuthUser middleware: $error');
+      store.dispatch(SaveAuthUserFailure(error));
+      if ('$error'.contains('412')) {
+        store.dispatch(UserUnverifiedPassword());
+      }
+      if (action.completer != null) {
+        action.completer!.completeError(error);
+      }
+    });
+
+    next(action);
+  };
+}
+
+Middleware<AppState> _connectOAuthUser(SettingsRepository settingsRepository) {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as ConnecOAuthUserRequest;
+
+    settingsRepository
+        .connectOAuthUser(
+      store.state.credentials,
+      action.provider,
+      action.password,
+      action.idToken,
+      action.accessToken,
+    )
+        .then((user) {
+      store.dispatch(ConnectOAuthUserSuccess(user));
+      if (action.completer != null) {
+        action.completer!.complete();
+      }
+    }).catchError((Object error) {
+      logError(' Error in connectOAuthUser middleware: $error');
+      store.dispatch(ConnecOAuthUserFailure(error));
+      if ('$error'.contains('412')) {
+        store.dispatch(UserUnverifiedPassword());
+      }
+      if (action.completer != null) {
+        action.completer!.completeError(error);
+      }
+    });
+
+    next(action);
+  };
+}
+
+Middleware<AppState> _disconnectOAuthUser(
+    SettingsRepository settingsRepository) {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as DisconnecOAuthUserRequest;
+
+    settingsRepository
+        .disconnectOAuthUser(
+      store.state.credentials,
+      action.user!,
+      action.password,
+      action.idToken,
+    )
+        .then((user) {
+      store.dispatch(DisconnectOAuthUserSuccess(user));
+      action.completer.complete();
+    }).catchError((Object error) {
+      logError(' Error in disconnectOAuthUser middleware: $error');
+      store.dispatch(DisconnecOAuthUserFailure(error));
+      if ('$error'.contains('412')) {
+        store.dispatch(UserUnverifiedPassword());
+      }
+      action.completer.completeError(error);
+    });
+
+    next(action);
+  };
+}
+
+Middleware<AppState> _disconnectOAuthMailer(
+    SettingsRepository settingsRepository) {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as DisconnectOAuthMailerRequest;
+
+    settingsRepository
+        .disconnectOAuthMailer(
+      store.state.credentials,
+      action.password,
+      action.idToken,
+      action.user!.id,
+    )
+        .then((user) {
+      store.dispatch(DisconnectOAuthMailerSuccess(user));
+      action.completer.complete();
+    }).catchError((Object error) {
+      logError(' Error in disconnectOAuthMailer middleware: $error');
+      store.dispatch(DisconnectOAuthMailerFailure(error));
+      if ('$error'.contains('412')) {
+        store.dispatch(UserUnverifiedPassword());
+      }
+      action.completer.completeError(error);
+    });
+
+    next(action);
+  };
+}
+
+Middleware<AppState> _connectGmailUser(SettingsRepository settingsRepository) {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as ConnecGmailUserRequest;
+
+    settingsRepository
+        .connectGmailUser(store.state.credentials, action.password,
+            action.idToken, action.serverAuthCode)
+        .then((user) {
+      store.dispatch(ConnecGmailUserSuccess(user));
+      if (action.completer != null) {
+        action.completer!.complete();
+      }
+    }).catchError((Object error) {
+      logError(' Error in connectGmailUser middleware: $error');
+      store.dispatch(ConnecGmailUserFailure(error));
+      if ('$error'.contains('412')) {
+        store.dispatch(UserUnverifiedPassword());
+      }
+      if (action.completer != null) {
+        action.completer!.completeError(error);
+      }
+    });
+
+    next(action);
+  };
+}
+
+Middleware<AppState> _disableTwoFactor(SettingsRepository settingsRepository) {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as DisableTwoFactorRequest;
+
+    settingsRepository
+        .disableTwoFactor(
+            store.state.credentials, action.password, action.idToken)
+        .then((_) {
+      store.dispatch(DisableTwoFactorSuccess());
+      action.completer.complete();
+    }).catchError((Object error) {
+      logError(' Error in disableTwoFactor middleware: $error');
+      store.dispatch(DisableTwoFactorFailure(error));
+      if ('$error'.contains('412')) {
+        store.dispatch(UserUnverifiedPassword());
+      }
+      action.completer.completeError(error);
+    });
+
+    next(action);
+  };
+}
+
+Middleware<AppState> _saveSettings(SettingsRepository settingsRepository) {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as SaveUserSettingsRequest;
+
+    settingsRepository
+        .saveUserSettings(store.state.credentials, action.user)
+        .then((userCompany) {
+      store.dispatch(SaveUserSettingsSuccess(userCompany));
+      action.completer.complete();
+    }).catchError((Object error) {
+      logError(' Error in saveSettings middleware: $error');
+      store.dispatch(SaveUserSettingsFailure(error));
+      action.completer.completeError(error);
+    });
+
+    next(action);
+  };
+}
+
+Middleware<AppState> _uploadLogo(SettingsRepository settingsRepository) {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as UploadLogoRequest;
+    final state = store.state;
+    // final settingsState = state.uiState.settingsUIState;
+    // final entityId = action.type == EntityType.company
+    //     ? state.company.id
+    //     : action.type == EntityType.group
+    //         ? settingsState.group.id
+    //         : settingsState.client.id;
+    final entityId = state.company.id;
+    settingsRepository
+        .uploadLogo(store.state.credentials, entityId, action.multipartFile,
+            action.type)
+        .then((entity) {
+      // if (action.type == EntityType.client) {
+      //   store.dispatch(SaveClientSuccess(entity as ClientEntity));
+      // } else if (action.type == EntityType.group) {
+      //   store.dispatch(SaveGroupSuccess(entity as GroupEntity));
+      // } else {
+      //   store.dispatch(SaveCompanySuccess(entity as CompanyEntity));
+      // }
+      store.dispatch(SaveCompanySuccess(entity as CompanyEntity));
+      action.completer!.complete();
+    }).catchError((Object error) {
+      logError(' Error in uploadLogo middleware: $error');
+      store.dispatch(UploadLogoFailure(error));
+      action.completer!.completeError(error);
+    });
+
+    next(action);
+  };
+}

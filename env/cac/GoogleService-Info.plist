@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>460489660874-n8e7vk6ld062jcuiabvq2e68765lbuiv.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.460489660874-n8e7vk6ld062jcuiabvq2e68765lbuiv</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>460489660874-8ebfhg9qqjueqsqgatspj08il29hiabv.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAlrX8wFpIcvQP8HXS3ILD4uNdn2iwQb9U</string>
+	<key>GCM_SENDER_ID</key>
+	<string>460489660874</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.cocktailsandconversation.app</string>
+	<key>PROJECT_ID</key>
+	<string>cocktails-d9e40</string>
+	<key>STORAGE_BUCKET</key>
+	<string>cocktails-d9e40.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:460489660874:ios:e95f745c1ed64a09445733</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app may use your location to see if you're at the event venue</string>
+</dict>
+</plist>

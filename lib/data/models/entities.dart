@@ -1,0 +1,516 @@
+// Package imports:
+import 'package:built_collection/built_collection.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
+
+// Project imports:
+import 'package:flutter_boilerplate/constants.dart';
+import 'package:flutter_boilerplate/data/models/models.dart';
+import 'package:flutter_boilerplate/project_config.dart';
+import 'package:flutter_boilerplate/ui/app/shared.dart';
+import 'package:flutter_boilerplate/utils/formatting.dart';
+import 'package:flutter_boilerplate/utils/strings.dart';
+
+part 'entities.g.dart';
+
+class EntityType extends EnumClass {
+  const EntityType._(String name) : super(name);
+
+  static Serializer<EntityType> get serializer => _$entityTypeSerializer;
+
+  static const EntityType dashboard = _$dashboard;
+  static const EntityType settings = _$settings;
+  static const EntityType user = _$user;
+  static const EntityType company = _$company;
+  static const EntityType design = _$design;
+  static const EntityType auth = _$auth;
+  // STARTER: entity type - do not remove comment
+  static const EntityType payment = _$payment;
+
+  static const EntityType product = _$product;
+
+  static const EntityType social = _$social;
+
+  static const EntityType photo = _$photo;
+
+  static const EntityType workout = _$workout;
+
+  static const EntityType notification = _$notification;
+
+  static const EntityType profileOperation = _$profileOperation;
+
+  static const EntityType profile = _$profile;
+
+  static const EntityType event = _$event;
+
+  static const EntityType chat = _$chat;
+
+  static const EntityType paymentTerm = _$paymentTerm;
+  static const EntityType contact = _$contact;
+  static const EntityType country = _$country;
+  static const EntityType currency = _$currency;
+  static const EntityType language = _$language;
+  static const EntityType industry = _$industry;
+  static const EntityType size = _$size;
+  static const EntityType taskStatus = _$taskStatus;
+  static const EntityType timezone = _$timezone;
+  static const EntityType dateFormat = _$dateFormat;
+  static const EntityType font = _$font;
+
+  String get plural {
+    if (this == EntityType.taskStatus) {
+      return 'taskStatuses';
+    }
+
+    return readableValue + 's';
+  }
+
+  bool get isSetting => [
+        EntityType.paymentTerm,
+        EntityType.user,
+        EntityType.design,
+        EntityType.taskStatus,
+      ].contains(this);
+
+  List<EntityType> get relatedTypes {
+    switch (this) {
+      case EntityType.user:
+        return [];
+      case EntityType.design:
+        return [];
+      case EntityType.event:
+        return ProjectConfig.relatedEntities(EntityType.event);
+      default:
+        return [];
+    }
+  }
+
+  EntityType get baseType {
+    return this;
+  }
+
+  bool get hideCreate => this == EntityType.settings;
+
+  String get snakeCase => toSnakeCase(toString());
+
+  String get apiValue {
+    return snakeCase;
+  }
+
+  String get pluralApiValue {
+    if (this == EntityType.taskStatus) {
+      return 'task_statuses';
+    }
+    return snakeCase + 's';
+  }
+
+  String get readableValue {
+    return toString();
+  }
+
+  bool get hasFullWidthViewer =>
+      ProjectConfig.fullWidthEntities().contains(this);
+
+  static BuiltSet<EntityType> get values => _$typeValues;
+
+  static EntityType valueOf(String name) => _$typeValueOf(name);
+}
+
+class EntityState extends EnumClass {
+  const EntityState._(String name) : super(name);
+
+  static Serializer<EntityState> get serializer => _$entityStateSerializer;
+
+  static const EntityState active = _$active;
+  static const EntityState archived = _$archived;
+  static const EntityState myEntities = _$myEntities;
+  static const EntityState deleted = _$deleted;
+  static const EntityState reported = _$reported;
+  static const EntityState activeAndMineEntities = _$activeAndMineEntities;
+
+  static BuiltSet<EntityState> get values => _$values;
+
+  static EntityState valueOf(String name) => _$valueOf(name);
+}
+
+class EmailTemplate extends EnumClass {
+  const EmailTemplate._(String name) : super(name);
+
+  static Serializer<EmailTemplate> get serializer => _$emailTemplateSerializer;
+
+  static const EmailTemplate invoice = _$invoice_email;
+  static const EmailTemplate quote = _$quote_email;
+  static const EmailTemplate payment = _$payment_email;
+  static const EmailTemplate payment_partial = _$payment_partial_email;
+  static const EmailTemplate payment_failed = _$payment_failed_email;
+  static const EmailTemplate credit = _$credit_email;
+  static const EmailTemplate purchase_order = _$purchase_order;
+  static const EmailTemplate statement = _$statement_email;
+  static const EmailTemplate reminder1 = _$reminder1_email;
+  static const EmailTemplate reminder2 = _$reminder2_email;
+  static const EmailTemplate reminder3 = _$reminder3_email;
+  static const EmailTemplate reminder_endless = _$reminder_endless_email;
+  static const EmailTemplate quote_reminder1 = _$quote_reminder1_email;
+  static const EmailTemplate custom1 = _$custom1_email;
+  static const EmailTemplate custom2 = _$custom2_email;
+  static const EmailTemplate custom3 = _$custom3_email;
+
+  static BuiltSet<EmailTemplate> get values => _$templateValues;
+
+  static EmailTemplate valueOf(String name) => _$templateValueOf(name);
+}
+
+class UserPermission extends EnumClass {
+  const UserPermission._(String name) : super(name);
+
+  static Serializer<UserPermission> get serializer =>
+      _$userPermissionSerializer;
+
+  static const UserPermission create = _$create;
+  static const UserPermission edit = _$edit;
+  static const UserPermission view = _$view;
+
+  static BuiltSet<UserPermission> get values => _$permissionValues;
+
+  static UserPermission valueOf(String name) => _$permissionValueOf(name);
+}
+
+abstract mixin class EntityStatus {
+  String get id;
+
+  String get name;
+}
+
+class EntityStats {
+  const EntityStats({
+    this.countActive,
+    this.countArchived,
+    this.total,
+  });
+
+  final int? countActive;
+
+  final int? countArchived;
+
+  final double? total;
+
+  String present(String activeLabel, String archivedLabel) {
+    String str = '';
+    if (countActive! > 0) {
+      str = '$countActive $activeLabel';
+      if (countArchived! > 0) {
+        str += ' • ';
+      }
+    }
+    if (countArchived! > 0) {
+      str += '$countArchived $archivedLabel';
+    }
+    return str;
+  }
+}
+
+abstract mixin class SelectableEntity {
+  String get id;
+
+  bool matchesFilter(String? filter) => true;
+
+  String? matchesFilterValue(String? filter) => null;
+
+  String get listDisplayName => 'Error: listDisplayName not set';
+
+  double? get listDisplayAmount => null;
+
+  FormatNumberType? get listDisplayAmountType => FormatNumberType.money;
+}
+
+class EntityFields {
+  static const String createdAt = 'created_at';
+  static const String updatedAt = 'updated_at';
+  static const String archivedAt = 'archived_at';
+  static const String assignedTo = 'assigned_to';
+  static const String createdBy = 'created_by';
+  static const String state = 'entity_state';
+  static const String isDeleted = 'is_deleted';
+  static const String isReported = 'reported';
+}
+
+abstract mixin class BaseEntity implements SelectableEntity {
+  static int counter = 0;
+
+  static String get nextId => '${--counter}';
+
+  static String get nextIdempotencyKey => getRandomString();
+
+  bool? get isChanged;
+
+  @BuiltValueField(wireName: 'created_at')
+  int get createdAt;
+
+  @BuiltValueField(wireName: 'updated_at')
+  int get updatedAt;
+
+  @BuiltValueField(wireName: 'archived_at')
+  int get archivedAt;
+
+  @BuiltValueField(wireName: 'is_deleted')
+  bool? get isDeleted;
+
+  @BuiltValueField(wireName: 'reported')
+  bool? get isReported;
+
+  @BuiltValueField(wireName: 'user_id')
+  String? get createdUserId;
+
+  @BuiltValueField(wireName: 'assigned_user_id')
+  String? get assignedUserId;
+
+  @BuiltValueField(wireName: 'entity_type')
+  EntityType? get entityType;
+
+  String get entityKey => '__${entityType}__${id}__';
+
+  bool get isNew => id.isEmpty || (int.tryParse(id) ?? 0) < 0;
+
+  bool get isOld => !isNew;
+
+  bool get isDeletable => true;
+
+  bool get isActive => !isArchived && !isDeleted!;
+
+  bool get isNotActive => isArchived || isDeleted!;
+
+  bool get isArchived => archivedAt > 0 && !isDeleted!;
+
+  bool get isEditable => !isDeleted!;
+
+  bool get isRestorable => true;
+
+  bool userCanAccess(String userId) =>
+      createdUserId == userId || assignedUserId == userId;
+
+  String get entityState => isActive
+      ? kEntityStateActive
+      : (isArchived ? kEntityStateArchived : kEntityStateDeleted);
+
+  List<EntityAction?> getActions(
+      {UserCompanyEntity? userCompany,
+      bool includeEdit = false,
+      bool multiselect = false,
+      bool? isGuest,
+      bool? isAuthor}) {
+    final actions = <EntityAction?>[];
+
+    if (userCompany == null) {
+      return [];
+    }
+
+    // Only restrict actions for guest if isGuest is true (not null)
+    if (isGuest == true || userCompany.permissions.isEmpty) {
+      return [];
+    }
+
+    // if (isNew || entityType == EntityType.company) {
+    //   return [];
+    // }
+
+    if (includeEdit && userCompany.canEditEntity(this)) {
+      actions.add(EntityAction.edit);
+    }
+
+    if (userCompany.canEditEntity(this) && (isArchived || isDeleted!)) {
+      actions.add(EntityAction.restore);
+    }
+
+    if (userCompany.canEditEntity(this) && isActive) {
+      actions.add(EntityAction.archive);
+    }
+
+    if (userCompany.canEditEntity(this) && (isActive || isArchived)) {
+      actions.add(EntityAction.delete);
+    }
+
+    return actions;
+  }
+
+  bool matchesEntityFilter(
+      EntityType? filterEntityType, String? filterEntityId) {
+    return id == filterEntityId && entityType == filterEntityType;
+  }
+
+  bool matchesStatuses(BuiltList<EntityStatus> statuses) {
+    return true;
+  }
+
+  bool matchesStates(BuiltList<EntityState> states) {
+    if (states.isEmpty) {
+      return true;
+    }
+
+    if (states.contains(EntityState.active) && isActive) {
+      return true;
+    }
+
+    if (states.contains(EntityState.archived) && isArchived) {
+      return true;
+    }
+    if (states.contains(EntityState.myEntities)) {
+      return true;
+    }
+
+    if (states.contains(EntityState.deleted) && isDeleted!) {
+      return true;
+    }
+    if (states.contains(EntityState.reported) && isReported!) {
+      return true;
+    }
+
+    return false;
+  }
+}
+
+abstract mixin class HasActivities {
+  BuiltList<ActivityEntity> get activities;
+
+  Iterable<ActivityEntity> getActivities({String? invoiceId, String? typeId}) {
+    return activities.where((activity) {
+      if (typeId != null && activity.activityTypeId != typeId) {
+        return false;
+      }
+      return true;
+    });
+  }
+}
+
+abstract mixin class BelongsToClient {
+  String? get clientId;
+}
+
+abstract mixin class BelongsToVendor {
+  String get vendorId;
+}
+
+abstract class ErrorMessage
+    implements Built<ErrorMessage, ErrorMessageBuilder> {
+  factory ErrorMessage([void updates(ErrorMessageBuilder b)]) = _$ErrorMessage;
+
+  ErrorMessage._();
+
+  @override
+  @memoized
+  int get hashCode;
+
+  String get message;
+
+  static Serializer<ErrorMessage> get serializer => _$errorMessageSerializer;
+}
+
+abstract class LoginResponse
+    implements Built<LoginResponse, LoginResponseBuilder> {
+  factory LoginResponse([void updates(LoginResponseBuilder b)]) =
+      _$LoginResponse;
+
+  LoginResponse._();
+
+  @override
+  @memoized
+  int get hashCode;
+
+  @BuiltValueField(wireName: 'data')
+  BuiltList<UserCompanyEntity> get userCompanies;
+
+  StaticDataEntity get static;
+
+  static Serializer<LoginResponse> get serializer => _$loginResponseSerializer;
+}
+
+class CustomFieldType {
+  static const String company = 'company';
+  static const String company1 = 'company1';
+  static const String company2 = 'company2';
+  static const String company3 = 'company3';
+  static const String company4 = 'company4';
+
+  static const String user = 'user';
+  static const String user1 = 'user1';
+  static const String user2 = 'user2';
+  static const String user3 = 'user3';
+  static const String user4 = 'user4';
+}
+
+abstract class ActivityEntity
+    implements Built<ActivityEntity, ActivityEntityBuilder> {
+  factory ActivityEntity([void updates(ActivityEntityBuilder b)]) =
+      _$ActivityEntity;
+
+  ActivityEntity._();
+
+  @override
+  @memoized
+  int get hashCode;
+
+  String get notes;
+
+  @BuiltValueField(wireName: 'id')
+  String get key;
+
+  @BuiltValueField(wireName: 'activity_type_id')
+  String get activityTypeId;
+
+  @BuiltValueField(wireName: 'user_id')
+  String get userId;
+
+  @BuiltValueField(wireName: 'updated_at')
+  int get updatedAt;
+
+  @BuiltValueField(wireName: 'created_at')
+  int get createdAt;
+
+  @BuiltValueField(wireName: 'is_system')
+  bool? get isSystem;
+
+  String? get ip;
+
+  @BuiltValueField(wireName: 'token_id')
+  String? get tokenId;
+
+  // TODO remove isEmpty check
+  bool get isComment =>
+      activityTypeId == kActivityComment || activityTypeId.isEmpty;
+
+  EntityType? get entityType {
+    if (isComment) {}
+    if ([
+      kActivityCreateUser,
+      kActivityUpdateUser,
+      kActivityArchiveUser,
+      kActivityDeleteUser,
+      kActivityRestoreUser,
+    ].contains(activityTypeId)) {
+      return EntityType.user;
+    } else {
+      logError(
+          'Failed to resolve entity type - activity_type_id: $activityTypeId');
+      return null;
+    }
+  }
+
+  String getDescription(
+    String? activity,
+    String? systemString,
+    String? recurringString, {
+    UserEntity? user,
+  }) {
+    activity =
+        activity!.replaceFirst(':user', user?.listDisplayName ?? systemString!);
+    activity = activity.replaceAll('  ', ' ');
+
+    return activity;
+  }
+
+  // ignore: unused_element
+  static void _initializeBuilder(ActivityEntityBuilder builder) =>
+      builder..createdAt = 0;
+
+  static Serializer<ActivityEntity> get serializer =>
+      _$activityEntitySerializer;
+}

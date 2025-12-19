@@ -1,0 +1,65 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_boilerplate/ui/app/scrollable_listview.dart';
+import 'package:flutter_boilerplate/ui/event/view/event_view_vm.dart';
+import 'package:flutter_boilerplate/ui/app/view_scaffold.dart';
+// STARTER: import - do not remove comment
+
+class EventView extends StatefulWidget {
+
+  const EventView({
+    Key? key,
+    required this.viewModel,
+    required this.isFilter,
+  }) : super(key: key);
+
+  final EventViewVM viewModel;
+  final bool isFilter;
+
+  @override
+  _EventViewState createState() => new _EventViewState();
+}
+
+class _EventViewState extends State<EventView> {
+  @override
+  Widget build(BuildContext context) {
+    final viewModel = widget.viewModel;
+    final event = viewModel.event;
+
+    return ViewScaffold(
+      isFilter: widget.isFilter,
+      entity: event,
+      //STARTER: primary field - do not remove comment
+title: event.name,
+      onBackPressed: () => viewModel.onBackPressed(),
+      body: ScrollableListView(
+        children: <Widget>[
+          const SizedBox(height: 16.0),
+          FieldGrid(
+            {
+             // STARTER: field grid - do not remove comment
+EventFields.name: event.name,
+EventFields.accessCode: event.accessCode,
+EventFields.callToAction: event.callToAction,
+EventFields.chk: event.chk,
+EventFields.currency: event.currency,
+EventFields.description: event.description,
+EventFields.end: event.end.toString(),
+EventFields.start: event.start.toString(),
+EventFields.eventSeriesId: event.eventSeriesId,
+EventFields.hidden: event.hidden.toString(),
+EventFields.onlineEvent: event.onlineEvent.toString(),
+EventFields.privateEvent: event.privateEvent.toString(),
+EventFields.status: event.status,
+EventFields.ticketsAvailable: event.ticketsAvailable.toString(),
+EventFields.totalHolds: event.totalHolds.toString(),
+EventFields.totalIssuedTickets: event.totalIssuedTickets.toString(),
+EventFields.totalOrders: event.totalOrders.toString(),
+EventFields.unavailable: event.unavailable.toString(),
+EventFields.unavailableStatus: event.unavailableStatus,
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}

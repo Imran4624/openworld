@@ -1,0 +1,259 @@
+import 'package:redux/redux.dart';
+import 'package:built_collection/built_collection.dart';
+import 'package:flutter_boilerplate/redux/app/app_actions.dart';
+import 'package:flutter_boilerplate/data/models/models.dart';
+import 'package:flutter_boilerplate/redux/company/company_actions.dart';
+import 'package:flutter_boilerplate/redux/ui/entity_ui_state.dart';
+import 'package:flutter_boilerplate/redux/notification/notification_actions.dart';
+import 'package:flutter_boilerplate/redux/ui/list_ui_state.dart';
+import 'package:flutter_boilerplate/redux/notification/notification_state.dart';
+
+EntityUIState notificationUIReducer(StubUIState state, dynamic action) {
+  return state.rebuild((b) => b
+    ..listUIState.replace(notificationListReducer(state.listUIState, action))
+    ..editing.replace(editingReducer(state.editing, action)!)
+    ..selectedId = selectedIdReducer(state.selectedId, action)
+    ..forceSelected = forceSelectedReducer(state.forceSelected, action)
+    ..tabIndex = tabIndexReducer(state.tabIndex, action)
+  );
+}
+
+final forceSelectedReducer = combineReducers<bool?>([
+  TypedReducer<bool?, ViewStub>((completer, action) => true),
+  TypedReducer<bool?, ViewStubList>((completer, action) => false),
+  TypedReducer<bool?, FilterStubsByState>((completer, action) => false),
+  TypedReducer<bool?, FilterStubs>((completer, action) => false),
+]);
+
+final tabIndexReducer = combineReducers<int?>([
+  TypedReducer<int?, UpdateStubTab>((completer, action) => action.tabIndex),
+  TypedReducer<int?, PreviewEntity>((completer, action) => 0),
+]);
+
+Reducer<String?> selectedIdReducer = combineReducers([
+  TypedReducer<String?, ArchiveStubsSuccess>((completer, action) => ''),
+  TypedReducer<String?, DeleteStubsSuccess>((completer, action) => ''),
+  TypedReducer<String?, PurgeStubsSuccess>((completer, action) => ''),
+  TypedReducer<String?, PreviewEntity>((selectedId, action) =>
+      action.entityType == EntityType.notification ? action.entityId : selectedId),
+  TypedReducer<String?, ViewStub>(
+      (String? selectedId, dynamic action) => action.notificationId),
+  TypedReducer<String?, AddStubSuccess>(
+      (String? selectedId, dynamic action) => action.notification.id),
+  TypedReducer<String?, SelectCompany>(
+      (selectedId, action) => action.clearSelection ? '' : selectedId),
+  TypedReducer<String?, ClearEntityFilter>((selectedId, action) => ''),
+  TypedReducer<String?, SortStubs>((selectedId, action) => ''),
+  TypedReducer<String?, FilterStubs>((selectedId, action) => ''),
+  TypedReducer<String?, FilterStubsByState>((selectedId, action) => ''),
+  TypedReducer<String?, FilterByEntity>((selectedId, action) =>
+      action.clearSelection
+          ? ''
+          : action.entityType == EntityType.notification ? action.entityId : selectedId),
+]);
+
+final editingReducer = combineReducers<StubEntity?>([
+  TypedReducer<StubEntity?, SaveStubSuccess>(_updateEditing),
+  TypedReducer<StubEntity?, AddStubSuccess>(_updateEditing),
+  TypedReducer<StubEntity?, RestoreStubsSuccess>((notifications, action) {
+    return action.notifications[0];
+  }),
+  TypedReducer<StubEntity?, ArchiveStubsSuccess>((notifications, action) {
+    return action.notifications[0];
+  }),
+  TypedReducer<StubEntity?, DeleteStubsSuccess>((notifications, action) {
+    return action.notifications[0];
+  }),
+  TypedReducer<StubEntity?, PurgeStubsSuccess>((notifications, action) {
+    return action.notifications[0];
+  }),
+  TypedReducer<StubEntity?, EditStub>(_updateEditing),
+  TypedReducer<StubEntity?, UpdateStub>((notification, action) {
+    return action.notification.rebuild((b) => b..isChanged = true);
+  }),
+  TypedReducer<StubEntity?, DiscardChanges>(_clearEditing),
+]);
+
+StubEntity _clearEditing(StubEntity? notification, dynamic action) {
+  return StubEntity();
+}
+
+StubEntity? _updateEditing(StubEntity? notification, dynamic action) {
+  return action.notification;
+}
+
+final notificationListReducer = combineReducers<ListUIState>([
+  TypedReducer<ListUIState, SortStubs>(_sortStubs),
+  TypedReducer<ListUIState, FilterStubsByState>(_filterStubsByState),
+  TypedReducer<ListUIState, FilterStubs>(_filterStubs),
+  TypedReducer<ListUIState, StartStubMultiselect>(_startListMultiselect),
+  TypedReducer<ListUIState, AddToStubMultiselect>(_addToListMultiselect),
+  TypedReducer<ListUIState, RemoveFromStubMultiselect>(_removeFromListMultiselect),
+  TypedReducer<ListUIState, ClearStubMultiselect>(_clearListMultiselect),
+  TypedReducer<ListUIState, ViewStubList>(_viewStubList),
+  TypedReducer<ListUIState, FilterByEntity>((state, action) => state.rebuild(
+        (b) => b
+          ..filter = null
+          ..filterClearedAt = DateTime.now().millisecondsSinceEpoch,
+      )),
+]);
+
+ListUIState _viewStubList(ListUIState notificationListState, ViewStubList action) {
+  return notificationListState.rebuild((b) => b
+    ..selectedIds = null
+    ..filter = null
+    ..filterClearedAt = DateTime.now().millisecondsSinceEpoch);
+}
+
+ListUIState _filterStubsByState(
+    ListUIState notificationListState, FilterStubsByState action) {
+  if (notificationListState.stateFilters.contains(action.state)) {
+    return notificationListState
+        .rebuild((b) => b
+          ..stateFilters.clear()
+          ..stateFilters.add(EntityState.active));
+  } else {
+    return notificationListState
+        .rebuild((b) => b
+          ..stateFilters.clear()
+          ..stateFilters.add(action.state));
+  }
+}
+
+ListUIState _filterStubs(ListUIState notificationListState, FilterStubs action) {
+  return notificationListState.rebuild((b) => b
+    ..filter = action.filter
+    ..filterClearedAt = action.filter == null
+        ? DateTime.now().millisecondsSinceEpoch
+        : notificationListState.filterClearedAt);
+}
+
+ListUIState _sortStubs(ListUIState notificationListState, SortStubs action) {
+  return notificationListState.rebuild((b) => b
+    ..sortAscending = b.sortField != action.field || !b.sortAscending!
+    ..sortField = action.field);
+}
+
+ListUIState _startListMultiselect(
+    ListUIState productListState, StartStubMultiselect action) {
+  return productListState.rebuild((b) => b..selectedIds = ListBuilder());
+}
+
+ListUIState _addToListMultiselect(
+    ListUIState productListState, AddToStubMultiselect action) {
+  return productListState.rebuild((b) => b..selectedIds.add(action.entity.id));
+}
+
+ListUIState _removeFromListMultiselect(
+    ListUIState productListState, RemoveFromStubMultiselect action) {
+  return productListState.rebuild((b) => b..selectedIds.remove(action.entity.id));
+}
+
+ListUIState _clearListMultiselect(
+    ListUIState productListState, ClearStubMultiselect action) {
+  return productListState.rebuild((b) => b..selectedIds = null);
+}
+
+final notificationsReducer = combineReducers<StubState>([
+  TypedReducer<StubState, SaveStubSuccess>(_updateStub),
+  TypedReducer<StubState, AddStubSuccess>(_addStub),
+  TypedReducer<StubState, LoadStubsSuccess>(_setLoadedStubs),
+  TypedReducer<StubState, LoadStubSuccess>(_setLoadedStub),
+  TypedReducer<StubState, UpdateLastDocumentAction>(_updateLastDocument),
+  TypedReducer<StubState, UpdateStubFilter>(_updateStubFilter),
+  // TypedReducer<StubState, LoadCompanySuccess>(_setLoadedCompany), //uncomment this if you its dependant on selected company
+  TypedReducer<StubState, ArchiveStubsSuccess>(_archiveStubSuccess),
+  TypedReducer<StubState, DeleteStubsSuccess>(_deleteStubSuccess),
+  TypedReducer<StubState, PurgeStubsSuccess>(_purgeStubSuccess),
+  TypedReducer<StubState, RestoreStubsSuccess>(_restoreStubSuccess),
+]);
+
+StubState _archiveStubSuccess(
+    StubState notificationState, ArchiveStubsSuccess action) {
+  final int currentTime = DateTime.now().millisecondsSinceEpoch;
+  return notificationState.rebuild((b) {
+    for (final notification in action.notifications) {
+      b.map[notification.id] = notificationState.map[notification.id]!.rebuild((b) => b
+        ..archivedAt = currentTime);
+    }
+  });
+}
+
+StubState _updateStubFilter(
+    StubState notificationState, UpdateStubFilter action) {
+  return notificationState.rebuild((b) => b..filter = action.filter.toBuilder());
+}
+
+// StubState _deleteStubSuccess(StubState notificationState, DeleteStubsSuccess action) {
+//   return notificationState.rebuild((b) {
+//     for (final notification in action.notifications) {
+//       b.map[notification.id] = notification;
+//     }
+//   });
+// } 
+
+StubState _deleteStubSuccess(
+    StubState notificationState, DeleteStubsSuccess action) {
+  return notificationState.rebuild((b) {
+    for (final notification in action.notifications) {
+      b.map[notification.id] = notificationState.map[notification.id]!.rebuild((b) => b
+        ..isDeleted = true);
+    }
+  });
+}
+
+StubState _purgeStubSuccess(
+    StubState notificationState, PurgeStubsSuccess action) {
+  return notificationState.rebuild((b) {
+    for (final notification in action.notifications) {
+      b.map.remove(notification.id);
+      b.list.remove(notification.id);
+    }
+  });
+}
+
+StubState _restoreStubSuccess(
+    StubState notificationState, RestoreStubsSuccess action) {
+  return notificationState.rebuild((b) {
+    for (final notification in action.notifications) {
+      b.map[notification.id] = notificationState.map[notification.id]!.rebuild((b) => b
+        ..isDeleted = false
+        ..archivedAt = 0);
+    }
+  });
+}
+
+StubState _addStub(StubState notificationState, AddStubSuccess action) {
+  return notificationState.rebuild((b) => b
+    ..map[action.notification.id] = action.notification
+    ..list.add(action.notification.id));
+}
+
+StubState _updateStub(StubState notificationState, SaveStubSuccess action) {
+  return notificationState.rebuild((b) => b..map[action.notification.id] = action.notification);
+}
+StubState _updateLastDocument(
+    StubState notificationState, UpdateLastDocumentAction action) {
+  return notificationState.rebuild((b) => b..lastDocument = action.lastDocument);
+}
+
+StubState _setLoadedStub(StubState notificationState, LoadStubSuccess action) {
+  return notificationState.rebuild((b) => b..map[action.notification.id] = action.notification);
+}
+
+StubState _setLoadedStubs(
+    StubState notificationState, LoadStubsSuccess action) {
+  return notificationState.rebuild((b) {
+    action.notifications.forEach((notification) {
+      b.map[notification.id] = notification;
+      if (!b.list.build().contains(notification.id)) {
+        b.list.add(notification.id);
+      }
+    });
+  });
+}
+
+// StubState _setLoadedCompany(StubState notificationState, LoadCompanySuccess action) {
+//   final company = action.userCompany.company;
+//   return notificationState.loadStubs(company.notifications);
+// }

@@ -1,0 +1,49 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_boilerplate/ui/app/scrollable_listview.dart';
+import 'package:flutter_boilerplate/ui/profile_operation/view/profile_operation_view_vm.dart';
+import 'package:flutter_boilerplate/ui/app/view_scaffold.dart';
+// STARTER: import - do not remove comment
+
+class ProfileOperationView extends StatefulWidget {
+
+  const ProfileOperationView({
+    Key? key,
+    required this.viewModel,
+    required this.isFilter,
+  }) : super(key: key);
+
+  final ProfileOperationViewVM viewModel;
+  final bool isFilter;
+
+  @override
+  _ProfileOperationViewState createState() => new _ProfileOperationViewState();
+}
+
+class _ProfileOperationViewState extends State<ProfileOperationView> {
+  @override
+  Widget build(BuildContext context) {
+    final viewModel = widget.viewModel;
+    final profileOperation = viewModel.profileOperation;
+
+    return ViewScaffold(
+      isFilter: widget.isFilter,
+      entity: profileOperation,
+      //STARTER: primary field - do not remove comment
+title: profileOperation.status,
+      onBackPressed: () => viewModel.onBackPressed(),
+      body: ScrollableListView(
+        children: <Widget>[
+          const SizedBox(height: 16.0),
+          FieldGrid(
+            {
+             // STARTER: field grid - do not remove comment
+ProfileOperationFields.status: profileOperation.status.toString(),
+ProfileOperationFields.comment: profileOperation.comment,
+ProfileOperationFields.type: profileOperation.type.toString(),
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}

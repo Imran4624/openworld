@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "375206486692",
+    "project_id": "lm-test-e40ab",
+    "storage_bucket": "lm-test-e40ab.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:375206486692:android:ee37c27975bce8d6017c31",
+        "android_client_info": {
+          "package_name": "com.londonsmarathon.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlznosMGn9JYt3s2xf42BKFQpXmF7FPts"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

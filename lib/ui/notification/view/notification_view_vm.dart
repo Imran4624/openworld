@@ -1,0 +1,93 @@
+import 'dart:async';
+import 'package:flutter_boilerplate/redux/app/app_actions.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_boilerplate/utils/completers.dart';
+import 'package:flutter_boilerplate/utils/localization.dart';
+import 'package:redux/redux.dart';
+import 'package:flutter_boilerplate/redux/ui/ui_actions.dart';
+import 'package:flutter_boilerplate/ui/notification/notification_screen.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_boilerplate/redux/notification/notification_actions.dart';
+import 'package:flutter_boilerplate/data/models/models.dart';
+import 'package:flutter_boilerplate/ui/notification/view/notification_view.dart';
+import 'package:flutter_boilerplate/redux/app/app_state.dart';
+
+class NotificationViewScreen extends StatelessWidget {
+  const NotificationViewScreen({
+    Key? key,
+    this.isFilter = false,
+  }) : super(key: key);
+
+  static const String route = '/notification/view';
+
+  final bool isFilter;
+
+  @override
+  Widget build(BuildContext context) {
+    return StoreConnector<AppState, NotificationViewVM>(
+      converter: (Store<AppState> store) {
+        return NotificationViewVM.fromStore(store);
+      },
+      builder: (context, vm) {
+        return NotificationView(
+          viewModel: vm,
+          isFilter: isFilter,
+        );
+      },
+    );
+  }
+}
+
+class NotificationViewVM {
+  NotificationViewVM({
+    required this.state,
+    required this.notification,
+    required this.company,
+    required this.onEntityAction,
+    required this.onRefreshed,
+    required this.isSaving,
+    required this.isLoading,
+    required this.isDirty,
+    required this.onBackPressed,
+  });
+
+  factory NotificationViewVM.fromStore(Store<AppState> store) {
+    final state = store.state;
+    final notification =
+        state.notificationState.map[state.notificationUIState.selectedId] ??
+            NotificationEntity(id: state.notificationUIState.selectedId);
+
+    Future<Null> _handleRefresh(BuildContext context) {
+      final completer =
+          snackBarCompleter<Null>(AppLocalization.of(context)!.refreshComplete);
+      store.dispatch(LoadNotification(
+          completer: completer, notificationId: notification.id));
+      return completer.future;
+    }
+
+    return NotificationViewVM(
+      state: state,
+      company: state.company,
+      isSaving: state.isSaving,
+      isLoading: state.isLoading,
+      isDirty: notification.isNew,
+      notification: notification,
+      onRefreshed: (context) => _handleRefresh(context),
+      onBackPressed: () {
+        store.dispatch(UpdateCurrentRoute(NotificationScreen.route));
+      },
+      onEntityAction: (BuildContext context, EntityAction action) =>
+          handleEntitiesActions([notification], action, autoPop: true),
+    );
+  }
+
+  final AppState state;
+  final NotificationEntity notification;
+  final CompanyEntity company;
+  final Function(BuildContext, EntityAction) onEntityAction;
+  final Function(BuildContext) onRefreshed;
+  final Function onBackPressed;
+  final bool isSaving;
+  final bool isLoading;
+  final bool isDirty;
+}

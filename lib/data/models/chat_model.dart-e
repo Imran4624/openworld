@@ -1,0 +1,323 @@
+import 'package:built_value/built_value.dart';
+import 'package:built_collection/built_collection.dart';
+import 'package:built_value/serializer.dart';
+import 'package:flutter_boilerplate/redux/app/app_state.dart';
+import 'package:flutter_boilerplate/data/models/models.dart';
+import 'package:flutter_boilerplate/utils/formatting.dart';
+import 'package:flutter_boilerplate/utils/strings.dart';
+
+part 'chat_model.g.dart';
+
+abstract class ChatFilter implements Built<ChatFilter, ChatFilterBuilder> {
+  factory ChatFilter() {
+    return _$ChatFilter._(
+      searchTerm: '',
+      stateFilter: EntityState.active,
+      sortField: ChatFields.title,
+      sortAscending: true,
+      limit: 10, 
+    );
+  }
+
+  ChatFilter._();
+
+  @override
+  @memoized
+  int get hashCode;
+
+  String get searchTerm;
+  EntityState get stateFilter;
+  String get sortField;
+  bool get sortAscending;
+  int get limit; 
+
+  Map<String, dynamic> toFirebaseQuery() {
+    final Map<String, dynamic> filters = {};
+    
+    // Handle search term
+    if (searchTerm.isNotEmpty) {
+      filters['title'] = searchTerm.toLowerCase();
+    }
+
+    // Handle state filter
+    switch (stateFilter) {
+      case EntityState.active:
+        filters['archived_at'] = 0;
+        filters['is_deleted'] = false;
+        break;
+      case EntityState.archived:
+        filters['archived_at_gt'] = 0;
+        filters['is_deleted'] = false;
+        break;
+      case EntityState.deleted:
+        filters['is_deleted'] = true;
+        break;
+    }
+
+    return {
+      'filters': filters,
+      'sort_field': sortField,
+      'sort_ascending': sortAscending,
+      'limit': limit
+    };
+  }
+
+  static Serializer<ChatFilter> get serializer => _$chatFilterSerializer;
+}
+
+abstract class ChatListResponse
+    implements Built<ChatListResponse, ChatListResponseBuilder> {
+  factory ChatListResponse([void Function(ChatListResponseBuilder) updates]) =
+      _$ChatListResponse;
+
+  ChatListResponse._();
+
+  @override
+  @memoized
+  int get hashCode;
+
+  BuiltList<ChatEntity> get data;
+
+  static Serializer<ChatListResponse> get serializer =>
+      _$chatListResponseSerializer;
+}
+
+abstract class ChatItemResponse
+    implements Built<ChatItemResponse, ChatItemResponseBuilder> {
+  factory ChatItemResponse([void Function(ChatItemResponseBuilder) updates]) =
+      _$ChatItemResponse;
+
+  ChatItemResponse._();
+
+  @override
+  @memoized
+  int get hashCode;
+
+  ChatEntity get data;
+
+  static Serializer<ChatItemResponse> get serializer =>
+      _$chatItemResponseSerializer;
+}
+
+class ChatFields {
+  // STARTER: fields - do not remove comment
+static const String isGroupChat = 'isGroupChat';
+static const String groupName = 'groupName';
+static const String status = 'status';
+static const String centityType = 'centityType';
+static const String centityId = 'centityId';
+static const String groupThumbnail = 'groupThumbnail';
+static const String lastMessage = 'lastMessage';
+static const String lastActive = 'lastActive';
+static const String unreadCount = 'unreadCount';
+}
+
+abstract class ChatEntity extends Object
+    with BaseEntity
+    implements Built<ChatEntity, ChatEntityBuilder> {
+  factory ChatEntity({String? id, AppState? state}) {
+    return _$ChatEntity._(
+      id: id ?? BaseEntity.nextId,
+      isChanged: false,
+      isDeleted: false,
+      createdAt: 0,
+      updatedAt: 0,
+      createdUserId: '',
+      assignedUserId: '',
+      archivedAt: 0,
+      // STARTER: constructor - do not remove comment
+isGroupChat: '',
+
+groupName: '',
+
+status: '',
+
+centityType: '',
+
+centityId: '',
+
+groupThumbnail: '',
+
+lastMessage: '',
+
+lastActive: '',
+
+unreadCount: '',
+
+    );
+  }
+
+  ChatEntity._();
+
+  @override
+  @memoized
+  int get hashCode;
+
+  // STARTER: properties - do not remove comment
+String get isGroupChat;
+
+String get groupName;
+
+String get status;
+
+String get centityType;
+
+String get centityId;
+
+String get groupThumbnail;
+
+String get lastMessage;
+
+String get lastActive;
+
+String get unreadCount;
+
+
+  @override
+  EntityType get entityType => EntityType.chat;
+
+  @override
+  List<EntityAction?> getActions({
+    UserCompanyEntity? userCompany,
+    bool includeEdit = false,
+    bool multiselect = false,
+  }) {
+    final actions = <EntityAction?>[];
+
+    if (!isDeleted! && !multiselect && includeEdit && userCompany?.canEditEntity(this) == true) {
+      actions.add(EntityAction.edit);
+    }
+
+    if (!multiselect && userCompany?.canEditEntity(this) == true) {
+      actions.add(EntityAction.purge);
+    }
+
+    if (actions.isNotEmpty) {
+      actions.add(null);
+    }
+
+    return actions..addAll(super.getActions(userCompany: userCompany));
+  }
+
+  int compareTo(ChatEntity chat, String sortField, bool sortAscending) {
+    int response = 0;
+    final chatA = sortAscending ? this : chat;
+    final chatB = sortAscending ? chat : this;
+
+    switch (sortField) {
+      // STARTER: sort switch - do not remove comment
+case ChatFields.isGroupChat:
+response = chatA.isGroupChat.compareTo(chatB.isGroupChat);
+break;
+
+case ChatFields.groupName:
+response = chatA.groupName.compareTo(chatB.groupName);
+break;
+
+case ChatFields.status:
+response = chatA.status.compareTo(chatB.status);
+break;
+
+case ChatFields.centityType:
+response = chatA.centityType.compareTo(chatB.centityType);
+break;
+
+case ChatFields.centityId:
+response = chatA.centityId.compareTo(chatB.centityId);
+break;
+
+case ChatFields.groupThumbnail:
+response = chatA.groupThumbnail.compareTo(chatB.groupThumbnail);
+break;
+
+case ChatFields.lastMessage:
+response = chatA.lastMessage.compareTo(chatB.lastMessage);
+break;
+
+case ChatFields.lastActive:
+response = chatA.lastActive.compareTo(chatB.lastActive);
+break;
+
+case ChatFields.unreadCount:
+response = chatA.unreadCount.compareTo(chatB.unreadCount);
+break;
+
+      default:
+        logError('sort by chat.$sortField is not implemented');
+        break;
+    }
+
+    if (response == 0) {
+      // STARTER: sort default - do not remove comment
+    } else {
+      return response;
+    }
+  }
+
+  @override
+  bool matchesFilter(String? filter) {
+    return matchesStrings(
+      haystacks: [
+      // STARTER: field names - do not remove comment
+isGroupChat,
+
+groupName,
+
+status,
+
+centityType,
+
+centityId,
+
+groupThumbnail,
+
+lastMessage,
+
+lastActive,
+
+unreadCount,
+
+      ],
+      needle: filter,
+    );
+  }
+
+  @override
+  String? matchesFilterValue(String? filter) {
+    return matchesStringsValue(
+      haystacks: [
+      // STARTER: field names - do not remove comment
+isGroupChat,
+
+groupName,
+
+status,
+
+centityType,
+
+centityId,
+
+groupThumbnail,
+
+lastMessage,
+
+lastActive,
+
+unreadCount,
+
+      ],
+      needle: filter,
+    )!;
+  }
+
+  @override
+  String get listDisplayName => '';
+
+  @override
+  double get listDisplayAmount => 0;
+
+  @override
+  FormatNumberType get listDisplayAmountType => FormatNumberType.int;
+
+  static Serializer<ChatEntity> get serializer => _$chatEntitySerializer;
+}

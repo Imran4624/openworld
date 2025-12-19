@@ -1,0 +1,55 @@
+// Package imports:
+import 'package:flutter_boilerplate/data/models/models.dart';
+import 'package:redux/redux.dart';
+
+// Project imports:
+import 'package:flutter_boilerplate/redux/app/app_actions.dart';
+import 'package:flutter_boilerplate/redux/static/static_state.dart';
+
+Reducer<StaticState> staticReducer = combineReducers([
+  TypedReducer<StaticState, LoadStaticSuccess>(staticLoadedReducer),
+]);
+
+StaticState staticLoadedReducer(
+    StaticState staticState, LoadStaticSuccess action) {
+  final data = action.data!;
+  return StaticState().rebuild((b) => b
+    ..updatedAt = DateTime.now().millisecondsSinceEpoch
+    ..templateMap.replace(data.templates)
+    ..bulkUpdates.replace(data.bulkUpdates)
+    ..currencyMap.addAll(Map<String, CurrencyEntity>.fromIterable(
+      data.currencies,
+      key: (dynamic item) => item.id,
+      value: (dynamic item) => item,
+    ))
+    ..sizeMap.addAll(Map<String, SizeEntity>.fromIterable(
+      data.sizes,
+      key: (dynamic item) => item.id,
+      value: (dynamic item) => item,
+    ))
+    ..industryMap.addAll(Map<String, IndustryEntity>.fromIterable(
+      data.industries,
+      key: (dynamic item) => item.id,
+      value: (dynamic item) => item,
+    ))
+    ..timezoneMap.addAll(Map<String, TimezoneEntity>.fromIterable(
+      data.timezones,
+      key: (dynamic item) => item.id,
+      value: (dynamic item) => item,
+    ))
+    ..dateFormatMap.addAll(Map<String, DateFormatEntity>.fromIterable(
+      data.dateFormats,
+      key: (dynamic item) => item.id,
+      value: (dynamic item) => item,
+    ))
+    ..languageMap.addAll(Map<String, LanguageEntity>.fromIterable(
+      data.languages,
+      key: (dynamic item) => item.id,
+      value: (dynamic item) => item,
+    ))
+    ..countryMap.addAll(Map<String, CountryEntity>.fromIterable(
+      data.countries,
+      key: (dynamic item) => item.id,
+      value: (dynamic item) => item,
+    )));
+}

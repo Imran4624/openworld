@@ -1,0 +1,89 @@
+import 'dart:async';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
+import 'package:built_collection/built_collection.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_boilerplate/redux/ui/entity_ui_state.dart';
+import 'package:flutter_boilerplate/redux/ui/list_ui_state.dart';
+import 'package:flutter_boilerplate/data/models/models.dart';
+import 'package:flutter_boilerplate/redux/ui/pref_state.dart';
+
+part 'notification_state.g.dart';
+
+abstract class NotificationState
+    implements Built<NotificationState, NotificationStateBuilder> {
+  factory NotificationState() {
+    return _$NotificationState._(
+      map: BuiltMap<String, NotificationEntity>(),
+      list: BuiltList<String>(),
+      lastDocument: null,
+      filter: NotificationFilter(),
+      currentFcmToken: '',
+    );
+  }
+  NotificationState._();
+
+  @override
+  @memoized
+  int get hashCode;
+
+  String get currentFcmToken;
+
+  BuiltMap<String, NotificationEntity> get map;
+  BuiltList<String> get list;
+
+  DocumentSnapshot? get lastDocument;
+  NotificationFilter get filter;
+
+  NotificationEntity get(String notificationId) {
+    return map[notificationId] ?? NotificationEntity(id: notificationId);
+  }
+
+  NotificationState loadNotifications(BuiltList<NotificationEntity> clients) {
+    final map = Map<String, NotificationEntity>.fromIterable(
+      clients,
+      key: (dynamic item) => item.id,
+      value: (dynamic item) => item,
+    );
+
+    return rebuild((b) => b
+      ..map.addAll(map)
+      ..list.replace((map.keys.toList() + list.toList()).toSet().toList()));
+  }
+
+  static Serializer<NotificationState> get serializer =>
+      _$notificationStateSerializer;
+}
+
+abstract class NotificationUIState extends Object
+    with EntityUIState
+    implements Built<NotificationUIState, NotificationUIStateBuilder> {
+  factory NotificationUIState(PrefStateSortField? sortField) {
+    return _$NotificationUIState._(
+      listUIState: ListUIState(
+        // STARTER: primary field - do not remove comment
+        sortField?.field ?? NotificationFields.title,
+        sortAscending: sortField?.ascending,
+      ),
+      editing: NotificationEntity(),
+      selectedId: '',
+      tabIndex: 0,
+    );
+  }
+  NotificationUIState._();
+
+  @override
+  @memoized
+  int get hashCode;
+
+  NotificationEntity? get editing;
+
+  @override
+  bool get isCreatingNew => editing?.isNew ?? false;
+
+  @override
+  String get editingId => editing?.id ?? '';
+
+  static Serializer<NotificationUIState> get serializer =>
+      _$notificationUIStateSerializer;
+}

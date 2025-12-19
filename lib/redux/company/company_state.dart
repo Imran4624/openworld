@@ -1,0 +1,121 @@
+// Package imports:
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
+
+// Project imports:
+import 'package:flutter_boilerplate/constants.dart';
+import 'package:flutter_boilerplate/data/models/models.dart';
+import 'package:flutter_boilerplate/redux/design/design_state.dart';
+import 'package:flutter_boilerplate/redux/dynamicField/dynamic_field_state.dart';
+import 'package:flutter_boilerplate/redux/user/user_state.dart';
+
+// STARTER: import - do not remove comment
+import 'package:flutter_boilerplate/redux/payment/payment_state.dart';
+
+import 'package:flutter_boilerplate/redux/product/product_state.dart';
+
+import 'package:flutter_boilerplate/redux/social/social_state.dart';
+
+import 'package:flutter_boilerplate/redux/photo/photo_state.dart';
+
+import 'package:flutter_boilerplate/redux/workout/workout_state.dart';
+
+import 'package:flutter_boilerplate/redux/notification/notification_state.dart';
+
+import 'package:flutter_boilerplate/redux/profile_operation/profile_operation_state.dart';
+
+import 'package:flutter_boilerplate/redux/profile/profile_state.dart';
+
+import 'package:flutter_boilerplate/redux/event/event_state.dart';
+
+import 'package:flutter_boilerplate/redux/chat/chat_state.dart';
+
+part 'company_state.g.dart';
+
+abstract class UserCompanyState
+    implements Built<UserCompanyState, UserCompanyStateBuilder> {
+  factory UserCompanyState(bool reportErrors) {
+    return _$UserCompanyState._(
+      lastUpdated: 0,
+      selectedCompanyId: '',
+      userCompany: UserCompanyEntity(reportErrors),
+      // STARTER: constructor - do not remove comment
+      paymentState: PaymentState(),
+
+      productState: ProductState(),
+
+      socialState: SocialState(),
+
+      photoState: PhotoState(),
+
+      workoutState: WorkoutState(),
+
+      notificationState: NotificationState(),
+
+      profileOperationState: ProfileOperationState(),
+
+      profileState: ProfileState(),
+
+      eventState: EventState(),
+
+      chatState: ChatState(),
+
+      dynamicFieldState: DynamicFieldState(),
+
+      designState: DesignState(),
+      userState: UserState(),
+    );
+  }
+
+  UserCompanyState._();
+
+  @override
+  @memoized
+  int get hashCode;
+
+  int get lastUpdated;
+
+  String get selectedCompanyId;
+
+  UserCompanyEntity get userCompany;
+
+  // STARTER: fields - do not remove comment
+  PaymentState get paymentState;
+  ProductState get productState;
+  SocialState get socialState;
+  PhotoState get photoState;
+  WorkoutState get workoutState;
+  NotificationState get notificationState;
+  ProfileOperationState get profileOperationState;
+  ProfileState get profileState;
+  EventState get eventState;
+  ChatState get chatState;
+
+  DynamicFieldState get dynamicFieldState;
+
+  DesignState get designState;
+
+  UserState get userState;
+
+  CompanyEntity get company => userCompany.company;
+
+  UserEntity get user => userCompany.user;
+
+  bool get isStale {
+    if (!isLoaded) {
+      return true;
+    }
+
+    return DateTime.now().millisecondsSinceEpoch - lastUpdated >
+        kMillisecondsToRefreshData;
+  }
+
+  bool get isLoaded => lastUpdated > 0;
+
+  static Serializer<UserCompanyState> get serializer =>
+      _$userCompanyStateSerializer;
+
+  get clientState => null;
+
+  get groupState => null;
+}

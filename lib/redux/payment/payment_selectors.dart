@@ -1,0 +1,111 @@
+import 'package:flutter_boilerplate/redux/static/static_state.dart';
+import 'package:flutter_boilerplate/redux/app/app_state.dart';
+import 'package:memoize/memoize.dart';
+import 'package:built_collection/built_collection.dart';
+import 'package:flutter_boilerplate/data/models/models.dart';
+import 'package:flutter_boilerplate/redux/ui/list_ui_state.dart';
+
+var memoizedDropdownPaymentList = memo5(
+    (BuiltMap<String, PaymentEntity> paymentMap,
+            BuiltList<String> paymentList,
+            StaticState staticState,
+            BuiltMap<String, UserEntity> userMap,
+            String? clientId) =>
+        dropdownPaymentsSelector(
+            paymentMap, paymentList, staticState, userMap, clientId));
+
+List<String> dropdownPaymentsSelector(
+    BuiltMap<String, PaymentEntity> paymentMap,
+    BuiltList<String> paymentList,
+    StaticState staticState,
+    BuiltMap<String, UserEntity> userMap,
+    String? clientId) {
+  final list = paymentList.where((paymentId) {
+    final payment = paymentMap[paymentId];
+    if (payment == null) {
+      return false;
+    }
+    /*
+    if (clientId != null && clientId > 0 && payment.clientId != clientId) {
+      return false;
+    }
+    */
+    return payment.isActive;
+  }).toList();
+
+  list.sort((paymentAId, paymentBId) {
+    final paymentA = paymentMap[paymentAId]!;
+    final paymentB = paymentMap[paymentBId]!;
+
+    // STARTER: primary field - do not remove comment
+    return paymentA.compareTo(paymentB, PaymentFields.id, true);
+  });
+
+  return list;
+}
+
+var memoizedFilteredPaymentList = memo4((SelectionState selectionState,
+        BuiltMap<String, PaymentEntity> paymentMap,
+        BuiltList<String> paymentList,
+        ListUIState paymentListState) =>
+    filteredPaymentsSelector(
+        selectionState, paymentMap, paymentList, paymentListState));
+
+List<String> filteredPaymentsSelector(
+    SelectionState selectionState,
+    BuiltMap<String, PaymentEntity> paymentMap,
+    BuiltList<String> paymentList,
+    ListUIState paymentListState) {
+  final filterEntityId = selectionState.filterEntityId;
+  // final filterEntityType = selectionState.filterEntityType;
+
+  final filteredList = paymentList.where((paymentId) {
+    final payment = paymentMap[paymentId];
+    if (payment == null) {
+      return false;
+    }
+
+    if (filterEntityId != null && payment.id != filterEntityId) {
+      return false;
+    }
+
+    if (!payment.matchesStates(paymentListState.stateFilters)) {
+      return false;
+    }
+
+    // Uncomment if using custom filters in future
+    // if (paymentListState.custom1Filters.isNotEmpty &&
+    //     !paymentListState.custom1Filters.contains(payment.customValue1)) {
+    //   return false;
+    // } else if (paymentListState.custom2Filters.isNotEmpty &&
+    //     !paymentListState.custom2Filters.contains(payment.customValue2)) {
+    //   return false;
+    // } else if (paymentListState.custom3Filters.isNotEmpty &&
+    //     !paymentListState.custom3Filters.contains(payment.customValue3)) {
+    //   return false;
+    // } else if (paymentListState.custom4Filters.isNotEmpty &&
+    //     !paymentListState.custom4Filters.contains(payment.customValue4)) {
+    //   return false;
+    // }
+
+    return payment.matchesFilter(paymentListState.filter);
+  }).toList();
+
+  final uniquePayments = <String, String>{};
+  for (final paymentId in filteredList) {
+    final payment = paymentMap[paymentId];
+    if (payment != null) {
+      uniquePayments[payment.id] = paymentId;
+    }
+  }
+
+  final sortedList = uniquePayments.values.toList();
+  // ..sort((paymentAId, paymentBId) {
+  //   final paymentA = paymentMap[paymentAId]!;
+  //   final paymentB = paymentMap[paymentBId]!;
+  //   return paymentA.compareTo(
+  //       paymentB, paymentListState.sortField, paymentListState.sortAscending);
+  // });
+
+  return sortedList;
+}

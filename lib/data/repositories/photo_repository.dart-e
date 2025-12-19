@@ -1,0 +1,138 @@
+import 'dart:core';
+import 'package:built_collection/built_collection.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_boilerplate/data/repositories/firebase_repository.dart';
+import 'package:flutter_boilerplate/data/models/serializers.dart';
+import 'package:flutter_boilerplate/data/models/models.dart';
+import 'package:flutter_boilerplate/redux/app/app_state.dart';
+
+class StubRepository {
+  const StubRepository();
+
+  static final FirebaseRepository _firebaseRepository =
+      FirebaseRepository('photos');
+
+  Future<StubEntity> loadItem(Credentials credentials, String entityId) async {
+    final data = await _firebaseRepository.getItem(entityId);
+
+    if (data != null) {
+      return serializers.deserializeWith(StubEntity.serializer, data)!;
+    }
+    throw Exception('Stub with ID $entityId not found');
+  }
+
+  Future<BuiltList<StubEntity>> loadList(Credentials credentials) async {
+    final response = await _firebaseRepository.getList();
+    final dataList = response['data'] as List<Map<String, dynamic>>;
+    final photos = dataList
+        .map((data) =>
+            serializers.deserializeWith(StubEntity.serializer, data)!)
+        .toList();
+
+    return BuiltList<StubEntity>(photos);
+  }
+
+  Future<Map<String, dynamic>> loadListWithPagination({
+    DocumentSnapshot? lastDocument,
+    int limit = 10,
+    StubFilter? filter,
+  }) async {
+    Query query = FirebaseFirestore.instance.collection('photos');
+    
+    if (filter != null) {
+      final queryParams = filter.toFirebaseQuery();
+      final filters = queryParams['filters'] as Map<String, dynamic>;
+
+      if (filter.stateFilter == EntityState.archived) {
+        query = query
+            .where('is_deleted', isEqualTo: false)
+            .where('archived_at', isGreaterThan: 0)
+            .orderBy('archived_at', descending: true);
+      } 
+      else if (filter.stateFilter == EntityState.deleted) {
+        query = query
+            .where('is_deleted', isEqualTo: true)
+            .orderBy('created_at', descending: true);
+      }
+      else {
+        query = query
+            .where('is_deleted', isEqualTo: false)
+            .where('archived_at', isEqualTo: 0)
+            .orderBy('created_at', descending: true);
+      }
+
+      if (filters['title'] != null) {
+        query = query.where('title',
+            isGreaterThanOrEqualTo: filters['title'],
+            isLessThanOrEqualTo: filters['title'] + '\uf8ff');
+      }
+    }
+
+    if (limit > 0) {
+      query = query.limit(limit);
+    }
+
+    if (lastDocument != null) {
+      query = query.startAfterDocument(lastDocument);
+    }
+
+    final response = await _firebaseRepository.getList(
+      customQuery: query,
+      lastDocument: lastDocument,
+      limit: limit,
+    );
+
+    final dataList = response['data'] as List<Map<String, dynamic>>;
+    final lastDocumentSnapshot = response['lastDocument'] as DocumentSnapshot?;
+
+    final photos = dataList
+        .map((data) => serializers.deserializeWith(StubEntity.serializer, data)!)
+        .toList();
+
+    return {
+      'photos': BuiltList<StubEntity>(photos),
+      'lastDocument': lastDocumentSnapshot,
+    };
+  }
+
+  Future<List<StubEntity>> bulkAction(
+      Credentials credentials, List<String> ids, EntityAction action) async {
+    if (action == EntityAction.delete) {
+      for (var id in ids) {
+        final data = {'is_deleted': true};
+        await _firebaseRepository.updateItem(id, data);
+      }
+    } else if (action == EntityAction.archive) {
+      final int currentTime = DateTime.now().millisecondsSinceEpoch;
+      for (var id in ids) {
+        final data = {'archived_at': currentTime};
+        await _firebaseRepository.updateItem(id, data);
+      }
+    } else if (action == EntityAction.restore) {
+      for (var id in ids) {
+        final data = {'archived_at': 0, 'is_deleted': false};
+        await _firebaseRepository.updateItem(id, data);
+      }
+    } else if (action == EntityAction.purge) {
+        await _firebaseRepository.deleteItems(ids);
+    }
+
+    return ids.map((id) => StubEntity(id: id)).toList();
+  }
+
+  Future<StubEntity> saveData(Credentials credentials, StubEntity photo) async {
+    final data =
+        serializers.serializeWith(StubEntity.serializer, photo) as Map<String, dynamic>;
+
+    if (photo.id == null || !(await _firebaseRepository.itemExists(photo.id))) {
+      final newId = FirebaseFirestore.instance.collection('photos').doc().id;
+      data['id'] = newId;
+
+      await _firebaseRepository.saveItem(newId, data);
+      return photo.rebuild((b) => b..id = newId);
+    } else {
+      await _firebaseRepository.saveItem(photo.id, data);
+      return photo;
+    }
+  }
+}

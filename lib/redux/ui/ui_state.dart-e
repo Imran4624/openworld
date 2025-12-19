@@ -1,0 +1,233 @@
+// Package imports:
+import 'package:built_collection/built_collection.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
+
+// Project imports:
+import 'package:flutter_boilerplate/constants.dart';
+import 'package:flutter_boilerplate/data/models/entities.dart';
+import 'package:flutter_boilerplate/project_config.dart';
+import 'package:flutter_boilerplate/redux/dashboard/dashboard_state.dart';
+import 'package:flutter_boilerplate/redux/design/design_state.dart';
+import 'package:flutter_boilerplate/redux/settings/settings_state.dart';
+import 'package:flutter_boilerplate/redux/ui/pref_state.dart';
+import 'package:flutter_boilerplate/redux/user/user_state.dart';
+import 'package:flutter_boilerplate/ui/auth/login_vm.dart';
+import 'package:flutter_boilerplate/utils/strings.dart';
+
+// STARTER: import - do not remove comment
+import 'package:flutter_boilerplate/redux/payment/payment_state.dart';
+
+import 'package:flutter_boilerplate/redux/product/product_state.dart';
+
+import 'package:flutter_boilerplate/redux/social/social_state.dart';
+
+import 'package:flutter_boilerplate/redux/photo/photo_state.dart';
+
+import 'package:flutter_boilerplate/redux/workout/workout_state.dart';
+
+import 'package:flutter_boilerplate/redux/notification/notification_state.dart';
+
+import 'package:flutter_boilerplate/redux/profile_operation/profile_operation_state.dart';
+
+import 'package:flutter_boilerplate/redux/profile/profile_state.dart';
+
+import 'package:flutter_boilerplate/redux/event/event_state.dart';
+
+import 'package:flutter_boilerplate/redux/chat/chat_state.dart';
+
+part 'ui_state.g.dart';
+
+abstract class UIState implements Built<UIState, UIStateBuilder> {
+  factory UIState({
+    String? currentRoute,
+    required BuiltMap<EntityType, PrefStateSortField> sortFields,
+  }) {
+    return _$UIState._(
+      selectedCompanyIndex: 0,
+      filterClearedAt: 0,
+      lastActivityAt: 0,
+      currentRoute: currentRoute ?? ProjectConfig.defaultRouteForGuestUser,
+      previousRoute: '',
+      dismissedFlutterWebWarning: false,
+      previewStack: BuiltList<EntityType>(),
+      filterStack: BuiltList<BaseEntity>(),
+      dashboardUIState: DashboardUIState(),
+      settingsUIState: SettingsUIState(),
+      designUIState: DesignUIState(sortFields[EntityType.design]),
+      userUIState: UserUIState(sortFields[EntityType.user]),
+      // STARTER: constructor - do not remove comment
+      productUIState: ProductUIState(sortFields[EntityType.product]),
+
+      socialUIState: SocialUIState(sortFields[EntityType.social]),
+
+      photoUIState: PhotoUIState(sortFields[EntityType.photo]),
+
+      workoutUIState: WorkoutUIState(sortFields[EntityType.workout]),
+
+      notificationUIState:
+          NotificationUIState(sortFields[EntityType.notification]),
+
+      profileOperationUIState:
+          ProfileOperationUIState(sortFields[EntityType.profileOperation]),
+
+      profileUIState: ProfileUIState(sortFields[EntityType.profile]),
+
+      eventUIState: EventUIState(sortFields[EntityType.event]),
+
+      chatUIState: ChatUIState(sortFields[EntityType.chat]),
+    );
+  }
+
+  UIState._();
+
+  @override
+  @memoized
+  int get hashCode;
+
+  int get selectedCompanyIndex;
+
+  String get currentRoute;
+
+  String get previousRoute;
+
+  bool get dismissedFlutterWebWarning;
+
+  EntityType? get loadingEntityType;
+
+  BuiltList<EntityType> get previewStack;
+
+  BuiltList<BaseEntity> get filterStack;
+
+  BaseEntity get filterEntity => filterStack.last;
+
+  String? get filterEntityId => filterStack.isEmpty ? null : filterEntity.id;
+
+  EntityType? get filterEntityType =>
+      filterStack.isEmpty ? null : filterEntity.entityType;
+
+  String? get filter;
+
+  int get filterClearedAt;
+
+  int get lastActivityAt;
+
+  DashboardUIState get dashboardUIState;
+
+  // STARTER: properties - do not remove comment
+PaymentUIState get paymentUIState;
+
+  ProductUIState get productUIState;
+
+  SocialUIState get socialUIState;
+
+  PhotoUIState get photoUIState;
+
+  WorkoutUIState get workoutUIState;
+
+  NotificationUIState get notificationUIState;
+
+  ProfileOperationUIState get profileOperationUIState;
+
+  ProfileUIState get profileUIState;
+
+  EventUIState get eventUIState;
+
+  ChatUIState get chatUIState;
+
+  DesignUIState get designUIState;
+
+  UserUIState get userUIState;
+
+  SettingsUIState get settingsUIState;
+
+  bool containsRoute(String route) {
+    if (route.isEmpty) {
+      return false;
+    }
+    return currentRoute.contains(route);
+  }
+
+  EntityType get entityTypeRoute {
+    final entityType = mainRoute.replaceFirst('/', '');
+    return EntityType.valueOf(toCamelCase(entityType));
+  }
+
+  String get mainRoute {
+    final parts =
+        currentRoute.split('/').where((part) => part.isNotEmpty).toList();
+    return parts.isNotEmpty ? parts[0] : '';
+  }
+
+  String get subRoute {
+    final parts =
+        currentRoute.split('/').where((part) => part.isNotEmpty).toList();
+    if (parts.length == 3) {
+      return '${parts[1]}/${parts[2]}';
+    } else {
+      return parts.length > 1 ? parts[1] : '';
+    }
+  }
+
+  String get baseRoute {
+    String route = currentRoute;
+    route = route.replaceAll('/edit', '');
+    route = route.replaceAll('/view', '');
+    route = route.replaceAll('/pdf', '');
+    route = route.replaceAll('/email', '');
+    return route;
+  }
+
+  String get baseSubRoute {
+    String route = subRoute;
+    route = route.replaceAll('/edit', '');
+    route = route.replaceAll('/view', '');
+    route = route.replaceAll('/pdf', '');
+    route = route.replaceAll('/email', '');
+    return route;
+  }
+
+  String get previousMainRoute {
+    final parts =
+        previousRoute.split('/').where((part) => part.isNotEmpty).toList();
+    return parts.isNotEmpty ? parts[0] : '';
+  }
+
+  String get previousSubRoute {
+    final parts =
+        previousRoute.split('/').where((part) => part.isNotEmpty).toList();
+    return parts.length > 1 ? parts[1] : '';
+  }
+
+  bool get isEditing =>
+      currentRoute.endsWith('/edit') || currentRoute.endsWith('refund');
+
+  bool get isEmailing => currentRoute.endsWith('/email');
+
+  bool get isPDF => currentRoute.endsWith('/pdf');
+
+  bool get isViewing => !isEditing && !isEmailing;
+
+  bool get isInSettings => currentRoute.startsWith('/settings');
+
+  bool get isPreviewing => previewStack.isNotEmpty;
+
+  bool get isList => !isEditing && !isEmailing && !isPDF && !isInSettings;
+
+  bool get hasRecentActivity {
+    if (lastActivityAt == 0) {
+      return false;
+    }
+
+    return DateTime.now().millisecondsSinceEpoch - lastActivityAt <
+        kMillisecondsToRefreshStaticData;
+  }
+
+  // ignore: unused_element
+  static void _initializeBuilder(UIStateBuilder builder) => builder
+    ..lastActivityAt = 0
+    ..dismissedFlutterWebWarning = false
+    ..filterStack.replace(BuiltList<BaseEntity>());
+
+  static Serializer<UIState> get serializer => _$uIStateSerializer;
+}

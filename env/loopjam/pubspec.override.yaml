@@ -1,0 +1,29 @@
+dependencies:
+  # OVERRIDE_DEPENDENCIES_START
+  flutter_map: ^5.0.0
+  latlong2: ^0.9.0
+  geolocator: ^10.0.0
+  flutter_compass: ^0.8.0
+  flutter_tts: ^4.2.2
+  # OVERRIDE_DEPENDENCIES_END
+
+flutter:
+  assets:
+    # OVERRIDE_ASSETS_START
+    - assets/loopjam/logo/logo_name.png
+    - assets/loopjam/logo/light.png
+    - assets/loopjam/images/welcom_screen_image.png
+    - assets/loopjam/images/welcom_screen_mobile_image.png
+    - assets/loopjam/images/defaultBackgroundImageForNoRecords.png
+    - assets/loopjam/images/defaultDottedImage.png
+    - assets/loopjam/images/defaultUserIcon.png
+    - assets/loopjam/email_templates/invite_email_template.html
+    # OVERRIDE_ASSETS_END
+
+  # Include fonts section if needed
+  # fonts:
+    # OVERRIDE_FONTS_START
+    # - family: CustomFont
+    #   fonts:
+    #     - asset: assets/fonts/CustomFont-Regular.ttf
+    # OVERRIDE_FONTS_END

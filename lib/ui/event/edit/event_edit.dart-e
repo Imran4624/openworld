@@ -1,0 +1,242 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_boilerplate/ui/app/edit_scaffold.dart';
+import 'package:flutter_boilerplate/ui/app/form_card.dart';
+import 'package:flutter_boilerplate/ui/event/edit/event_edit_vm.dart';
+import 'package:flutter_boilerplate/utils/localization.dart';
+import 'package:flutter_boilerplate/utils/completers.dart';
+import 'package:flutter_boilerplate/ui/app/scrollable_listview.dart';
+
+class EventEdit extends StatefulWidget {
+  const EventEdit({
+    Key? key,
+    required this.viewModel,
+  }) : super(key: key);
+
+  final EventEditVM viewModel;
+
+  @override
+  _EventEditState createState() => _EventEditState();
+}
+
+class _EventEditState extends State<EventEdit> {
+  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>(debugLabel: '_eventEdit');
+  final _debouncer = Debouncer();
+
+  // STARTER: controllers - do not remove comment
+final _nameController = TextEditingController();
+final _accessCodeController = TextEditingController();
+final _callToActionController = TextEditingController();
+final _chkController = TextEditingController();
+final _currencyController = TextEditingController();
+final _descriptionController = TextEditingController();
+final _endController = TextEditingController();
+final _startController = TextEditingController();
+final _eventSeriesIdController = TextEditingController();
+bool _hiddenValue = false; // Checkbox
+bool _onlineEventValue = false; // Checkbox
+bool _privateEventValue = false; // Checkbox
+final _statusController = TextEditingController();
+bool _ticketsAvailableValue = false; // Checkbox
+final _totalHoldsController = TextEditingController();
+final _totalIssuedTicketsController = TextEditingController();
+final _totalOrdersController = TextEditingController();
+bool _unavailableValue = false; // Checkbox
+final _unavailableStatusController = TextEditingController();
+  List<TextEditingController> _controllers = [];
+
+  @override
+  void didChangeDependencies() {
+    _controllers = [
+      // STARTER: array - do not remove comment
+_nameController,
+_accessCodeController,
+_callToActionController,
+_chkController,
+_currencyController,
+_descriptionController,
+_endController,
+_startController,
+_eventSeriesIdController,
+_statusController,
+_totalHoldsController,
+_totalIssuedTicketsController,
+_totalOrdersController,
+_unavailableStatusController,
+    ];
+
+    _controllers.forEach((controller) => controller.removeListener(_onChanged));
+
+    final event = widget.viewModel.event;
+    // STARTER: read value - do not remove comment
+_nameController.text = event.name.toString();
+_accessCodeController.text = event.accessCode.toString();
+_callToActionController.text = event.callToAction.toString();
+_chkController.text = event.chk.toString();
+_currencyController.text = event.currency.toString();
+_descriptionController.text = event.description.toString();
+_endController.text = event.end.toString();
+_startController.text = event.start.toString();
+_eventSeriesIdController.text = event.eventSeriesId.toString();
+_hiddenValue = event.hidden;
+_onlineEventValue = event.onlineEvent;
+_privateEventValue = event.privateEvent;
+_statusController.text = event.status.toString();
+_ticketsAvailableValue = event.ticketsAvailable;
+_totalHoldsController.text = event.totalHolds.toString();
+_totalIssuedTicketsController.text = event.totalIssuedTickets.toString();
+_totalOrdersController.text = event.totalOrders.toString();
+_unavailableValue = event.unavailable;
+_unavailableStatusController.text = event.unavailableStatus.toString();
+
+    _controllers.forEach((controller) => controller.addListener(_onChanged));
+
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    _controllers.forEach((controller) {
+      controller.removeListener(_onChanged);
+      controller.dispose();
+    });
+
+    super.dispose();
+  }
+
+  void _onChanged() {
+    _debouncer.run(() {
+      final event = widget.viewModel.event.rebuild((b) => b
+        // STARTER: set value - do not remove comment
+..name = _nameController.text.trim()
+..accessCode = _accessCodeController.text.trim()
+..callToAction = _callToActionController.text.trim()
+..chk = _chkController.text.trim()
+..currency = _currencyController.text.trim()
+..description = _descriptionController.text.trim()
+..end = int.tryParse(_endController.text.trim()) ?? 0
+..start = int.tryParse(_startController.text.trim()) ?? 0
+..eventSeriesId = _eventSeriesIdController.text.trim()
+..hidden = _hiddenValue
+..onlineEvent = _onlineEventValue
+..privateEvent = _privateEventValue
+..status = _statusController.text.trim()
+..ticketsAvailable = _ticketsAvailableValue
+..totalHolds = int.tryParse(_totalHoldsController.text.trim()) ?? 0
+..totalIssuedTickets = int.tryParse(_totalIssuedTicketsController.text.trim()) ?? 0
+..totalOrders = int.tryParse(_totalOrdersController.text.trim()) ?? 0
+..unavailable = _unavailableValue
+..unavailableStatus = _unavailableStatusController.text.trim()
+      );
+      if (event != widget.viewModel.event) {
+        widget.viewModel.onChanged(event);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final viewModel = widget.viewModel;
+    final localization = AppLocalization.of(context)!;
+    final event = viewModel.event;
+
+    return EditScaffold(
+      title: event.isNew ? localization.newEvent : localization.editEvent,
+      onCancelPressed: (context) => viewModel.onCancelPressed(context),
+      onSavePressed: (context) {
+        final bool isValid = _formKey.currentState!.validate();
+        if (!isValid) {
+          return;
+        }
+        viewModel.onSavePressed(context);
+      },
+      body: Form(
+        key: _formKey,
+        child: Builder(builder: (BuildContext context) {
+          return ScrollableListView(
+            children: <Widget>[
+              FormCard(
+                children: <Widget>[
+                  // STARTER: widgets - do not remove comment
+TextFormField(
+controller: _accessCodeController,
+autocorrect: false,
+decoration: InputDecoration(
+labelText: 'AccessCode',
+),
+),
+
+TextFormField(
+controller: _callToActionController,
+autocorrect: false,
+decoration: InputDecoration(
+labelText: 'CallToAction',
+),
+),
+
+TextFormField(
+controller: _chkController,
+autocorrect: false,
+decoration: InputDecoration(
+labelText: 'Chk',
+),
+),
+
+TextFormField(
+controller: _currencyController,
+autocorrect: false,
+decoration: InputDecoration(
+labelText: 'Currency',
+),
+),
+
+TextFormField(
+controller: _descriptionController,
+autocorrect: false,
+decoration: InputDecoration(
+labelText: 'Description',
+),
+),
+
+TextFormField(controller: _endController,autocorrect: false,keyboardType: TextInputType.number,decoration: InputDecoration(labelText: 'End',),),
+TextFormField(controller: _startController,autocorrect: false,keyboardType: TextInputType.number,decoration: InputDecoration(labelText: 'Start',),),
+TextFormField(
+controller: _eventSeriesIdController,
+autocorrect: false,
+decoration: InputDecoration(
+labelText: 'EventSeriesId',
+),
+),
+
+CheckboxListTile(title: Text('Hidden'),value: _hiddenValue,onChanged: (value) => setState(() {  _hiddenValue = value ?? false;  _onChanged();}),),
+CheckboxListTile(title: Text('OnlineEvent'),value: _onlineEventValue,onChanged: (value) => setState(() {  _onlineEventValue = value ?? false;  _onChanged();}),),
+CheckboxListTile(title: Text('PrivateEvent'),value: _privateEventValue,onChanged: (value) => setState(() {  _privateEventValue = value ?? false;  _onChanged();}),),
+TextFormField(
+controller: _statusController,
+autocorrect: false,
+decoration: InputDecoration(
+labelText: 'Status',
+),
+),
+
+CheckboxListTile(title: Text('TicketsAvailable'),value: _ticketsAvailableValue,onChanged: (value) => setState(() {  _ticketsAvailableValue = value ?? false;  _onChanged();}),),
+TextFormField(controller: _totalHoldsController,autocorrect: false,keyboardType: TextInputType.number,decoration: InputDecoration(labelText: 'TotalHolds',),),
+TextFormField(controller: _totalIssuedTicketsController,autocorrect: false,keyboardType: TextInputType.number,decoration: InputDecoration(labelText: 'TotalIssuedTickets',),),
+TextFormField(controller: _totalOrdersController,autocorrect: false,keyboardType: TextInputType.number,decoration: InputDecoration(labelText: 'TotalOrders',),),
+CheckboxListTile(title: Text('Unavailable'),value: _unavailableValue,onChanged: (value) => setState(() {  _unavailableValue = value ?? false;  _onChanged();}),),
+TextFormField(
+controller: _unavailableStatusController,
+autocorrect: false,
+decoration: InputDecoration(
+labelText: 'UnavailableStatus',
+),
+),
+
+                ],
+              ),
+            ],
+          );
+        }),
+      ),
+    );
+  }
+}

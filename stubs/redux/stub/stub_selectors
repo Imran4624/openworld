@@ -1,0 +1,106 @@
+import 'package:flutter_boilerplate/redux/static/static_state.dart';
+import 'package:flutter_boilerplate/redux/app/app_state.dart';
+import 'package:memoize/memoize.dart';
+import 'package:built_collection/built_collection.dart';
+import 'package:flutter_boilerplate/data/models/models.dart';
+import 'package:flutter_boilerplate/redux/ui/list_ui_state.dart';
+
+var memoizedDropdownStubList = memo5(
+    (BuiltMap<String, StubEntity> stubMap, BuiltList<String> stubList,
+            StaticState staticState, BuiltMap<String, UserEntity> userMap,
+            String? clientId) =>
+        dropdownStubsSelector(stubMap, stubList, staticState, userMap, clientId));
+
+List<String> dropdownStubsSelector(
+    BuiltMap<String, StubEntity> stubMap,
+    BuiltList<String> stubList,
+    StaticState staticState,
+    BuiltMap<String, UserEntity> userMap,
+    String? clientId) {
+  final list = stubList.where((stubId) {
+    final stub = stubMap[stubId];
+    if (stub == null) {
+      return false;
+    }
+    /*
+    if (clientId != null && clientId > 0 && stub.clientId != clientId) {
+      return false;
+    }
+    */
+    return stub.isActive;
+  }).toList();
+
+  list.sort((stubAId, stubBId) {
+    final stubA = stubMap[stubAId]!;
+    final stubB = stubMap[stubBId]!;
+
+    // STARTER: primary field - do not remove comment
+  });
+
+  return list;
+}
+
+var memoizedFilteredStubList = memo4((SelectionState selectionState,
+        BuiltMap<String, StubEntity> stubMap,
+        BuiltList<String> stubList,
+        ListUIState stubListState) =>
+    filteredStubsSelector(selectionState, stubMap, stubList, stubListState));
+
+List<String> filteredStubsSelector(
+    SelectionState selectionState,
+    BuiltMap<String, StubEntity> stubMap,
+    BuiltList<String> stubList,
+    ListUIState stubListState) {
+  final filterEntityId = selectionState.filterEntityId;
+  // final filterEntityType = selectionState.filterEntityType;
+
+  final filteredList = stubList.where((stubId) {
+    final stub = stubMap[stubId];
+    if (stub == null) {
+      return false;
+    }
+
+    if (filterEntityId != null && stub.id != filterEntityId) {
+      return false;
+    }
+
+    if (!stub.matchesStates(stubListState.stateFilters)) {
+      return false;
+    }
+
+    // Uncomment if using custom filters in future
+    // if (stubListState.custom1Filters.isNotEmpty &&
+    //     !stubListState.custom1Filters.contains(stub.customValue1)) {
+    //   return false;
+    // } else if (stubListState.custom2Filters.isNotEmpty &&
+    //     !stubListState.custom2Filters.contains(stub.customValue2)) {
+    //   return false;
+    // } else if (stubListState.custom3Filters.isNotEmpty &&
+    //     !stubListState.custom3Filters.contains(stub.customValue3)) {
+    //   return false;
+    // } else if (stubListState.custom4Filters.isNotEmpty &&
+    //     !stubListState.custom4Filters.contains(stub.customValue4)) {
+    //   return false;
+    // }
+
+    return stub.matchesFilter(stubListState.filter);
+  }).toList();
+
+  final uniqueStubs = <String, String>{};
+  for (final stubId in filteredList) {
+    final stub = stubMap[stubId];
+    if (stub != null) {
+      uniqueStubs[stub.id] = stubId; 
+    }
+  }
+
+  final sortedList = uniqueStubs.values.toList();
+    // ..sort((stubAId, stubBId) {
+    //   final stubA = stubMap[stubAId]!;
+    //   final stubB = stubMap[stubBId]!;
+    //   return stubA.compareTo(
+    //       stubB, stubListState.sortField, stubListState.sortAscending);
+    // });
+
+  return sortedList;
+}

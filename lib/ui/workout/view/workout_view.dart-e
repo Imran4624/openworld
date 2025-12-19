@@ -1,0 +1,54 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_boilerplate/ui/app/scrollable_listview.dart';
+import 'package:flutter_boilerplate/ui/workout/view/workout_view_vm.dart';
+import 'package:flutter_boilerplate/ui/app/view_scaffold.dart';
+// STARTER: import - do not remove comment
+
+class WorkoutView extends StatefulWidget {
+
+  const WorkoutView({
+    Key? key,
+    required this.viewModel,
+    required this.isFilter,
+  }) : super(key: key);
+
+  final WorkoutViewVM viewModel;
+  final bool isFilter;
+
+  @override
+  _WorkoutViewState createState() => new _WorkoutViewState();
+}
+
+class _WorkoutViewState extends State<WorkoutView> {
+  @override
+  Widget build(BuildContext context) {
+    final viewModel = widget.viewModel;
+    final workout = viewModel.workout;
+
+    return ViewScaffold(
+      isFilter: widget.isFilter,
+      entity: workout,
+      //STARTER: primary field - do not remove comment
+title: workout.type,
+      onBackPressed: () => viewModel.onBackPressed(),
+      body: ScrollableListView(
+        children: <Widget>[
+          const SizedBox(height: 16.0),
+          FieldGrid(
+            {
+             // STARTER: field grid - do not remove comment
+WorkoutFields.type: workout.type,
+WorkoutFields.startTime: workout.startTime.toString(),
+WorkoutFields.endTime: workout.endTime.toString(),
+WorkoutFields.duration: workout.duration.toString(),
+WorkoutFields.distance: workout.distance.toString(),
+WorkoutFields.averagePace: workout.averagePace.toString(),
+WorkoutFields.caloriesBurned: workout.caloriesBurned.toString(),
+WorkoutFields.elevationGain: workout.elevationGain.toString(),
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}

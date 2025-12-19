@@ -1,0 +1,106 @@
+import 'package:flutter_boilerplate/redux/static/static_state.dart';
+import 'package:flutter_boilerplate/redux/app/app_state.dart';
+import 'package:memoize/memoize.dart';
+import 'package:built_collection/built_collection.dart';
+import 'package:flutter_boilerplate/data/models/models.dart';
+import 'package:flutter_boilerplate/redux/ui/list_ui_state.dart';
+
+var memoizedDropdownWorkoutList = memo5(
+    (BuiltMap<String, WorkoutEntity> workoutMap, BuiltList<String> workoutList,
+            StaticState staticState, BuiltMap<String, UserEntity> userMap,
+            String? clientId) =>
+        dropdownWorkoutsSelector(workoutMap, workoutList, staticState, userMap, clientId));
+
+List<String> dropdownWorkoutsSelector(
+    BuiltMap<String, WorkoutEntity> workoutMap,
+    BuiltList<String> workoutList,
+    StaticState staticState,
+    BuiltMap<String, UserEntity> userMap,
+    String? clientId) {
+  final list = workoutList.where((workoutId) {
+    final workout = workoutMap[workoutId];
+    if (workout == null) {
+      return false;
+    }
+    /*
+    if (clientId != null && clientId > 0 && workout.clientId != clientId) {
+      return false;
+    }
+    */
+    return workout.isActive;
+  }).toList();
+
+  list.sort((workoutAId, workoutBId) {
+    final workoutA = workoutMap[workoutAId]!;
+    final workoutB = workoutMap[workoutBId]!;
+
+    // STARTER: primary field - do not remove comment
+  });
+
+  return list;
+}
+
+var memoizedFilteredWorkoutList = memo4((SelectionState selectionState,
+        BuiltMap<String, WorkoutEntity> workoutMap,
+        BuiltList<String> workoutList,
+        ListUIState workoutListState) =>
+    filteredWorkoutsSelector(selectionState, workoutMap, workoutList, workoutListState));
+
+List<String> filteredWorkoutsSelector(
+    SelectionState selectionState,
+    BuiltMap<String, WorkoutEntity> workoutMap,
+    BuiltList<String> workoutList,
+    ListUIState workoutListState) {
+  final filterEntityId = selectionState.filterEntityId;
+  // final filterEntityType = selectionState.filterEntityType;
+
+  final filteredList = workoutList.where((workoutId) {
+    final workout = workoutMap[workoutId];
+    if (workout == null) {
+      return false;
+    }
+
+    if (filterEntityId != null && workout.id != filterEntityId) {
+      return false;
+    }
+
+    if (!workout.matchesStates(workoutListState.stateFilters)) {
+      return false;
+    }
+
+    // Uncomment if using custom filters in future
+    // if (workoutListState.custom1Filters.isNotEmpty &&
+    //     !workoutListState.custom1Filters.contains(workout.customValue1)) {
+    //   return false;
+    // } else if (workoutListState.custom2Filters.isNotEmpty &&
+    //     !workoutListState.custom2Filters.contains(workout.customValue2)) {
+    //   return false;
+    // } else if (workoutListState.custom3Filters.isNotEmpty &&
+    //     !workoutListState.custom3Filters.contains(workout.customValue3)) {
+    //   return false;
+    // } else if (workoutListState.custom4Filters.isNotEmpty &&
+    //     !workoutListState.custom4Filters.contains(workout.customValue4)) {
+    //   return false;
+    // }
+
+    return workout.matchesFilter(workoutListState.filter);
+  }).toList();
+
+  final uniqueWorkouts = <String, String>{};
+  for (final workoutId in filteredList) {
+    final workout = workoutMap[workoutId];
+    if (workout != null) {
+      uniqueWorkouts[workout.id] = workoutId; 
+    }
+  }
+
+  final sortedList = uniqueWorkouts.values.toList();
+    // ..sort((workoutAId, workoutBId) {
+    //   final workoutA = workoutMap[workoutAId]!;
+    //   final workoutB = workoutMap[workoutBId]!;
+    //   return workoutA.compareTo(
+    //       workoutB, workoutListState.sortField, workoutListState.sortAscending);
+    // });
+
+  return sortedList;
+}

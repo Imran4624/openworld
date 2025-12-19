@@ -1,0 +1,291 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:redux/redux.dart';
+import 'package:built_collection/built_collection.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_boilerplate/main_app.dart';
+import 'package:flutter_boilerplate/redux/app/app_actions.dart';
+import 'package:flutter_boilerplate/data/models/models.dart';
+import 'package:flutter_boilerplate/redux/ui/ui_actions.dart';
+import 'package:flutter_boilerplate/ui/notification/notification_screen.dart';
+import 'package:flutter_boilerplate/ui/notification/edit/notification_edit_vm.dart';
+import 'package:flutter_boilerplate/ui/notification/view/notification_view_vm.dart';
+import 'package:flutter_boilerplate/redux/notification/notification_actions.dart';
+import 'package:flutter_boilerplate/redux/app/app_state.dart';
+import 'package:flutter_boilerplate/data/repositories/notification_repository.dart';
+
+List<Middleware<AppState>> createStoreStubsMiddleware([
+  StubRepository repository = const StubRepository(),
+]) {
+  final viewStubList = _viewStubList();
+  final viewStub = _viewStub();
+  final editStub = _editStub();
+  final loadStubs = _loadStubs(repository);
+  final loadStub = _loadStub(repository);
+  final saveStub = _saveStub(repository);
+  final archiveStub = _archiveStub(repository);
+  final deleteStub = _deleteStub(repository);
+  final purgeStub = _purgeStub(repository);
+  final restoreStub = _restoreStub(repository);
+  final updateFilter = _updateFilter(repository);
+
+  return [
+    TypedMiddleware<AppState, ViewStubList>(viewStubList),
+    TypedMiddleware<AppState, ViewStub>(viewStub),
+    TypedMiddleware<AppState, EditStub>(editStub),
+    TypedMiddleware<AppState, LoadStubs>(loadStubs),
+    TypedMiddleware<AppState, LoadStub>(loadStub),
+    TypedMiddleware<AppState, SaveStubRequest>(saveStub),
+    TypedMiddleware<AppState, ArchiveStubsRequest>(archiveStub),
+    TypedMiddleware<AppState, DeleteStubsRequest>(deleteStub),
+    TypedMiddleware<AppState, PurgeStubsRequest>(purgeStub),
+    TypedMiddleware<AppState, RestoreStubsRequest>(restoreStub),
+    TypedMiddleware<AppState, UpdateStubFilter>(updateFilter),
+  ];
+}
+
+Middleware<AppState> _editStub() {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as EditStub;
+
+    next(action);
+
+    store.dispatch(UpdateCurrentRoute(StubEditScreen.route));
+
+    if (store.state.prefState.isMobile) {
+      navigatorKey.currentState!.pushNamed(StubEditScreen.route);
+    }
+  };
+}
+
+Middleware<AppState> _viewStub() {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) async {
+    final action = dynamicAction as ViewStub;
+
+    next(action);
+
+    store.dispatch(UpdateCurrentRoute(StubViewScreen.route));
+
+    if (store.state.prefState.isMobile) {
+      navigatorKey.currentState!.pushNamed(StubViewScreen.route);
+    }
+  };
+}
+
+Middleware<AppState> _viewStubList() {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as ViewStubList;
+
+    next(action);
+
+    if (store.state.staticState.isStale) {
+      store.dispatch(RefreshData());
+    }
+
+    store.dispatch(UpdateCurrentRoute(StubScreen.route));
+
+    if (store.state.prefState.isMobile) {
+      navigatorKey.currentState!.pushNamedAndRemoveUntil(
+          StubScreen.route, (Route<dynamic> route) => false);
+    }
+  };
+}
+
+Middleware<AppState> _archiveStub(StubRepository repository) {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as ArchiveStubsRequest;
+    final prevStubs = action.notificationIds
+        .map((id) => store.state.notificationState.map[id])
+        .whereType<StubEntity>()
+        .toList();
+
+    repository
+        .bulkAction(store.state.credentials, action.notificationIds, EntityAction.archive)
+        .then((List<StubEntity> notifications) {
+      store.dispatch(ArchiveStubsSuccess(notifications));
+      action.completer.complete(null);
+    }).catchError((Object error) {
+      printL(error);
+      store.dispatch(ArchiveStubsFailure(prevStubs));
+      action.completer.completeError(error);
+    });
+
+    next(action);
+  };
+}
+
+Middleware<AppState> _deleteStub(StubRepository repository) {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as DeleteStubsRequest;
+    final prevStubs = action.notificationIds
+        .map((id) => store.state.notificationState.map[id])
+        .whereType<StubEntity>()
+        .toList();
+
+    repository
+        .bulkAction(store.state.credentials, action.notificationIds, EntityAction.delete)
+        .then((List<StubEntity> notifications) {
+      store.dispatch(DeleteStubsSuccess(notifications));
+      action.completer.complete(null);
+    }).catchError((Object error) {
+      printL(error);
+      store.dispatch(DeleteStubsFailure(prevStubs));
+      action.completer.completeError(error);
+    });
+
+    next(action);
+  };
+}
+
+Middleware<AppState> _purgeStub(StubRepository repository) {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as PurgeStubsRequest;
+    final prevStubs = action.notificationIds
+        .map((id) => store.state.notificationState.map[id])
+        .whereType<StubEntity>()
+        .toList();
+
+    repository
+        .bulkAction(store.state.credentials, action.notificationIds, EntityAction.purge)
+        .then((List<StubEntity> notifications) {
+      store.dispatch(PurgeStubsSuccess(notifications));
+      action.completer.complete(null);
+    }).catchError((Object error) {
+      printL(error);
+      store.dispatch(PurgeStubsFailure(prevStubs));
+      action.completer.completeError(error);
+    });
+
+    next(action);
+  };
+}
+
+Middleware<AppState> _restoreStub(StubRepository repository) {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as RestoreStubsRequest;
+    final prevStubs = action.notificationIds
+        .map((id) => store.state.notificationState.map[id])
+        .whereType<StubEntity>()
+        .toList();
+
+    repository
+        .bulkAction(store.state.credentials, action.notificationIds, EntityAction.restore)
+        .then((List<StubEntity> notifications) {
+      store.dispatch(RestoreStubsSuccess(notifications));
+      action.completer.complete(null);
+    }).catchError((Object error) {
+      printL(error);
+      store.dispatch(RestoreStubsFailure(prevStubs));
+      action.completer.completeError(error);
+    });
+
+    next(action);
+  };
+}
+
+Middleware<AppState> _saveStub(StubRepository repository) {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as SaveStubRequest;
+    repository
+        .saveData(store.state.credentials, action.notification!)
+        .then((StubEntity notification) {
+      if (action.notification!.isNew) {
+        store.dispatch(AddStubSuccess(notification));
+      } else {
+        store.dispatch(SaveStubSuccess(notification));
+      }
+
+      action.completer?.complete(notification);
+    }).catchError((Object error) {
+      printL(error);
+      store.dispatch(SaveStubFailure(error));
+      action.completer?.completeError(error);
+    });
+
+    next(action);
+  };
+}
+
+Middleware<AppState> _loadStub(StubRepository repository) {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as LoadStub;
+
+    store.dispatch(LoadStubRequest());
+    repository
+        .loadItem(store.state.credentials, action.notificationId!)
+        .then((notification) {
+      store.dispatch(LoadStubSuccess(notification));
+      action.completer?.complete(null);
+    }).catchError((Object error) {
+      printL(error);
+      store.dispatch(LoadStubFailure(error));
+      action.completer?.completeError(error);
+    });
+
+    next(action);
+  };
+}
+
+Middleware<AppState> _loadStubs(StubRepository repository) {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    if (store.state.isLoading) {
+      return;
+    }
+
+    final action = dynamicAction as LoadStubs;
+    final state = store.state;// Get current state filter from listUIState
+    final stateFilters = state.notificationListState.stateFilters;
+    final currentFilter = action.filter ?? state.notificationState.filter;
+    
+    // Update filter with current state filter from listUIState
+    final filter = currentFilter.rebuild((b) {
+      if (stateFilters.isNotEmpty) {
+        b.stateFilter = stateFilters.first; // Use the first state filter
+      } else {
+        b.stateFilter = EntityState.active; // Default to active
+      }
+    });
+    store.dispatch(LoadStubsRequest(filter: filter));
+    
+    var lastDocument = state.notificationState.lastDocument;
+    if (action.isRefresh) {
+      lastDocument = null;
+      store.dispatch(UpdateLastDocumentAction(null));
+    }
+
+    repository
+        .loadListWithPagination(
+          lastDocument: lastDocument,
+          limit: filter.limit,
+          filter: filter,
+        )
+        .then((response) {
+      final notifications = response['notifications'] as BuiltList<StubEntity>;
+      final newLastDocument = response['lastDocument'] as DocumentSnapshot?;
+
+      store.dispatch(LoadStubsSuccess(notifications));
+      if (notifications.isNotEmpty) {
+        store.dispatch(UpdateLastDocumentAction(newLastDocument));
+      }
+      action.completer?.complete(null);
+    }).catchError((Object error) {
+      printL(error);
+      store.dispatch(LoadStubsFailure(error));
+      action.completer?.completeError(error);
+    });
+
+    next(action);
+  };
+}
+Middleware<AppState> _updateFilter(StubRepository repository) {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as UpdateStubFilter;
+
+    next(action);
+
+    store.dispatch(LoadStubs(
+      filter: action.filter,
+      isRefresh: true,
+    ));
+  };
+}

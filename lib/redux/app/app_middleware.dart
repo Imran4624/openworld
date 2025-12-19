@@ -1,0 +1,673 @@
+// Dart imports:
+import 'dart:async';
+import 'dart:convert';
+import 'dart:math';
+
+// Flutter imports:
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_boilerplate/redux/settings/settings_actions.dart';
+import 'package:flutter_boilerplate/ui/app/routing_rules.dart';
+import 'package:flutter_boilerplate/utils/widgets.dart';
+import 'package:flutter_boilerplate/ui/app/shared.dart';
+
+// Package imports:
+import 'package:path_provider/path_provider.dart';
+import 'package:redux/redux.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+// Project imports:
+import 'package:flutter_boilerplate/.env.dart';
+import 'package:flutter_boilerplate/constants.dart';
+import 'package:flutter_boilerplate/data/file_storage.dart';
+import 'package:flutter_boilerplate/data/models/models.dart';
+import 'package:flutter_boilerplate/data/models/serializers.dart';
+import 'package:flutter_boilerplate/data/repositories/persistence_repository.dart';
+import 'package:flutter_boilerplate/data/repositories/qr_repository.dart';
+import 'package:flutter_boilerplate/main_app.dart';
+import 'package:flutter_boilerplate/project_config.dart';
+import 'package:flutter_boilerplate/redux/app/app_actions.dart';
+import 'package:flutter_boilerplate/redux/app/app_state.dart';
+import 'package:flutter_boilerplate/redux/auth/auth_actions.dart';
+import 'package:flutter_boilerplate/redux/auth/auth_state.dart';
+import 'package:flutter_boilerplate/redux/company/company_actions.dart';
+import 'package:flutter_boilerplate/redux/company/company_state.dart';
+import 'package:flutter_boilerplate/redux/static/static_state.dart';
+import 'package:flutter_boilerplate/redux/ui/pref_state.dart';
+import 'package:flutter_boilerplate/redux/ui/ui_actions.dart';
+import 'package:flutter_boilerplate/redux/ui/ui_state.dart';
+import 'package:flutter_boilerplate/ui/app/app_builder.dart';
+import 'package:flutter_boilerplate/ui/app/main_screen.dart';
+import 'package:flutter_boilerplate/ui/auth/login_vm.dart';
+import 'package:flutter_boilerplate/utils/completers.dart';
+import 'package:flutter_boilerplate/utils/formatting.dart';
+import 'package:flutter_boilerplate/utils/platforms.dart';
+
+// ignore: unused_import
+import 'package:flutter_boilerplate/utils/web_stub.dart'
+    if (dart.library.html) 'package:flutter_boilerplate/utils/web.dart';
+
+List<Middleware<AppState>> createStorePersistenceMiddleware([
+  PersistenceRepository authRepository = const PersistenceRepository(
+    fileStorage: const FileStorage(
+      'auth_state',
+      getApplicationDocumentsDirectory,
+    ),
+  ),
+  PersistenceRepository profileRepository = const PersistenceRepository(
+    fileStorage: const FileStorage(
+      'profile_state',
+      getApplicationDocumentsDirectory,
+    ),
+  ),
+  PersistenceRepository uiRepository = const PersistenceRepository(
+    fileStorage: const FileStorage(
+      'ui_state',
+      getApplicationDocumentsDirectory,
+    ),
+  ),
+  PersistenceRepository staticRepository = const PersistenceRepository(
+    fileStorage: const FileStorage(
+      'static_state',
+      getApplicationDocumentsDirectory,
+    ),
+  ),
+  List<PersistenceRepository> companyRepositories = const [
+    const PersistenceRepository(
+      fileStorage: const FileStorage(
+        'company_state_0',
+        getApplicationDocumentsDirectory,
+      ),
+    ),
+    const PersistenceRepository(
+      fileStorage: const FileStorage(
+        'company_state_1',
+        getApplicationDocumentsDirectory,
+      ),
+    ),
+    const PersistenceRepository(
+      fileStorage: const FileStorage(
+        'company_state_2',
+        getApplicationDocumentsDirectory,
+      ),
+    ),
+    const PersistenceRepository(
+      fileStorage: const FileStorage(
+        'company_state_3',
+        getApplicationDocumentsDirectory,
+      ),
+    ),
+    const PersistenceRepository(
+      fileStorage: const FileStorage(
+        'company_state_4',
+        getApplicationDocumentsDirectory,
+      ),
+    ),
+    const PersistenceRepository(
+      fileStorage: const FileStorage(
+        'company_state_5',
+        getApplicationDocumentsDirectory,
+      ),
+    ),
+    const PersistenceRepository(
+      fileStorage: const FileStorage(
+        'company_state_6',
+        getApplicationDocumentsDirectory,
+      ),
+    ),
+    const PersistenceRepository(
+      fileStorage: const FileStorage(
+        'company_state_7',
+        getApplicationDocumentsDirectory,
+      ),
+    ),
+    const PersistenceRepository(
+      fileStorage: const FileStorage(
+        'company_state_8',
+        getApplicationDocumentsDirectory,
+      ),
+    ),
+    const PersistenceRepository(
+      fileStorage: const FileStorage(
+        'company_state_9',
+        getApplicationDocumentsDirectory,
+      ),
+    ),
+  ],
+]) {
+  final loadState = _createLoadState(
+    authRepository,
+    profileRepository,
+    uiRepository,
+    staticRepository,
+    companyRepositories,
+  );
+
+  final accountLoaded = _createAccountLoaded();
+  final dataRefreshed = _createDataRefreshed();
+
+  final persistData = _createPersistData(
+    companyRepositories,
+  );
+
+  final persistStatic = _createPersistStatic(staticRepository);
+
+  final userLoggedIn = _createUserLoggedIn(
+    authRepository,
+    profileRepository,
+    uiRepository,
+    staticRepository,
+    companyRepositories,
+  );
+
+  final persistUI = _createPersistUI(uiRepository);
+
+  final persistPrefs = _createPersistPrefs();
+
+  final updateAuthState = _updateAuthState(authRepository);
+
+  final updateProfileState = _updateProfileState(profileRepository);
+
+  final clearDataState = _createClearData(companyRepositories);
+
+  final deleteState = _createDeleteState(
+    authRepository,
+    profileRepository,
+    uiRepository,
+    staticRepository,
+    companyRepositories,
+  );
+
+  final viewMainScreen = _createViewMainScreen();
+
+  return [
+    TypedMiddleware<AppState, UserLogout>(deleteState),
+    TypedMiddleware<AppState, LoadStateRequest>(loadState),
+    TypedMiddleware<AppState, UserLoginSuccess>(userLoggedIn),
+    TypedMiddleware<AppState, LoadAccountSuccess>(accountLoaded),
+    TypedMiddleware<AppState, RefreshDataSuccess>(dataRefreshed),
+    TypedMiddleware<AppState, PersistData>(persistData),
+    TypedMiddleware<AppState, PersistStatic>(persistStatic),
+    TypedMiddleware<AppState, PersistUI>(persistUI),
+    TypedMiddleware<AppState, PersistPrefs>(persistPrefs),
+    TypedMiddleware<AppState, UpdateAuthState>(updateAuthState),
+    TypedMiddleware<AppState, UpdateProfileState>(updateProfileState),
+    TypedMiddleware<AppState, ViewMainScreen>(viewMainScreen),
+    TypedMiddleware<AppState, ClearPersistedData>(clearDataState),
+    // Register the new middleware
+    TypedMiddleware<AppState, RefreshCurrentRoute>(
+        _createRefreshCurrentRoute()),
+    TypedMiddleware<AppState, DownloadQRCode>(_createDownloadQRCode()),
+  ];
+}
+
+Middleware<AppState> _createLoadState(
+  PersistenceRepository authRepository,
+  PersistenceRepository profileRepository,
+  PersistenceRepository uiRepository,
+  PersistenceRepository staticRepository,
+  List<PersistenceRepository> companyRepositories,
+) {
+  AuthState? authState;
+  UIState? uiState;
+  StaticState? staticState;
+  final List<UserCompanyState?> companyStates = [];
+
+  return (Store<AppState> store, dynamic dynamicAction,
+      NextDispatcher next) async {
+    final action = dynamicAction as LoadStateRequest?;
+
+    try {
+      final state = store.state;
+      final prefState = state.prefState;
+
+      authState = await authRepository.loadAuthState();
+      uiState = await uiRepository.loadUIState();
+      staticState = await staticRepository.loadStaticState();
+
+      for (var i = 0; i < companyRepositories.length; i++) {
+        UserCompanyState? companyState = UserCompanyState(state.reportErrors);
+        try {
+          companyState = await companyRepositories[i].loadCompanyState(i);
+        } catch (e) {
+          // do nothing
+        }
+        companyStates.add(companyState);
+      }
+
+      // Carry over a deeplink URL on the web
+      if (state.uiState.currentRoute != LoginScreen.route) {
+        uiState = uiState!
+            .rebuild((b) => b..currentRoute = state.uiState.currentRoute);
+      }
+
+      final AppState appState = AppState(
+              prefState: prefState,
+              isWhiteLabeled: store.state.isWhiteLabeled,
+              reportErrors: store.state.account.reportErrors)
+          .rebuild((b) => b
+            ..authState.replace(authState!)
+            ..uiState.replace(uiState!)
+            ..staticState.replace(staticState!)
+            ..userCompanyStates.replace(companyStates));
+
+      AppBuilder.of(navigatorKey.currentContext!)!.rebuild();
+      store.dispatch(LoadStateSuccess(appState));
+
+      if (!store.state.authState.isEmailLinkAuth) {
+        store.dispatch(RefreshData(
+            completer: Completer<Null>()
+              ..future.then<Null>((_) {
+                AppBuilder.of(navigatorKey.currentContext!)!.rebuild();
+                store.dispatch(UpdatedSetting());
+              })));
+      }
+      if (uiState!.currentRoute != LoginScreen.route &&
+          uiState!.currentRoute.isNotEmpty) {
+        RoutingRules.onRefreshRouting(appState.prefState.appLayout);
+      } else {
+        throw 'Unknown page: ${uiState!.currentRoute}';
+      }
+    } catch (error) {
+      logError(' ERROR (app_middleware - load state): $error');
+
+      String? token;
+
+      if (Config.DEMO_MODE ||
+          cleanApiUrl(store.state.authState.url) == kFlutterDemoUrl) {
+        token = 'TOKEN';
+      } else {
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        token = prefs.getString(kSharedPrefToken) ?? '';
+
+        if (token.isNotEmpty) {
+          // token = TokenEntity.unobscureToken(token);
+        }
+      }
+
+      if (token.isNotEmpty) {
+        if (calculateLayout(navigatorKey.currentContext!) == AppLayout.mobile) {
+          store.dispatch(UpdateUserPreferences(appLayout: AppLayout.mobile));
+        } else {
+          store.dispatch(ViewMainScreen());
+        }
+
+        final prefs = await SharedPreferences.getInstance();
+        final companyId = prefs.getString(kSharedPrefCompanyId);
+        if (companyId != null) {
+          final index = companyStates.indexWhere(
+              (companyState) => companyState?.company.id == companyId);
+          if (index > 0) {
+            store.dispatch(SelectCompany(companyIndex: index));
+          }
+        }
+
+        WidgetsBinding.instance.addPostFrameCallback((duration) {
+          RoutingRules.onRefreshRouting(store.state.prefState.appLayout);
+        });
+        AppBuilder.of(navigatorKey.currentContext!)!.rebuild();
+      } else {
+        final email = WebUtils.getUrlParameter('email');
+        final authType = WebUtils.getUrlParameter('authType');
+        
+        if (email != null && email.isNotEmpty && authType == 'opw') {
+          if (calculateLayout(navigatorKey.currentContext!) == AppLayout.mobile) {
+            store.dispatch(UpdateUserPreferences(appLayout: AppLayout.mobile));
+          } else {
+            store.dispatch(ViewMainScreen());
+          }
+          
+          store.dispatch(SetEmailLinkAuthenticationEmail(email: email));
+          final completer = Completer<Null>();
+          store.dispatch(EmailLinkLoginRequest(
+            email: email,
+            completer: completer,
+          ));
+          
+          WidgetsBinding.instance.addPostFrameCallback((duration) {
+            RoutingRules.onRefreshRouting(store.state.prefState.appLayout);
+          });
+          AppBuilder.of(navigatorKey.currentContext!)!.rebuild();
+          return; 
+        }
+        
+        if (!(store.state.authState.isEmailLinkAuth)) {
+          store.dispatch(UserLogout());
+        }
+      }
+    }
+
+    next(action);
+  };
+}
+
+
+Middleware<AppState> _createUserLoggedIn(
+  PersistenceRepository authRepository,
+  PersistenceRepository profileRepository,
+  PersistenceRepository uiRepository,
+  PersistenceRepository staticRepository,
+  List<PersistenceRepository> companyRepositories,
+) {
+  return (Store<AppState> store, dynamic dynamicAction,
+      NextDispatcher next) async {
+    final action = dynamicAction as UserLoginSuccess?;
+
+    next(action);
+
+    final state = store.state;
+    authRepository.saveAuthState(state.authState);
+    profileRepository.saveProfileState(state.profileState);
+    uiRepository.saveUIState(state.uiState);
+    staticRepository.saveStaticState(state.staticState);
+
+    if (state.prefState.persistData) {
+      for (var i = 0; i < state.userCompanyStates.length; i++) {
+        companyRepositories[i].saveCompanyState(state.userCompanyStates[i]);
+      }
+    }
+  };
+}
+
+Middleware<AppState> _createPersistData(
+  List<PersistenceRepository> companyRepositories,
+) {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as PersistData?;
+
+    next(action);
+
+    final state = store.state;
+    final index = state.uiState.selectedCompanyIndex;
+    final companyState = state.userCompanyStates[index];
+
+    if (state.prefState.persistData) {
+      companyRepositories[index].saveCompanyState(companyState);
+    }
+  };
+}
+
+final _persistUIDebouncer = PersistDebouncer();
+Middleware<AppState> _createPersistUI(PersistenceRepository uiRepository) {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as PersistUI?;
+
+    next(action);
+
+    _persistUIDebouncer.run(() {
+      uiRepository.saveUIState(store.state.uiState);
+    });
+  };
+}
+
+Middleware<AppState> _createPersistPrefs() {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as PersistPrefs?;
+
+    next(action);
+
+    final string =
+        serializers.serializeWith(PrefState.serializer, store.state.prefState);
+
+    SharedPreferences.getInstance()
+        .then((prefs) => prefs.setString(kSharedPrefs, json.encode(string)));
+  };
+}
+
+Middleware<AppState> _updateAuthState(PersistenceRepository authRepository) {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as UpdateAuthState?;
+
+    next(action);
+    final state = store.state;
+    authRepository.saveAuthState(state.authState);
+  };
+}
+
+Middleware<AppState> _updateProfileState(
+    PersistenceRepository profileRepository) {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as UpdateProfileState?;
+
+    next(action);
+    final state = store.state;
+    profileRepository.saveProfileState(state.profileState);
+  };
+}
+
+Middleware<AppState> _createAccountLoaded() {
+  return (Store<AppState> store, dynamic dynamicAction,
+      NextDispatcher next) async {
+    final action = dynamicAction as LoadAccountSuccess;
+    final response = action.loginResponse;
+    final loadedStaticData = response.static.currencies.isNotEmpty;
+
+    if (loadedStaticData) {
+      store.dispatch(LoadStaticSuccess(data: response.static));
+    }
+
+    int selectedCompanyIndex = 0;
+
+    try {
+      logInfo(' Account Loaded: ${response.userCompanies.length}');
+      
+      if (response.userCompanies.isEmpty) {
+        store.dispatch(SelectCompany(companyIndex: 0, clearSelection: loadedStaticData));
+        store.dispatch(UserLoginSuccess());
+
+        if (!store.state.authState.isDialogLogin &&
+            store.state.uiState.selectedCompanyIndex >= 0) {
+          store.dispatch(ViewMainScreen());
+        }
+
+        action.completer.complete(null);
+        next(action);
+        WidgetUtils.updateData();
+        return;
+      }
+      
+      for (int i = 0;
+          i < min(response.userCompanies.length, kMaxNumberOfCompanies);
+          i++) {
+        final UserCompanyEntity userCompany = response.userCompanies[i];
+
+        if (i == 0) {
+          final SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setString(
+              kSharedPrefToken, 'Token'); // userCompany.token.obscuredToken);
+        }
+
+        store.dispatch(
+            SelectCompany(companyIndex: i, clearSelection: loadedStaticData));
+        store.dispatch(LoadCompanySuccess(userCompany));
+
+        if (store.state.account.defaultCompanyId == userCompany.company.id) {
+          selectedCompanyIndex = i;
+        }
+      }
+    } catch (error) {
+      action.completer.completeError(error);
+      rethrow;
+    }
+
+    store.dispatch(SelectCompany(
+        companyIndex: selectedCompanyIndex, clearSelection: loadedStaticData));
+    store.dispatch(UserLoginSuccess());
+
+    if (!store.state.authState.isDialogLogin &&
+        store.state.uiState.selectedCompanyIndex >= 0) {
+      store.dispatch(ViewMainScreen());
+    }
+
+    action.completer.complete(null);
+
+    next(action);
+
+    WidgetUtils.updateData();
+  };
+}
+
+Middleware<AppState> _createDataRefreshed() {
+  return (Store<AppState> store, dynamic dynamicAction,
+      NextDispatcher next) async {
+    final action = dynamicAction as RefreshDataSuccess;
+    final response = action.data!;
+    final loadedStaticData = response.static.currencies.isNotEmpty;
+    final state = store.state;
+    final selectedCompanyIndex = state.uiState.selectedCompanyIndex;
+    if (loadedStaticData) {
+      store.dispatch(LoadStaticSuccess(data: response.static));
+    }
+
+    try {
+      if (response.userCompanies.length == 1) {
+        final userCompany = response.userCompanies.first;
+        store.dispatch(LoadCompanySuccess(userCompany));
+      } else {
+        for (int i = 0;
+            i < min(response.userCompanies.length, kMaxNumberOfCompanies);
+            i++) {
+          final UserCompanyEntity userCompany = response.userCompanies[i];
+
+          if (i == 0) {
+            final SharedPreferences prefs =
+                await SharedPreferences.getInstance();
+            prefs.setString(
+                kSharedPrefToken, 'Token'); //userCompany.token.obscuredToken);
+          }
+
+          store.dispatch(
+              SelectCompany(companyIndex: i, clearSelection: loadedStaticData));
+          store.dispatch(LoadCompanySuccess(userCompany));
+        }
+
+        if (store.state.uiState.selectedCompanyIndex != selectedCompanyIndex) {
+          store.dispatch(SelectCompany(companyIndex: selectedCompanyIndex));
+        }
+      }
+    } catch (error) {
+      action.completer?.completeError(error);
+      rethrow;
+    }
+
+    store.dispatch(PersistData());
+
+    if (action.completer != null) {
+      action.completer!.complete(null);
+    }
+
+    next(action);
+
+    WidgetUtils.updateData();
+  };
+}
+
+Middleware<AppState> _createPersistStatic(
+    PersistenceRepository staticRepository) {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as PersistStatic?;
+
+    next(action);
+
+    staticRepository.saveStaticState(store.state.staticState);
+  };
+}
+
+Middleware<AppState> _createDeleteState(
+  PersistenceRepository authRepository,
+  PersistenceRepository profileRepository,
+  PersistenceRepository uiRepository,
+  PersistenceRepository staticRepository,
+  List<PersistenceRepository> companyRepositories,
+) {
+  return (Store<AppState> store, dynamic action, NextDispatcher next) async {
+    authRepository.delete();
+    profileRepository.delete();
+    uiRepository.delete();
+    staticRepository.delete();
+    companyRepositories.forEach((repo) => repo.delete());
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove(kSharedPrefToken);
+    prefs.remove(kSharedPrefUrl);
+
+    next(action);
+  };
+}
+
+Middleware<AppState> _createViewMainScreen() {
+  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
+    final action = dynamicAction as ViewMainScreen?;
+
+    if (store.state.authState.isDialogLogin) {
+      next(action);
+      return;
+    }
+
+    if (store.state.uiState.currentRoute == LoginScreen.route) {
+      store.dispatch(CheckProfileCompletionRequest(
+          context: navigatorKey.currentContext!,
+          completer: Completer<Null>(),
+          isSignUp: store.state.profileUIState.isCreatingNew));
+    }
+
+    while (navigatorKey.currentState!.canPop()) {
+      navigatorKey.currentState!.pop();
+    }
+
+    WidgetsBinding.instance.addPostFrameCallback((duration) {
+      navigatorKey.currentState!.pushNamed(MainScreen.route);
+    });
+
+    next(action);
+  };
+}
+
+Middleware<AppState> _createClearData(
+  List<PersistenceRepository> companyRepositories,
+) {
+  return (Store<AppState> store, dynamic action, NextDispatcher next) async {
+    companyRepositories.forEach((repo) => repo.delete());
+
+    store.dispatch(PersistData());
+
+    next(action);
+  };
+}
+
+Middleware<AppState> _createRefreshCurrentRoute() {
+  return (Store<AppState> store, dynamic action, NextDispatcher next) {
+    if (action is RefreshCurrentRoute) {
+      final currentRoute = store.state.uiState.currentRoute;
+      store.dispatch(UpdateCurrentRoute(currentRoute));
+    }
+    next(action);
+  };
+}
+
+Middleware<AppState> _createDownloadQRCode() {
+  return (Store<AppState> store, dynamic action, NextDispatcher next) async {
+    if (action is DownloadQRCode) {
+      try {
+        final qrRepository = QRRepository();
+        await qrRepository.downloadQRCode(
+          url: action.url,
+          title: action.title,
+          context: navigatorKey.currentContext,
+        );
+      } catch (e) {
+        logError('Error downloading QR code: $e');
+        // Show error message to user
+        if (navigatorKey.currentContext != null) {
+          ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
+            SnackBar(
+              content: Text('Failed to download QR code: $e'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    }
+    next(action);
+  };
+}

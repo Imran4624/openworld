@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "default": "boilerplatedev-52f7d",
+    "boilerplate-dating-demo": "boilerpalte-dating-demo",
+    "boilerplate": "boilerplatedev-21d04",
+    "cac": "cocktails-d9e40",
+    "lm": "londonmarathon-5578d",
+    "mis": "myislamicspouse-prod",
+    "loopjam": "loopjamevents",
+    "opw": "openworld-app",
+    "lvc": "your-luv-code",
+    "datingdemo": "datingdemo-7e27d",
+    "events121": "events121-6151e"
+  },
+  "targets": {},
+  "etags": {}
+}

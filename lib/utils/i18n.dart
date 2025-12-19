@@ -1,0 +1,6018 @@
+// Project imports:
+import 'package:flutter_boilerplate/utils/strings.dart';
+import 'package:flutter_boilerplate/ui/app/shared.dart';
+
+abstract class LocaleCodeAware {
+  LocaleCodeAware(this.localeCode);
+
+  final String localeCode;
+
+  String get baseLocaleCode => localeCode.split('_').first;
+}
+
+///
+/// It provides localization strings to be statically used via getters
+///
+/// It should be used by a [LocaleCodeAware] to get the i18n strings for
+/// a specified locale.
+mixin LocalizationsProvider on LocaleCodeAware {
+  static final Map<String, Map<String, String>> _localizedValues = {
+    'en': {
+      // STARTER: lang key - do not remove comment
+      'payment': 'Payment',
+      'payments': 'Payments',
+      'new_payment': 'New Payment',
+      'edit_payment': 'Edit Payment',
+      'created_payment': 'Successfully created payment',
+      'updated_payment': 'Successfully updated payment',
+      'archived_payment': 'Successfully archived payment',
+      'deleted_payment': 'Successfully deleted payment',
+      'removed_payment': 'Successfully removed payment',
+      'restored_payment': 'Successfully restored payment',
+      'search_payment': 'Search Payment',
+      'search_payments': 'Search Payments',
+
+      'id': 'Id',
+      'idempotencyKey': 'IdempotencyKey',
+      'isChanged': 'IsChanged',
+      'amount': 'Amount',
+      'transactionReference': 'TransactionReference',
+      'date': 'Date',
+      'typeId': 'TypeId',
+      'privateNotes': 'PrivateNotes',
+      'exchangeRate': 'ExchangeRate',
+      'exchangeCurrencyId': 'ExchangeCurrencyId',
+      'refunded': 'Refunded',
+      'applied': 'Applied',
+      'statusId': 'StatusId',
+      'updatedAt': 'UpdatedAt',
+      'archivedAt': 'ArchivedAt',
+      'isDeleted': 'IsDeleted',
+      'isManual': 'IsManual',
+      'paymentables': 'Paymentables',
+      'invoices': 'Invoices',
+      'assignedUserId': 'AssignedUserId',
+      'createdAt': 'CreatedAt',
+      'createdUserId': 'CreatedUserId',
+      'number': 'Number',
+      'sendEmail': 'SendEmail',
+      'companyGatewayId': 'CompanyGatewayId',
+      'clientContactId': 'ClientContactId',
+      'currencyId': 'CurrencyId',
+      'transactionId': 'TransactionId',
+      'invitationId': 'InvitationId',
+      'isApplying': 'IsApplying',
+      'product': 'Product',
+      'products': 'Products',
+      'shop': 'Shop',
+      'myPhotos': 'My Photos',
+      'myPosts': 'MyPosts',
+      'myProducts': 'My Products',
+      'new_product': 'New Product',
+      'edit_product': 'Edit Product',
+      'created_product': 'Successfully created product',
+      'updated_product': 'Successfully updated product',
+      'archived_product': 'Successfully archived product',
+      'deleted_product': 'Successfully deleted product',
+      'removed_product': 'Successfully removed product',
+      'restored_product': 'Successfully restored product',
+      'search_product': 'Search Product',
+      'search_products': 'Search Products',
+      'myEntities': 'My Entities',
+
+      'name': 'Name',
+      'social': 'Social',
+      'socials': 'Socials',
+      'new_social': 'New Social',
+      'edit_social': 'Edit Social',
+      'created_social': 'Successfully created social',
+      'updated_social': 'Successfully updated social',
+      'archived_social': 'Successfully archived social',
+      'deleted_social': 'Successfully deleted social',
+      'removed_social': 'Successfully removed social',
+      'restored_social': 'Successfully restored social',
+      'search_social': 'Search Social',
+      'search_socials': 'Search Socials',
+
+      'userDisplayName': 'UserDisplayName',
+      'userPhotoUrl': 'UserPhotoUrl',
+      'content': 'Content',
+      'photos': 'Photos',
+      'marathonMap': 'Marathon Map',
+      'category': 'Category',
+      'likeCount': 'LikeCount',
+      'commentCount': 'CommentCount',
+      'tags': 'Tags',
+      'photo': 'Photo',
+      'photos': 'Photos',
+      'new_photo': 'New Photo',
+      'edit_photo': 'Edit Photo',
+      'created_photo': 'Successfully created photo',
+      'updated_photo': 'Successfully updated photo',
+      'archived_photo': 'Successfully archived photo',
+      'deleted_photo': 'Successfully deleted photo',
+      'removed_photo': 'Successfully removed photo',
+      'restored_photo': 'Successfully restored photo',
+      'search_photo': 'Search Photo',
+      'search_photos': 'Search Photos',
+
+      'category': 'Category',
+      'storageType': 'StorageType',
+      'url': 'Url',
+      'isProcessed': 'IsProcessed',
+      'tags': 'Tags',
+      'workout': 'Workout',
+      'workouts': 'Workouts',
+      'new_workout': 'New Workout',
+      'edit_workout': 'Edit Workout',
+      'created_workout': 'Successfully created workout',
+      'updated_workout': 'Successfully updated workout',
+      'archived_workout': 'Successfully archived workout',
+      'deleted_workout': 'Successfully deleted workout',
+      'removed_workout': 'Successfully removed workout',
+      'restored_workout': 'Successfully restored workout',
+      'search_workout': 'Search Workout',
+      'search_workouts': 'Search Workouts',
+
+      'type': 'Type',
+      'startTime': 'StartTime',
+      'endTime': 'EndTime',
+      'duration': 'Duration',
+      'distance': 'Distance',
+      'averagePace': 'AveragePace',
+      'caloriesBurned': 'CaloriesBurned',
+      'elevationGain': 'ElevationGain',
+      'notification': 'Notification',
+      'notifications': 'Notifications',
+      'new_notification': 'New Notification',
+      'edit_notification': 'Edit Notification',
+      'created_notification': 'Successfully created notification',
+      'updated_notification': 'Successfully updated notification',
+      'archived_notification': 'Successfully archived notification',
+      'deleted_notification': 'Successfully deleted notification',
+      'removed_notification': 'Successfully removed notification',
+      'restored_notification': 'Successfully restored notification',
+      'search_notification': 'Search Notification',
+      'search_notifications': 'Search Notifications',
+
+      'title': 'Title',
+      'body': 'Body',
+      'type': 'Type',
+      'channel': 'Channel',
+      'actionUrl': 'ActionUrl',
+      'payload': 'Payload',
+      'priority': 'Priority',
+      'profile_operation': 'ProfileOperation',
+      'profile_operations': 'Matches',
+      'new_profile_operation': 'New ProfileOperation',
+      'edit_profile_operation': 'Edit ProfileOperation',
+      'created_profile_operation': 'Successfully created profile_operation',
+      'updated_profile_operation': 'Successfully updated profile_operation',
+      'archived_profile_operation': 'Successfully archived profile_operation',
+      'deleted_profile_operation': 'Successfully deleted profile_operation',
+      'removed_profile_operation': 'Successfully removed profile_operation',
+      'restored_profile_operation': 'Successfully restored profile_operation',
+      'search_profile_operation': 'Search ProfileOperation',
+      'search_profile_operations': 'Search ProfileOperations',
+
+      'comment': 'Comment',
+      'type': 'Type',
+      'profile': 'Profile',
+      'profiles': 'Profiles',
+      'new_profile': 'New Profile',
+      'edit_profile': 'Edit Profile',
+      'created_profile': 'Successfully created profile',
+      'updated_profile': 'Successfully updated profile',
+      'archived_profile': 'Successfully archived profile',
+      'deleted_profile': 'Successfully deleted profile',
+      'deleted_account': 'Account is deleted successfully',
+      'removed_profile': 'Successfully removed profile',
+      'restored_profile': 'Successfully restored profile',
+      'search_profile': 'Search Profile',
+      'search_profiles': 'Search Profiles',
+
+      'name': 'Name',
+      'event': 'Event',
+      'events': 'Events',
+      'new_event': 'New Event',
+      'edit_event': 'Edit Event',
+      'created_event': 'Successfully created event',
+      'updated_event': 'Successfully updated event',
+      'archived_event': 'Successfully archived event',
+      'deleted_event': 'Successfully deleted event',
+      'removed_event': 'Successfully removed event',
+      'restored_event': 'Successfully restored event',
+      'search_event': 'Search Event',
+      'search_events': 'Search Events',
+
+      'accessCode': 'AccessCode',
+      'callToAction': 'CallToAction',
+      'chk': 'Chk',
+      'description': 'Description',
+      'end': 'End',
+      'start': 'Start',
+      'eventSeriesId': 'EventSeriesId',
+      'hidden': 'Hidden',
+      'onlineEvent': 'OnlineEvent',
+      'privateEvent': 'PrivateEvent',
+      'ticketsAvailable': 'TicketsAvailable',
+      'totalHolds': 'TotalHolds',
+      'totalIssuedTickets': 'TotalIssuedTickets',
+      'totalOrders': 'TotalOrders',
+      'unavailable': 'Unavailable',
+      'unavailableStatus': 'UnavailableStatus',
+      'chat': 'Chat',
+      'chats': 'Chats',
+      'new_chat': 'New Chat',
+      'edit_chat': 'Edit Chat',
+      'created_chat': 'Successfully created chat',
+      'updated_chat': 'Successfully updated chat',
+      'archived_chat': 'Successfully archived chat',
+      'deleted_chat': 'Successfully deleted chat',
+      'removed_chat': 'Successfully removed chat',
+      'restored_chat': 'Successfully restored chat',
+      'search_chat': 'Search Chat',
+      'search_chats': 'Search Chats',
+
+      // old keys, add all new keys above this (we'll remove old keys later)
+      'liked': 'Liked',
+      'likedMe': 'Liked Me',
+      'matches': 'Matches',
+      'passes': 'Passes',
+      'comments': 'Comments',
+
+      // Empty state messages
+      'noLikedProfilesYet': 'You haven\'t liked any profiles yet',
+      'noLikedMeProfilesYet': 'No one has liked your profile yet',
+      'noMatchesYet': 'You don\'t have any matches yet',
+      'noPassesYet': 'You haven\'t passed on any profiles yet',
+      'noCommentsYet': 'No comments yet',
+
+      // Action labels
+      'match': 'Match',
+      'like': 'Like',
+      'pass': 'Pass',
+      'block': 'Block',
+      'favorite': 'Favorite',
+      'report': 'Report',
+      'message': 'Message',
+
+      // Status messages
+      'youLiked': 'You liked',
+      'youLikedThisProfile': 'You liked this profile',
+      'thisProfileLikedYou': 'This profile liked you',
+      'youMatchedWithThisProfile': 'You matched with this profile',
+      'youPassedOnThisProfile': 'You passed on this profile',
+      'noComment': 'No comment',
+      'chatStarted': 'Chat started',
+      'matched': 'Matched',
+      'passed': 'Passed',
+      'commented': 'Commented',
+      'ago': 'ago',
+
+      //#region auth
+      'email': 'Email',
+      'password': 'Password',
+      'url': 'URL',
+      'secret': 'Secret',
+      'name': 'Name',
+      'logout': 'Log Out',
+      'change_password': 'Change Password',
+      'old_password': 'Old Password',
+      'new_password': 'New Password',
+      'confirm_password': 'Confirm Password',
+      'change_password_error': 'Change Password Error',
+      'change_password_success': 'Password changed SuccessFully',
+      'confirm_password_error':
+          'New password and confirm password do not match.',
+      'login': 'Login',
+      'welcome_back': 'Welcome Back',
+
+      'hosted_login': 'Hosted Login',
+      'selfhost_login': 'Selfhost Login',
+      'hosted': 'Hosted',
+      'selfhosted': 'Self-Hosted',
+
+      //endregion
+      'search_users': 'Search Users',
+      'task_assigned': 'Task Assigned',
+      //#region app
+      //endregion
+
+      // 'payment_failed': 'Payment Failed',
+      // 'activity_141': 'User :user entered note :notes',
+      // 'activity_142': 'Quote :number reminder 1 sent',
+      // 'activity_143': 'Auto Bill succeeded for invoice :invoice',
+      // 'activity_144': 'Auto Bill failed for invoice :invoice. :notes',
+      // 'activity_145': 'EInvoice :invoice for :client was e-delivered. :notes',
+      'title': 'Title',
+      'ssl_host_override': 'SSL Host Override',
+      'upload_logo_short': 'Upload Logo',
+      // 'show_pdfhtml_on_mobile_help':
+      //     'For improved visualization, displays a HTML version of the invoice/quote when viewing on mobile.',
+      // 'accept_purchase_order': 'Accept Purchase Order',
+      // 'one_page_checkout': 'One-Page Checkout',
+      // 'one_page_checkout_help': 'Enable the new single page payment flow',
+      // 'applies_to': 'Applies To',
+      // 'purchase_order_items': 'Purchase Order Items',
+      // 'assigned_group': 'Successfully assigned group',
+      // 'assign_group': 'Assign Group',
+      // 'merge_to_pdf': 'Merge to PDF',
+      // 'emails': 'Emails',
+      // 'latest_requires_php_version':
+      //     'Note: the latest version requires PHP :version',
+      // 'quote_reminder1': 'First Quote Reminder',
+      // 'before_valid_until': 'Before the valid until',
+      // 'after_valid_until': 'After the valid until',
+      // 'after_quote_date': 'After the quote date',
+      // 'remind_quote': 'Remind Quote',
+      'task_assigned_notification': 'Task Assigned Notification',
+      'task_assigned_notification_help':
+          'Send an email when a task is assigned',
+      // 'invoices_locked_end_of_month':
+      //     'Invoices are locked at the end of the month',
+      // 'end_of_month': 'End of Month',
+      'referral_url': 'Referral URL',
+      'referral_program': 'Referral Program',
+      'comment': 'Comment',
+      'add_comment': 'Add Comment',
+      'added_comment': 'Successfully saved comment',
+      'disconnected': 'Disconnected',
+      'reconnect': 'Reconnect',
+      // 'e_invoice_settings': 'E-Invoice Settings',
+      // 'calculate': 'Calculate',
+      // 'sum': 'Sum',
+      // 'money': 'Money',
+      // 'time': 'Time',
+      // 'format': 'Format',
+      'web_app': 'Web App',
+      'desktop_app': 'Desktop App',
+      // 'invoice_net_amount': 'Invoice Net Amount',
+      // 'round_to_seconds': 'Round To Seconds',
+      // '1_minute': '1 Minute',
+      // '5_minutes': '5 Minutes',
+      // '15_minutes': '15 Minutes',
+      // '30_minutes': '30 Minutes',
+      // '1_hour': '1 Hour',
+      // '1_day': '1 Day',
+      // 'round_tasks': 'Round Tasks',
+      // 'round_tasks_help': 'Round time intervals when saving tasks',
+      // 'direction': 'Direction',
+      // 'round_up': 'Round Up',
+      // 'round_down': 'Round Down',
+      // 'task_round_to_nearest': 'Round To Nearest',
+      // 'activity_139': 'Expense :expense notification sent to :contact',
+      // 'activity_140': 'Statement sent to :client - :notes',
+      'bulk_updated': 'Successfully updated data',
+      'bulk_update': 'Bulk Update',
+      // 'advanced_cards': 'Advanced Cards',
+      // 'always_show_required_fields': 'Always Show Required Fields',
+      'always_show_required_fields_help':
+          'Show required fields regardless if they are filled or not',
+      'flutter_web_warning': 'Please download the app for best performance',
+      'rappen_rounding': 'Rappen Rounding',
+      'rappen_rounding_help': 'Round amount to 5 cents',
+      'check_credentials': 'Check Credentials',
+      'valid_credentials': 'Credentials are valid',
+      'invalid_credentials': 'Credentials are not valid',
+      // 'e_quote': 'E-Quote',
+      // 'e_credit': 'E-Credit',
+      // 'e_purchase_order': 'E-Purchase Order',
+      // 'valid_vat_number': 'Valid VAT Number',
+      // 'use_available_payments': 'Use Available Payments',
+      'test_email_sent': 'Successfully sent email',
+      'send_test_email': 'Send Test Email',
+      // 'gateway_type': 'Gateway Type',
+      // 'please_select_an_invoice_or_credit':
+      //     'Please select an invoice or credit',
+      'mobile_version': 'Mobile Version',
+      'task_assigned': 'Task assigned',
+      // 'venmo': 'Venmo',
+      // 'mercado_pago': 'Mercado Pago',
+      // 'my_bank': 'MyBank',
+      // 'pay_later': 'Pay Later',
+      'email_report': 'Email Report',
+      'host': 'Host',
+      'port': 'Port',
+      'encryption': 'Encryption',
+      'local_domain': 'Local Domain',
+      'verify_peer': 'Verify Peer',
+      'username': 'Username',
+      // 'nordigen_help':
+      //     'Note: connecting an account requires a GoCardless/Nordigen API key',
+      // 'participant_name': 'Participant Name',
+      // 'yodlee_regions': 'Regions: USA, UK, Australia & India',
+      // 'nordigen_regions': 'Regions: Europe & UK',
+      // 'select_provider': 'Select Provider',
+
+      // 'send_emails_to': 'Send Emails To',
+      // 'primary_contact': 'Primary Contact',
+      // 'all_contacts': 'All Contacts',
+      // 'insert_below': 'Insert Below',
+      // 'ar_detailed': 'Accounts Receivable Detailed',
+      // 'ar_summary': 'Accounts Receivable Summary',
+      // 'client_sales': 'Client Sales',
+      // 'tax_summary': 'Tax Summary',
+      // 'user_sales': 'User Sales',
+      'run_template': 'Run Template',
+      // 'task_extension_banner':
+      //     'Install the Chrome extension to manage tasks in your browser',
+      'watch_video': 'Watch Video',
+      'view_extension': 'View Extension',
+      'reactivate_email': 'Reactivate Email',
+      'email_reactivated': 'Successfully reactivated email',
+      'template_help': 'Enable using the design as a template',
+      // 'delivery_note_design': 'Delivery Note Design',
+      'statement_design': 'Statement Design',
+      // 'payment_receipt_design': 'Payment Receipt Design',
+      // 'payment_refund_design': 'Payment Refund Design',
+      'quarter': 'Quarter',
+      'item_description': 'Item Description',
+      'task_item': 'Task Item',
+      'record_state': 'Record State',
+      'last_login': 'Last Login',
+      'save_files_to_this_folder': 'Save files to this folder',
+      'downloads_folder': 'Downloads Folder',
+      // 'total_invoiced_quotes': 'Invoiced Quotes',
+      // 'total_invoice_paid_quotes': 'Invoice Paid Quotes',
+      // 'downloads_folder_does_not_exist':
+      //     'The downloads folder does not exist :value',
+      'user_logged_in_notification': 'User Logged in Notification',
+      'user_logged_in_notification_help':
+          'Send an email when logging in from a new location',
+      // 'client_contact': 'Client Contact',
+      // 'expense_status_4': 'Unpaid',
+      // 'expense_status_5': 'Paid',
+      'recurring': 'Recurring',
+      // 'ziptax_help':
+      //     'Note: this feature requires a Zip-Tax API key to lookup US sales tax by address',
+      'cache_data': 'Cache Data',
+      'unknown': 'Unknown',
+      // 'webhook_failure': 'Webhook Failure',
+      // 'email_opened': 'Email Opened',
+      // 'email_delivered': 'Email Delivered',
+      // 'log': 'Log',
+      // 'individual': 'Individual',
+      // 'partnership': 'Partnership',
+      // 'trust': 'Trust',
+      // 'charity': 'Charity',
+      // 'government': 'Government',
+      // 'classification': 'Classification',
+      // 'click_or_drop_files_here': 'Click or drop files here',
+      // 'public': 'Public',
+      // 'private': 'Private',
+      // 'image': 'Image',
+      // 'other': 'Other',
+      // 'hash': 'Hash',
+      // 'linked_to': 'Linked To',
+      'file_saved_in_path': 'The file has been saved to :path',
+      // 'unlinked_transactions': 'Successfully unlinked :count transactions',
+      // 'unlinked_transaction': 'Successfully unlinked transaction',
+      // 'unlink': 'Unlink',
+      'view_dashboard_permission':
+          'Allow user to access the dashboard, data is limited to available permissions',
+      // 'is_tax_exempt': 'Tax Exempt',
+      // 'district': 'District',
+      // 'region': 'Region',
+      // 'county': 'County',
+      // 'tax_details': 'Tax Details',
+      // 'activity_10_online':
+      //     ':contact entered payment :payment for invoice :invoice for :client',
+      // 'activity_10_manual':
+      //     ':user entered payment :payment for invoice :invoice for :client',
+
+      // 'admin_initiated_payments': 'Admin Initiated Payments',
+      // 'admin_initiated_payments_help':
+      //     'Support entering a payment in the admin portal without an invoice',
+      'use_mobile_to_manage_plan':
+          'Use your phone subscription settings to manage your plan',
+      // 'show_task_billable': 'Show Task Billable',
+      // 'credit_item': 'Credit Item',
+      // 'files': 'Files',
+      // 'camera': 'Camera',
+      // 'gallery': 'Gallery',
+      // 'email_count_invoices': 'Email :count invoices',
+      // 'project_location': 'Project Location',
+      // 'invoice_task_item_description': 'Invoice Task Item Description',
+      // 'invoice_task_item_description_help':
+      //     'Add the item description to the invoice line items',
+      // 'next_send_time': 'Next Send Time',
+      // 'uploaded_certificate': 'Successfully uploaded certificate',
+      // 'certificate_set': 'Certificate set',
+      // 'certificate_not_set': 'Certificate not set',
+      // 'passphrase_set': 'Passphrase set',
+      // 'passphrase_not_set': 'Passphrase not set',
+      // 'upload_certificate': 'Upload Certificate',
+      // 'certificate_passphrase': 'Certificate Passphrase',
+      // 'rename': 'Rename',
+      // 'renamed_document': 'Successfully renamed document',
+      // 'e_invoice': 'E-Invoice',
+      'light_dark_mode': 'Light/Dark Mode',
+      // 'activities': 'Activities',
+      // 'routing_id': 'Routing ID',
+      // 'enable_e_invoice': 'Enable E-Invoice',
+      // 'e_invoice_type': 'E-Invoice Type',
+      // 'e_quote_type': 'E-Quote Type',
+      // 'reduced_tax': 'Reduced',
+      // 'override_tax': 'Override',
+      // 'zero_rated': 'Zero Rated',
+      // 'reverse_tax': 'Reverse',
+      // 'updated_tax_category': 'Successfully updated the tax category',
+      // 'updated_tax_categories': 'Successfully updated the tax categories',
+      // 'set_tax_category': 'Set Tax Category',
+      // 'payment_manual': 'Payment Manual',
+      // 'tax_category': 'Tax Category',
+      // 'physical_goods': 'Physical Goods',
+      // 'digital_products': 'Digital Products',
+      // 'services': 'Services',
+      // 'shipping': 'Shipping',
+      // 'tax_exempt': 'Exempt',
+      // 'reduced_rate': 'Reduced Rate',
+      // 'tax_all': 'Tax All',
+      // 'tax_selected': 'Tax Selected',
+      // 'version': 'version',
+      // 'seller_subregion': 'Seller Subregion',
+      // 'calculate_taxes': 'Calculate Taxes',
+      // 'calculate_taxes_help':
+      //     'Automatically calculate taxes when saving invoices',
+      // 'admin': 'Admin',
+      // 'owner': 'Owner',
+      // 'link_expenses': 'Link Expenses',
+      // 'converted_client_balance': 'Converted Client Balance',
+      // 'converted_payment_balance': 'Converted Payment Balance',
+      // 'total_hours': 'Total Hours',
+      // 'date_picker_hint': 'Use +days to set the date in the future',
+      'browser_pdf_viewer': 'Use Browser PDF Viewer',
+      'browser_pdf_viewer_help':
+          'Warning: Prevents interacting with app over the PDF',
+      // 'increase_prices': 'Increase Prices',
+      // 'update_prices': 'Update Prices',
+      // 'incresed_prices': 'Successfully queued prices to be increased',
+      // 'updated_prices': 'Successfully queued prices to be updated',
+      // 'bacs': 'Bacs',
+      'api_token': 'API Token',
+      'api_key': 'API Key',
+      'endpoint': 'Endpoint',
+      // 'billable': 'Billable',
+      // 'not_billable': 'Not Billable',
+      // 'allow_billable_task_items': 'Allow Billable Task Items',
+      // 'allow_billable_task_items_help':
+      //     'Enable specifying which task items are billed',
+      // 'show_task_item_description': 'Show Task Item Description',
+      // 'show_task_item_description_help':
+      //     'Enable specifying task item descriptions',
+      // 'email_record': 'Email Record',
+      // 'invoice_product_columns': 'Invoice Product Columns',
+      // 'quote_product_columns': 'Quote Product Columns',
+      // 'minimum_payment_amount': 'Minimum Payment Amount',
+      // 'client_initiated_payments': 'Client Initiated Payments',
+      // 'client_initiated_payments_help':
+      //     'Support entering a payment in the client portal without an invoice',
+      // 'share_invoice_quote_columns': 'Share Invoice/Quote Columns',
+      // 'cc_email': 'CC Email',
+      // 'payment_balance': 'Payment Balance',
+      'view_report_permission':
+          'Allow user to access the reports, data is limited to available permissions',
+      // 'activity_138': 'Payment :payment was emailed to :contact',
+      // 'one_time_products': 'One-Time Products',
+      // 'optional_one_time_products': 'Optional One-Time Products',
+      // 'required': 'Required',
+      // 'hidden': 'Hidden',
+      // 'payment_links': 'Payment Links',
+      // 'action': 'Action',
+      // 'upgrade_to_paid_plan_to_schedule':
+      //     'Upgrade to a paid plan to create schedules',
+      // 'next_run': 'Next Run',
+      // 'all_clients': 'All Clients',
+      // 'show_aging_table': 'Show Aging Table',
+      // 'show_payments_table': 'Show Payments Table',
+      // 'only_clients_with_invoices': 'Only Clients with Invoices',
+      // 'email_statement': 'Email Statement',
+      // 'once': 'Once',
+      'schedule': 'Schedule',
+      // 'schedules': 'Schedules',
+      // 'new_schedule': 'New Schedule',
+      // 'edit_schedule': 'Edit Schedule',
+      // 'created_schedule': 'Successfully created schedule',
+      // 'updated_schedule': 'Successfully updated schedule',
+      // 'archived_schedule': 'Successfully archived schedule',
+      // 'deleted_schedule': 'Successfully deleted schedule',
+      // 'removed_schedule': 'Successfully removed schedule',
+      // 'restored_schedule': 'Successfully restored schedule',
+      // 'search_schedule': 'Search Schedule',
+      // 'search_schedules': 'Search Schedules',
+
+      // 'archive_payment': 'Archive Payment',
+      // 'archive_invoice': 'Archive Invoice',
+      // 'archive_quote': 'Archive Quote',
+      // 'archive_credit': 'Archive Credit',
+      // 'archive_task': 'Archive Task',
+      // 'archive_client': 'Archive Client',
+      // 'archive_project': 'Archive Project',
+      // 'archive_expense': 'Archive Expense',
+      // 'restore_payment': 'Restore Payment',
+      // 'restore_invoice': 'Restore Invoice',
+      // 'restore_quote': 'Restore Quote',
+      // 'restore_credit': 'Restore Credit',
+      // 'restore_task': 'Restore Task',
+      // 'restore_client': 'Restore Client',
+      // 'restore_project': 'Restore Project',
+      // 'restore_expense': 'Restore Expense',
+      // 'archive_vendor': 'Archive Vendor',
+      // 'restore_vendor': 'Restore Vendor',
+      // 'create_product': 'Create Product',
+      // 'update_product': 'Update Product',
+      // 'delete_product': 'Delete Product',
+      // 'restore_product': 'Restore Product',
+      // 'archive_product': 'Archive Product',
+      // 'create_purchase_order': 'Create Purchase Order',
+      // 'update_purchase_order': 'Update Purchase Order',
+      // 'delete_purchase_order': 'Delete Purchase Order',
+      // 'restore_purchase_order': 'Restore Purchase Order',
+      // 'archive_purchase_order': 'Archive Purchase Order',
+      // 'sent_invoice': 'Sent Invoice',
+      // 'sent_quote': 'Sent Quote',
+      // 'sent_credit': 'Sent Credit',
+      // 'sent_purchase_order': 'Sent Purchase Order',
+      // 'image_url': 'Image URL',
+      // 'max_quantity': 'Max Quantity',
+      // 'test_url': 'Test URL',
+      // 'auto_bill_help_off': 'Option is not shown',
+      // 'auto_bill_help_optin': 'Option is shown but not selected',
+      // 'auto_bill_help_optout': 'Option is shown and selected',
+      // 'auto_bill_help_always': 'Option is not shown',
+      // 'payment_methods': 'Payment Methods',
+      'view_all': 'View All',
+      'edit_all': 'Edit All',
+      // 'accept_purchase_order_number': 'Accept Purchase Order Number',
+      // 'accept_purchase_order_number_help':
+      //     'Enable clients to provide a PO number when approving a quote',
+      'from_email': 'From Email',
+      'show_preview': 'Show Preview',
+      // 'show_paid_stamp': 'Show Paid Stamp',
+      // 'show_shipping_address': 'Show Shipping Address',
+      // 'no_documents_to_download':
+      //     'There are no documents in the selected records to download',
+      // 'pixels': 'Pixels',
+      // 'logo_size': 'Logo Size',
+      // 'postal_city': 'Postal/City',
+      // 'failed': 'Failed',
+      // 'client_contacts': 'Client Contacts',
+      // 'sync_from': 'Sync From',
+      // 'inventory_threshold': 'Inventory Threshold',
+      // 'hour': 'Hour',
+      // 'emailed_statement': 'Successfully queued statement to be sent',
+      'show_email_footer': 'Show Email Footer',
+      // 'invoice_task_hours': 'Invoice Task Hours',
+      // 'invoice_task_hours_help': 'Add the hours to the invoice line items',
+      // 'auto_bill_standard_invoices': 'Auto Bill Standard Invoices',
+      // 'auto_bill_recurring_invoices': 'Auto Bill Recurring Invoices',
+      // 'email_alignment': 'Email Alignment',
+      // 'pdf_preview_location': 'PDF Preview Location',
+      // 'mailgun': 'Mailgun',
+      // 'postmark': 'Postmark',
+      // 'microsoft': 'Microsoft',
+      'click_plus_to_create_record': 'Click + to create a record',
+      '"no_data_found"': 'No data found',
+      'last365_days': 'Last 365 Days',
+      'import_design': 'Import Design',
+      'imported_design': 'Successfully imported design',
+      'invalid_design': 'The design is invalid, the :value section is missing',
+      'setup_wizard_logo': 'Would you like to upload your logo?',
+      'upload': 'Upload',
+      // 'installed_version': 'Installed Version',
+      // 'notify_vendor_when_paid': 'Notify Vendor When Paid',
+      // 'notify_vendor_when_paid_help':
+      //     'Send an email to the vendor when the expense is marked as paid',
+      // 'update_payment': 'Update Payment',
+      // 'markup': 'Markup',
+      // 'purchase_order_created': 'Purchase Order Created',
+      // 'purchase_order_sent': 'Purchase Order Sent',
+      // 'purchase_order_viewed': 'Purchase Order Viewed',
+      // 'purchase_order_accepted': 'Purchase Order Accepted',
+      // 'credit_payment_error':
+      //     'The credit amount can not be greater than the payment amount',
+      // 'klarna': 'Klarna',
+      // 'convert_payment_currency_help':
+      //     'Set an exchange rate when entering a manual payment',
+      // 'convert_expense_currency_help':
+      //     'Set an exchange rate when creating an expense',
+      'matomo_url': 'Matomo URL',
+      'matomo_id': 'Matomo Id',
+      // 'action_add_to_invoice': 'Add To Invoice',
+      // 'online_payment_email_help':
+      //     'Send an email when an online payment is made',
+      // 'manual_payment_email_help':
+      //     'Send an email when manually entering a payment',
+      // 'mark_paid_payment_email_help':
+      //     'Send an email when marking an invoice as paid',
+      // 'delete_project': 'Delete Project',
+      // 'linked_transaction': 'Successfully linked transaction',
+      // 'link_payment': 'Link Payment',
+      // 'link_expense': 'Link Expense',
+      // 'lock_invoiced_tasks': 'Lock Invoiced Tasks',
+      // 'lock_invoiced_tasks_help':
+      //     'Prevent tasks from being edited once invoiced',
+      // 'registration_required': 'Registration Required',
+      // 'registration_required_help': 'Require clients to register',
+      // 'use_inventory_management': 'Use Inventory Management',
+      // 'use_inventory_management_help': 'Require products to be in stock',
+      // 'optional_products': 'Optional Products',
+      // 'optional_recurring_products': 'Optional Recurring Products',
+      // 'convert_matched': 'Convert',
+      // 'auto_billed_invoice': 'Successfully queued invoice to be auto-billed',
+      // 'auto_billed_invoices': 'Successfully queued invoices to be auto-billed',
+      // 'operator': 'Operator',
+      // 'value': 'Value',
+      // 'is': 'Is',
+      // 'contains': 'Contains',
+      // 'starts_with': 'Starts with',
+      // 'is_empty': 'Is empty',
+      // 'add_rule': 'Add Rule',
+      // 'match_all_rules': 'Match All Rules',
+      // 'match_all_rules_help':
+      //     'All criteria needs to match for the rule to be applied',
+      // 'auto_convert_help':
+      //     'Automatically convert matched transactions to expenses',
+      // 'rules': 'Rules',
+      // 'transaction_rule': 'Transaction Rule',
+      // 'transaction_rules': 'Transaction Rules',
+      // 'new_transaction_rule': 'New Transaction Rule',
+      // 'edit_transaction_rule': 'Edit Transaction Rule',
+      // 'created_transaction_rule': 'Successfully created rule',
+      // 'updated_transaction_rule': 'Successfully updated transaction rule',
+      // 'archived_transaction_rule': 'Successfully archived transaction rule',
+      // 'deleted_transaction_rule': 'Successfully deleted transaction rule',
+      // 'removed_transaction_rule': 'Successfully removed transaction rule',
+      // 'restored_transaction_rule': 'Successfully restored transaction rule',
+      // 'search_transaction_rule': 'Search Transaction Rule',
+      // 'search_transaction_rules': 'Search Transaction Rules',
+      // 'save_as_default_terms': 'Save as default terms',
+      // 'save_as_default_footer': 'Save as default footer',
+      // 'auto_sync': 'Auto Sync',
+      // 'refresh_accounts': 'Refresh Accounts',
+      // 'upgrade_to_connect_bank_account':
+      //     'Upgrade to Enterprise to connect your bank account',
+      // 'click_here_to_connect_bank_account':
+      //     'Click here to connect your bank account',
+      'disable_2fa': 'Disable 2FA',
+      'change_number': 'Change Number',
+      'resend_code': 'Resend Code',
+      // 'base_type': 'Base Type',
+      // 'category_type': 'Category Type',
+      // 'bank_transaction': 'Transaction',
+      // 'bulk_print': 'Print PDF',
+      // 'vendor_postal_code': 'Vendor Postal Code',
+      'preview_location': 'Preview Location',
+      'bottom': 'Bottom',
+      'side': 'Side',
+      // 'pdf_preview': 'PDF Preview',
+      'long_press_to_select': 'Long Press to Select',
+      // 'purchase_order_number': 'Purchase Order Number',
+      // 'purchase_order_item': 'Purchase Order Item',
+      'would_you_rate_the_app': 'Would you like to rate the app?',
+      'include_deleted': 'Include Deleted',
+      'include_deleted_help': 'Include deleted records in reports',
+      // 'due_on': 'Due On',
+      // 'converted_transactions': 'Successfully converted transactions',
+      // 'created_bank_account': 'Successfully created bank account',
+      // 'updated_bank_account': 'Successfully updated bank account',
+      // 'edit_bank_account': 'Edit Bank Account',
+      // 'default_category': 'Default Category',
+      // 'account_type': 'Account Type',
+      // 'new_bank_account': 'New Bank Account',
+      // 'connect_accounts': 'Connect Accounts',
+      // 'manage_rules': 'Manage Rules',
+      // 'search_category': 'Search 1 Category',
+      // 'search_categories': 'Search :count Categories',
+      // 'min_amount': 'Min Amount',
+      // 'max_amount': 'Max Amount',
+      // 'selected': 'Selected',
+      // 'converted_transaction': 'Successfully converted transaction',
+      // 'convert_to_payment': 'Convert to Payment',
+      // 'deposit': 'Deposit',
+      // 'withdrawal': 'Withdrawal',
+      // 'deposits': 'Deposits',
+      // 'withdrawals': 'Withdrawals',
+      // 'matched': 'Matched',
+      // 'unmatched': 'Unmatched',
+      // 'create_credit': 'Create Credit',
+      // 'update_credit': 'Update Credit',
+      // 'delete_credit': 'Delete Credit',
+      // 'transaction': 'Transaction',
+      // 'transactions': 'Transactions',
+      // 'new_transaction': 'New Transaction',
+      // 'edit_transaction': 'Edit Transaction',
+      // 'created_transaction': 'Successfully created transaction',
+      // 'updated_transaction': 'Successfully updated transaction',
+      // 'archived_transaction': 'Successfully archived transaction',
+      // 'deleted_transaction': 'Successfully deleted transaction',
+      // 'removed_transaction': 'Successfully removed transaction',
+      // 'restored_transaction': 'Successfully restored transaction',
+      // 'search_transaction': 'Search Transaction',
+      // 'search_transactions': 'Search :count Transactions',
+      // 'bank_account': 'Bank Account',
+      // 'bank_accounts': 'Bank Accounts',
+      // 'archived_bank_account': 'Successfully archived bank account',
+      // 'deleted_bank_account': 'Successfully deleted bank account',
+      // 'removed_bank_account': 'Successfully removed bank account',
+      // 'restored_bank_account': 'Successfully restored bank account',
+      // 'search_bank_account': 'Search Bank Account',
+      // 'search_bank_accounts': 'Search :count Bank Accounts',
+      // 'connect': 'Connect',
+      // 'mark_paid_payment_email': 'Mark Paid Payment Email',
+      // 'convert_to_project': 'Convert to Project',
+      // 'client_email': 'Client Email',
+      // 'invoice_task_project': 'Invoice Task Project',
+      // 'invoice_task_project_help': 'Add the project to the invoice line items',
+      'field': 'Field',
+      // 'period': 'Period',
+      // 'fields_per_row': 'Fields Per Row',
+      // 'total_active_invoices': 'Active Invoices',
+      // 'total_outstanding_invoices': 'Outstanding Invoices',
+      // 'total_completed_payments': 'Completed Payments',
+      // 'total_refunded_payments': 'Refunded Payments',
+      // 'total_active_quotes': 'Active Quotes',
+      // 'total_approved_quotes': 'Approved Quotes',
+      // 'total_unapproved_quotes': 'Unapproved Quotes',
+      // 'total_logged_tasks': 'Logged Tasks',
+      // 'total_invoiced_tasks': 'Invoiced Tasks',
+      // 'total_paid_tasks': 'Paid Tasks',
+      // 'total_logged_expenses': 'Logged Expenses',
+      // 'total_pending_expenses': 'Pending Expenses',
+      // 'total_invoiced_expenses': 'Invoiced Expenses',
+      // 'total_invoice_paid_expenses': 'Invoice Paid Expenses',
+      // 'activity_130': ':user created purchase order :purchase_order',
+      // 'activity_131': ':user updated purchase order :purchase_order',
+      // 'activity_132': ':user archived purchase order :purchase_order',
+      // 'activity_133': ':user deleted purchase order :purchase_order',
+      // 'activity_134': ':user restored purchase order :purchase_order',
+      // 'activity_135': ':user emailed purchase order :purchase_order',
+      // 'activity_136': ':contact viewed purchase order :purchase_order',
+      // 'activity_137': ':contact accepted purchase order :purchase_order',
+      // 'vendor_portal': 'Vendor Portal',
+      'send_code': 'Send Code',
+      // 'save_to_upload_documents': 'Save the record to upload documents',
+      // 'expense_tax_rates': 'Expense Tax Rates',
+      // 'invoice_item_tax_rates': 'Invoice Item Tax Rates',
+      'verified_phone_number': 'Successfully verified phone number',
+      'code_was_sent': 'A code has been sent via SMS',
+      'please_enter_a_code': 'Please enter a code',
+      'code_was_sent_to': 'A code has been sent via SMS to :number',
+      'resend': 'Resend',
+      'verify': 'Verify',
+      'enter_phone_number': 'Please provide a phone number',
+      'invalid_phone_number': 'Invalid phone number',
+      'verify_phone_number': 'Verify Phone Number',
+      'verify_phone_number_help':
+          'Please verify your phone number for two factor authentication',
+      'become_member': 'Become a member',
+      'verify_phone_number_2fa_help':
+          'Please verify your phone number for 2FA backup',
+      // 'merged_clients': 'Successfully merged clients',
+      // 'merge_into': 'Merge Into',
+      // 'merge': 'Merge',
+      // 'price_change_accepted': 'Price change accepted',
+      // 'price_change_failed': 'Price change failed with code',
+      'restore_purchases': 'Restore Purchases',
+      'activate': 'Activate',
+      'connect_apple': 'Connect Apple',
+      'disconnect_apple': 'Disconnect Apple',
+      'disconnected_apple': 'Successfully disconnected Apple',
+      // 'send_now': 'Send Now',
+      // 'received': 'Received',
+      // 'purchase_order_date': 'Purchase Order Date',
+      // 'converted_to_expense': 'Successfully converted to expense',
+      // 'converted_to_expenses': 'Successfully converted to expenses',
+      // 'convert_to_expense': 'Convert to Expense',
+      // 'add_to_inventory': 'Add to Inventory',
+      // 'added_purchase_order_to_inventory':
+      //     'Successfully added purchase order to inventory',
+      // 'added_purchase_orders_to_inventory':
+      //     'Successfully added purchase orders to inventory',
+      // 'client_document_upload': 'Client Document Upload',
+      // 'vendor_document_upload': 'Vendor Document Upload',
+      // 'vendor_document_upload_help': 'Enable vendors to upload documents',
+      'are_you_enjoying_the_app': 'Are you enjoying the app?',
+      'yes_its_great': 'Yes, it\'s great!',
+      'not_so_much': 'Not so much',
+      'would_you_rate_it': 'Great to hear! Would you like to rate it?',
+      'would_you_tell_us_more':
+          'Sorry to hear it! Would you like to tell us more?',
+      'sure_happy_to': 'Sure, happy to',
+      'no_not_now': 'No, not now',
+      'add': 'Add',
+      // 'last_sent_template': 'Last Sent Template',
+      'enable_flexible_search': 'Enable Flexible Search',
+      'enable_flexible_search_help':
+          'Match non-contiguous characters, ie. \'ct\' matches \'cat\'',
+      // 'vendor_details': 'Vendor Details',
+      // 'purchase_order_details': 'Purchase Order Details',
+      'qr_iban': 'QR IBAN',
+      'besr_id': 'BESR ID',
+      'accept': 'Accept',
+      // 'clone_to_purchase_order': 'Clone to PO',
+      // 'vendor_email_not_set': 'Vendor does not have an email address set',
+      // 'bulk_send_email': 'Send Email',
+      // 'marked_purchase_order_as_sent':
+      //     'Successfully marked purchase order as sent',
+      // 'marked_purchase_orders_as_sent':
+      //     'Successfully marked purchase orders as sent',
+      // 'accepted_purchase_order': 'Successfully accepted purchase order',
+      // 'accepted_purchase_orders': 'Successfully accepted purchase orders',
+      // 'cancelled_purchase_order': 'Successfully cancelled purchase order',
+      // 'cancelled_purchase_orders': 'Successfully cancelled purchase orders',
+      'accepted': 'Accepted',
+      // 'please_select_a_vendor': 'Please select a vendor',
+      // 'purchase_order_total': 'Purchase Order Total',
+      // 'email_purchase_order': 'Email Purchase Order',
+      // 'bulk_email_purchase_orders': 'Email Purchase Orders',
+      'disconnected_email': 'Successfully disconnected email',
+      'connect_email': 'Connect Email',
+      'disconnect_email': 'Disconnect Email',
+      'use_web_app_to_connect_microsoft':
+          'Please use the web app to connect to Microsoft',
+      'email_provider': 'Email Provider',
+      'connect_microsoft': 'Connect Microsoft',
+      'disconnect_microsoft': 'Disconnect Microsoft',
+      'connected_microsoft': 'Successfully connected Microsoft',
+      'disconnected_microsoft': 'Successfully disconnected Microsoft',
+      'microsoft_sign_in': 'Login with Microsoft',
+      'microsoft_sign_up': 'Sign up with Microsoft',
+      // 'emailed_purchase_order': 'Successfully queued purchase order to be sent',
+      // 'emailed_purchase_orders':
+      //     'Successfully queued purchase orders to be sent',
+      'enable_react_app': 'Change to the React web app',
+      // 'purchase_order_design': 'Purchase Order Design',
+      // 'purchase_order_terms': 'Purchase Order Terms',
+      // 'purchase_order_footer': 'Purchase Order Footer',
+      // 'require_purchase_order_signature': 'Purchase Order Signature',
+      // 'require_purchase_order_signature_help':
+      //     'Require vendor to provide their signature.',
+      // 'purchase_order': 'Purchase Order',
+      // 'purchase_orders': 'Purchase Orders',
+      // 'new_purchase_order': 'New Purchase Order',
+      // 'edit_purchase_order': 'Edit Purchase Order',
+      // 'created_purchase_order': 'Successfully created purchase order',
+      // 'updated_purchase_order': 'Successfully updated purchase order',
+      // 'archived_purchase_order': 'Successfully archived purchase order',
+      // 'deleted_purchase_order': 'Successfully deleted purchase order',
+      // 'removed_purchase_order': 'Successfully removed purchase order',
+      // 'restored_purchase_order': 'Successfully restored purchase order',
+      // 'search_purchase_order': 'Search Purchase Order',
+      // 'search_purchase_orders': 'Search Purchase Orders',
+      // 'login_url': 'Login URL',
+      // 'payment_settings': 'Payment Settings',
+      // 'default': 'Default',
+      // 'stock_quantity': 'Stock Quantity',
+      // 'notification_threshold': 'Notification Threshold',
+      // 'track_inventory': 'Track Inventory',
+      // 'track_inventory_help':
+      //     'Display a product stock field and update when invoices are sent',
+      // 'stock_notifications': 'Stock Notifications',
+      // 'stock_notifications_help':
+      //     'Send an email when the stock reaches the threshold',
+      // 'vat': 'VAT',
+      // 'standing': 'Standing',
+      // 'view_map': 'View Map',
+      // 'set_default_design': 'Set Default Design',
+      // 'add_gateway': 'Add Gateway',
+      // 'add_gateway_help_message':
+      //     'Add a payment gateway (ie. Stripe, WePay or PayPal) to accept online payments',
+      'left': 'Left',
+      'right': 'Right',
+      'center': 'Center',
+      // 'page_numbering': 'Page Numbering',
+      // 'page_numbering_alignment': 'Page Numbering Alignment',
+      // 'invoice_sent_notification_label': 'Invoice Sent',
+      // 'show_product_description': 'Show Product Description',
+      // 'show_product_description_help':
+      //     'Include the description in the product dropdown',
+      // 'invoice_items': 'Invoice Items',
+      // 'quote_items': 'Quote Items',
+      // 'profitloss': 'Profit and Loss',
+      // 'import_format': 'Import Format',
+      // 'export_format': 'Export Format',
+      // 'export_type': 'Export Type',
+      // 'stop_on_unpaid': 'Stop On Unpaid',
+      // 'stop_on_unpaid_help':
+      //     'Stop creating recurring invoices if the last invoice is unpaid.',
+      // 'use_quote_terms': 'Use Quote Terms',
+      // 'use_quote_terms_help': 'When converting a quote to an invoice',
+      'add_country': 'Add Country',
+      'enable_tooltips': 'Enable Tooltips',
+      'enable_tooltips_help': 'Show tooltips when hovering the mouse',
+      // 'multiple_client_error': 'Error: records belong to more than one client',
+      'register_label': 'Create account',
+      'login_label': 'Sign in here',
+      'add_to_invoice': 'Add To Invoice',
+      'no_invoices_found': 'No invoices found',
+      // 'week': 'Week',
+      'created_record': 'Successfully created record',
+      // 'auto_archive_paid_invoices': 'Auto Archive Paid',
+      // 'auto_archive_paid_invoices_help':
+      //     'Automatically archive invoices when they are paid.',
+      // 'auto_archive_cancelled_invoices': 'Auto Archive Cancelled',
+      // 'auto_archive_cancelled_invoices_help':
+      //     'Automatically archive invoices when they are cancelled.',
+      // 'alternate_pdf_viewer': 'Alternate PDF Viewer',
+      // 'alternate_pdf_viewer_help': 'Improve scrolling over the PDF preview',
+      // 'invoice_currency': 'Invoice Currency',
+      // 'range': 'Range',
+      // 'tax_amount1': 'Tax Amount 1',
+      // 'tax_amount2': 'Tax Amount 2',
+      // 'tax_amount3': 'Tax Amount 3',
+      // 'create_project': 'Create Project',
+      // 'update_project': 'Update Project',
+      // 'view_task': 'View Task',
+      // 'cancel_invoice': 'Cancel Invoice',
+      'changed_status': 'Successfully changed task status',
+      'change_status': 'Change Status',
+      // 'fees_sample': 'The fee for a :amount invoice would be :total.',
+      'enable_touch_events': 'Enable Touch Events',
+      'enable_touch_events_help': 'Support drag events to scroll',
+      'after_saving': 'After Saving',
+      'view_record': 'View Record',
+      'enable_email_markdown': 'Enable Email Markdown',
+      'enable_email_markdown_help':
+          'Use visual WYSIWYG markdown editor for emails',
+      'enable_pdf_markdown': 'Enable PDF Markdown',
+      // 'json_help': 'Note: JSON files generated by the v4 app are not supported',
+      'release_notes': 'Release Notes',
+      // 'upgrade_to_view_reports': 'Upgrade your plan to view reports',
+      // 'started_tasks': 'Successfully started :value tasks',
+      // 'stopped_tasks': 'Successfully stopped :value tasks',
+      // 'approved_quote': 'Successfully approved quote',
+      // 'approved_quotes': 'Successfully :value approved quotes',
+      // 'approve': 'Approve',
+      // 'client_website': 'Client Website',
+      // 'invalid_time': 'Invalid Time',
+      // 'client_shipping_state': 'Client Shipping State',
+      // 'client_shipping_city': 'Client Shipping City',
+      // 'client_shipping_postal_code': 'Client Shipping Postal Code',
+      // 'client_shipping_country': 'Client Shipping Country',
+      // 'load_pdf': 'Load PDF',
+      'start_free_trial': 'Pro Plan Trial / Account Upgrade',
+      'start_free_trial_message': 'Start your FREE 14 day Pro Plan trial',
+      // 'due_on_receipt': 'Due on Receipt',
+      // 'is_paid': 'Is Paid',
+      // 'age_group_paid': 'Paid',
+      // 'id': 'Id',
+      // 'convert_to': 'Convert To',
+      // 'client_currency': 'Client Currency',
+      // 'company_currency': 'Company Currency',
+      // 'purged_client': 'Successfully purged client',
+      'custom_emails_disabled_help':
+          'To prevent spam we require upgrading to a paid account to customize the email',
+      'upgrade_to_add_company': 'Upgrade your plan to add companies',
+      'small': 'Small',
+      // 'marked_credit_as_paid': 'Successfully marked credit as paid',
+      // 'marked_credits_as_paid': 'Successfully marked credits as paid',
+      'wait_for_loading': 'Data loading - please wait for it to complete',
+      'wait_for_saving': 'Data saving - please wait for it to complete',
+      'html_preview_warning':
+          'Note: changes made here are only previewed, they must be applied in the tabs above to be saved',
+      // 'remaining': 'Remaining',
+      // 'invoice_paid': 'Invoice Paid',
+      // 'activity_120': ':user created recurring expense :recurring_expense',
+      // 'activity_121': ':user updated recurring expense :recurring_expense',
+      // 'activity_122': ':user archived recurring expense :recurring_expense',
+      // 'activity_123': ':user deleted recurring expense :recurring_expense',
+      // 'activity_124': ':user restored recurring expense :recurring_expense',
+      'normal': 'Normal',
+      'large': 'Large',
+      'extra_large': 'Extra Large',
+      'show_pdf_preview': 'Show PDF Preview',
+      'show_pdf_preview_help': 'Display PDF preview while editing invoices',
+      // 'print_pdf': 'Print PDF',
+      // 'remind_me': 'Remind Me',
+      // 'instant_bank_pay': 'Instant Bank Pay',
+      'click_selected': 'Click Selected',
+      'hide_preview': 'Hide Preview',
+      'edit_record': 'Edit Record',
+      // 'credit_is_more_than_invoice':
+      //     'The credit amount can not be more than the invoice amount',
+      // 'giropay': 'Giropay',
+      // 'direct_debit': 'Direct Debit',
+      'please_set_a_password': 'Please set an account password',
+      'set_password': 'Set Password',
+      // 'disconnected_gateway': 'Successfully disconnected gateway',
+      // 'disconnect': 'Disconnect',
+      // 'add_to_invoices': 'Add to Invoices',
+      'acss': 'ACSS',
+      'becs': 'BECS',
+      // 'bulk_download': 'Download',
+      'persist_data_help':
+          'Save data locally to enable the app to start faster, disabling may improve performance in large accounts',
+      // 'persist_ui': 'Persist UI',
+      // 'persist_ui_help':
+      //     'Save UI state locally to enable the app to start at the last location, disabling may improve performance',
+      // 'client_postal_code': 'Client Postal Code',
+      // 'client_vat_number': 'Client VAT Number',
+      // 'has_tasks': 'Has Tasks',
+      // 'registration': 'Registration',
+      // 'unauthorized_stripe_warning':
+      //     'Please authorize Stripe to accept online payments.',
+      // 'view_expense': 'View Expense',
+      // 'view_statement': 'View Statement',
+      // 'sepa': 'SEPA',
+      // 'ideal': 'iDEAL',
+      // 'przelewy24': 'Przelewy24',
+      'eps': 'EPS',
+      'fpx': 'FPX',
+      // 'update_all_records': 'Update all records',
+      'system': 'System',
+      'set_default_company': 'Set Default Company',
+      'updated_company': 'Successfully updated company',
+      'kbc': 'KBC',
+      // 'bancontact': 'Bancontact',
+      'why_are_you_leaving': 'Help us improve by telling us why (optional)',
+      // 'webhook_success': 'Webhook Success',
+      // 'error_cross_client_tasks': 'Tasks must all belong to the same client',
+      // 'error_cross_client_expenses':
+      //     'Expenses must all belong to the same client',
+      'app': 'App',
+      'for_best_performance': 'For the best performance download the :app app',
+      // 'gross_line_total': 'Gross Line Total',
+      // 'bulk_email_invoices': 'Email Invoices',
+      // 'bulk_email_quotes': 'Email Quotes',
+      // 'bulk_email_credits': 'Email Credits',
+      'from_name': 'From Name',
+      // 'clone_to_expense': 'Clone to Expense',
+      // 'recurring_expense': 'Recurring Expense',
+      // 'recurring_expenses': 'Recurring Expenses',
+      // 'new_recurring_expense': 'New Recurring Expense',
+      // 'edit_recurring_expense': 'Edit Recurring Expense',
+      // 'created_recurring_expense': 'Successfully created recurring expense',
+      // 'updated_recurring_expense': 'Successfully updated recurring expense',
+      // 'archived_recurring_expense': 'Successfully archived recurring expense',
+      // 'deleted_recurring_expense': 'Successfully deleted recurring expense',
+      // 'removed_recurring_expense': 'Successfully removed recurring expense',
+      // 'restored_recurring_expense': 'Successfully restored recurring expense',
+      // 'search_recurring_expense': 'Search Recurring Expense',
+      // 'search_recurring_expenses': 'Search Recurring Expenses',
+      // 'last_sent_date': 'Last Sent Date',
+      // 'include_drafts': 'Include Drafts',
+      // 'include_drafts_help': 'Include draft records in reports',
+      // 'is_invoiced': 'Is Invoiced',
+      'change_plan': 'Change Plan',
+      'persist_data': 'Persist Data',
+      // 'customer_count': 'Customer Count',
+      // 'verify_customers': 'Verify Customers',
+      'google_analytics': 'Google Analytics',
+      'google_analytics_tracking_id': 'Google Analytics Tracking ID',
+      'decimal_comma': 'Decimal Comma',
+      'use_comma_as_decimal_place': 'Use comma as decimal place in forms',
+      'select_method': 'Select Method',
+      'use_web_app_to_connect_gmail':
+          'Please use the web app to connect to Gmail',
+      // 'expense_tax_help': 'Expense tax rates are disabled',
+      'enable_markdown': 'Enable Markdown',
+      'enable_markdown_help': 'Convert markdown to HTML on the PDF',
+      // 'user_guide': 'User Guide',
+      // 'add_second_contact': 'Add Second Contact',
+      'previous_page': 'Previous Page',
+      'next_page': 'Next Page',
+      'export_colors': 'Export Colors',
+      'import_colors': 'Import Colors',
+      'clear_all': 'Clear All',
+      'contrast': 'Contrast',
+      'custom_colors': 'Custom Colors',
+      'colors': 'Colors',
+      'sidebar_active_background_color': 'Sidebar Active Background Color',
+      // 'sidebar_active_font_color': 'Sidebar Active Font Color',
+      // 'sidebar_inactive_background_color': 'Sidebar Inactive Background Color',
+      // 'sidebar_inactive_font_color': 'Sidebar Inactive Font Color',
+      // 'table_alternate_row_background_color':
+      //     'Table Alternate Row Background Color',
+      // 'invoice_header_background_color': 'Invoice Header Background Color',
+      // 'invoice_header_font_color': 'Invoice Header Font Color',
+      // 'net_subtotal': 'Net Subtotal',
+      'review_app': 'Review App',
+      'check_status': 'Check Status',
+      'free_trial': 'Free Trial',
+      'free_trial_ends_in_days': 'The Pro plan trial ends in :count days',
+      'free_trial_ends_today': 'Today is the last day of the Pro plan trial',
+      'change_email': 'Change Email',
+      // 'client_portal_domain_hint':
+      //     'Optionally configure a separate client portal domain',
+      // 'tasks_shown_in_portal': 'Tasks Shown in Portal',
+      // 'uninvoiced': 'Uninvoiced',
+      // 'subdomain_guide':
+      //     'The subdomain is used in the client portal to personalize links to match your brand. ie, https://your-brand.invoicing.co',
+      'send_time': 'Send Time',
+      'import_data': 'Import Data',
+      'import_settings': 'Import Settings',
+      'json_file_missing': 'Please provide the JSON file',
+      'json_option_missing': 'Please select to import the settings and/or data',
+      'json': 'JSON',
+      'wait_for_data': 'Please wait for the data to finish loading',
+      // 'net_total': 'Net Total',
+      // 'has_taxes': 'Has Taxes',
+      // 'import_customers': 'Import Customers',
+      // 'imported_customers': 'Successfully started importing customers',
+      // 'login_success': 'Successful Login',
+      // 'login_failure': 'Failed Login',
+      'exported_data':
+          'Once the file is ready you\'ll receive an email with a download link',
+      'include_deleted_clients': 'Include Deleted Clients',
+      'include_deleted_clients_help':
+          'Load records belonging to deleted clients',
+      // 'step_1_sign_in': 'Step 1: Sign In',
+      // 'step_2_authorize': 'Step 2: Authorize',
+      // 'account_id': 'Account ID',
+      // 'migration_not_yet_completed': 'The migration has not yet completed',
+      // 'activity_100': ':user created recurring invoice :recurring_invoice',
+      // 'activity_101': ':user updated recurring invoice :recurring_invoice',
+      // 'activity_102': ':user archived recurring invoice :recurring_invoice',
+      // 'activity_103': ':user deleted recurring invoice :recurring_invoice',
+      // 'activity_104': ':user restored recurring invoice :recurring_invoice',
+      // 'show_task_end_date': 'Show Task End Date',
+      // 'show_task_end_date_help': 'Enable specifying the task end date',
+      // 'gateway_setup': 'Gateway Setup',
+      // 'preview_sidebar': 'Preview Sidebar',
+      'years_data_shown': 'Years Data Shown',
+      'ended_all_sessions': 'Successfully ended all sessions',
+      'end_all_sessions': 'End All Sessions',
+      'count_session': '1 Session',
+      'count_sessions': ':count Sessions',
+      // 'invoice_created': 'Invoice Created',
+      // 'quote_created': 'Quote Created',
+      // 'credit_created': 'Credit Created',
+      'pro': 'Pro',
+      // 'enterprise': 'Enterprise',
+      'last_updated': 'Last Updated',
+      // 'invoice_item': 'Invoice Item',
+      // 'quote_item': 'Quote Item',
+      // 'contact_first_name': 'Contact First Name',
+      // 'contact_last_name': 'Contact Last Name',
+      // 'order': 'Order',
+      // 'unassigned': 'Unassigned',
+      // 'partial_value': 'Must be greater than zero and less than the total',
+      'search_kanban': 'Search Kanban',
+      'search_kanbans': 'Search Kanban',
+      'kanban': 'Kanban',
+      'enable': 'Enable',
+      'move_top': 'Move Top',
+      'move_up': 'Move Up',
+      'move_down': 'Move Down',
+      'move_bottom': 'Move Bottom',
+      'subdomain_help': 'Lowercase letters, numbers and hyphens are supported',
+      'body_variable_missing':
+          'Error: the custom email must include a :body variable',
+      'add_body_variable_message': 'Make sure to include a :body variable',
+      'view_date_formats': 'View Date Formats',
+      // 'is_viewed': 'Is Viewed',
+      // 'letter': 'Letter',
+      // 'legal': 'Legal',
+      // 'page_layout': 'Page Layout',
+      // 'portrait': 'Portrait',
+      // 'landscape': 'Landscape',
+      'owner_upgrade_to_paid_plan':
+          'The account owner can upgrade to a paid plan to enable the advanced advanced settings',
+      'upgrade_to_paid_plan':
+          'Upgrade to a paid plan to enable the advanced settings',
+      // 'invoice_payment_terms': 'Invoice Payment Terms',
+      // 'quote_valid_until': 'Quote Valid Until',
+      // 'no_headers': 'No Headers',
+      // 'add_header': 'Add Header',
+      // 'remove_header': 'Remove Header',
+      // 'return_url': 'Return URL',
+      // 'rest_method': 'REST Method',
+      // 'header_key': 'Header Key',
+      // 'header_value': 'Header Value',
+      // 'recurring_products': 'Recurring Products',
+      // 'promo_code': 'Promo Code',
+      // 'promo_discount': 'Promo Discount',
+      // 'allow_cancellation': 'Allow Cancellation',
+      // 'per_seat_enabled': 'Per Seat Enabled',
+      // 'max_seats_limit': 'Max Seats Limit',
+      // 'trial_enabled': 'Trial Enabled',
+      // 'trial_duration': 'Trial Duration',
+      // 'allow_query_overrides': 'Allow Query Overrides',
+      // 'allow_plan_changes': 'Allow Plan Changes',
+      // 'plan_map': 'Plan Map',
+      // 'refund_period': 'Refund Period',
+      // 'webhook_configuration': 'Webhook Configuration',
+      // 'purchase_page': 'Purchase Page',
+      'security': 'Security',
+      'email_bounced': 'Email Bounced',
+      'email_spam_complaint': 'Spam Complaint',
+      'email_delivery': 'Email Delivery',
+      // 'webhook_response': 'Webhook Response',
+      // 'pdf_response': 'PDF Response',
+      // 'authentication_failure': 'Authentication Failure',
+      // 'pdf_failed': 'PDF Failed',
+      // 'pdf_success': 'PDF Success',
+      // 'modified': 'Modified',
+      // 'payment_link': 'Payment Link',
+      // 'new_payment_link': 'New Payment Link',
+      // 'edit_payment_link': 'Edit Payment Link',
+      // 'created_payment_link': 'Successfully created payment link',
+      // 'updated_payment_link': 'Successfully updated payment link',
+      // 'archived_payment_link': 'Successfully archived payment link',
+      // 'deleted_payment_link': 'Successfully deleted payment link',
+      // 'removed_payment_link': 'Successfully removed payment link',
+      // 'restored_payment_link': 'Successfully restored payment link',
+      // 'search_payment_link': 'Search 1 Payment Link',
+      // 'search_payment_links': 'Search :count Payment Links',
+      'subdomain_is_not_available': 'Subdomain is not available',
+      'connect_gmail': 'Connect Gmail',
+      'disconnect_gmail': 'Disconnect Gmail',
+      'connected_gmail': 'Successfully connected Gmail',
+      'disconnected_gmail': 'Successfully disconnected Gmail',
+      // 'update_fail_help':
+      //     'Changes to the codebase may be blocking the update, you can run this command to discard the changes:',
+      // 'client_id_number': 'Client ID Number',
+      'count_minutes': ':count Minutes',
+      // 'password_timeout': 'Password Timeout',
+      // 'shared_invoice_credit_counter': 'Shared Invoice/Credit Counter',
+      'use_last_email': 'Use last email',
+      'activate_company': 'Activate Company',
+      'activate_company_help':
+          'Enable emails, recurring invoices, webhooks and notifications',
+      'an_error_occurred_try_again': 'An error occurred, please try again',
+      'please_first_set_a_password': 'Please first set a password',
+      'changing_phone_disables_two_factor':
+          'Warning: Changing your phone number will disable 2FA',
+      'help_translate': 'Help Translate',
+      'please_select_a_country': 'Please select a country',
+      // 'resend_invite': 'Resend Invite',
+      'disabled_two_factor': 'Successfully disabled 2FA',
+      'connected_google': 'Successfully connected account',
+      'disconnected_google': 'Successfully disconnected account',
+      // 'delivered': 'Delivered',
+      // 'bounced': 'Bounced',
+      // 'spam': 'Spam',
+      'view_docs': 'View Docs',
+      'enter_phone_to_enable_two_factor':
+          'Please provide a mobile phone number to enable two factor authentication',
+      'send_sms': 'Send SMS',
+      'sms_code': 'SMS Code',
+      // 'two_factor_setup_help': 'Scan the bar code with a :link compatible app.',
+      'enabled_two_factor': 'Successfully enabled Two-Factor Authentication',
+      'connect_google': 'Connect Google',
+      'disconnect_google': 'Disconnect Google',
+      'enable_two_factor': 'Enable Two Factor',
+      'disable_two_factor': 'Disable Two Factor',
+      'require_password_with_social_login':
+          'Require Password with Social Login',
+      'stay_logged_in': 'Stay Logged In',
+      'session_about_to_expire': 'Warning: Your session is about to expire',
+      'count_hours': ':count Hours',
+      'count_day': '1 Day',
+      'count_days': ':count Days',
+      'web_session_timeout': 'Web Session Timeout',
+      'security_settings': 'Security Settings',
+      'resend_email': 'Resend Email',
+      'i_have_confirmed_email': 'I have confirmed my email',
+      'confirm_your_email_address': 'Please confirm your email address',
+      // 'refunded_payment': 'Successfully refunded payment',
+      // 'partially_unapplied': 'Partially Unapplied',
+      // 'select_a_gmail_user': 'Please select a user authenticated with Gmail',
+      'list_long_press': 'List Long Press',
+      'show_actions': 'Show Actions',
+      'start_multiselect': 'Start Multiselect',
+      'email_sent_to_confirm_email':
+          'An email has been sent to confirm the email address',
+      'counter_pattern_error':
+          'To use :client_counter please add either :client_number or :client_id_number to prevent conflicts',
+      // 'this_quarter': 'This Quarter',
+      // 'last_quarter': 'Last Quarter',
+      // 'to_update_run': 'To update run',
+      // 'convert_to_invoice': 'Convert to Invoice',
+      // 'registration_url': 'Registration URL',
+      // 'invoice_project': 'Invoice Project',
+      // 'invoice_task': 'Invoice Task',
+      // 'invoice_expense': 'Invoice Expense',
+      // 'search_payment_term': 'Search 1 Payment Term',
+      // 'search_payment_terms': 'Search :count Payment Terms',
+      // 'save_and_preview': 'Save and Preview',
+      // 'save_and_email': 'Save and Email',
+      // 'supported_events': 'Supported Events',
+      // 'converted_amount': 'Converted Amount',
+      // 'converted_balance': 'Converted Balance',
+      // 'converted_paid_to_date': 'Converted Paid to Date',
+      // 'converted_credit_balance': 'Converted Credit Balance',
+      // 'converted_total': 'Converted Total',
+      // 'is_sent': 'Is Sent',
+      // 'default_documents': 'Default Documents',
+      // 'document_upload': 'Document Upload',
+      // 'document_upload_help': 'Enable clients to upload documents',
+      // 'expense_total': 'Expense Total',
+      // 'enter_taxes': 'Enter Taxes',
+      // 'by_rate': 'By Rate',
+      // 'by_amount': 'By Amount',
+      // 'enter_amount': 'Enter Amount',
+      // 'before_taxes': 'Before Taxes',
+      // 'after_taxes': 'After Taxes',
+      'color': 'Color',
+      'show': 'Show',
+      'hide': 'Hide',
+      // 'empty_columns': 'Empty Columns',
+      'debug_mode_is_enabled': 'Debug mode is enabled',
+      'debug_mode_is_enabled_help':
+          'Warning: it is intended for use on local machines, it can leak credentials. Click to learn more.',
+      // 'running_tasks': 'Running Tasks',
+      // 'recent_tasks': 'Recent Tasks',
+      // 'recent_expenses': 'Recent Expenses',
+      // 'upcoming_expenses': 'Upcoming Expenses',
+      // 'update_app': 'Update App',
+      // 'started_import': 'Successfully started import',
+      // 'duplicate_column_mapping': 'Duplicate column mapping',
+      // 'uses_inclusive_taxes': 'Uses Inclusive Taxes',
+      // 'is_amount_discount': 'Is Amount Discount',
+      // 'column': 'Column',
+      // 'sample': 'Sample',
+      // 'map_to': 'Map To',
+      'import': 'Import',
+      // 'first_row_as_column_names': 'Use first row as column names',
+      // 'select_file': 'Select File',
+      // 'no_file_selected': 'No File Selected',
+      // 'csv_file': 'CSV File',
+      // 'csv': 'CSV',
+      // 'freshbooks': 'FreshBooks',
+      // 'invoice2go': 'Invoice2go',
+      // 'invoicely': 'Invoicely',
+      // 'waveaccounting': 'Wave Accounting',
+      // 'zoho': 'Zoho',
+      // 'accounting': 'Accounting',
+      // 'required_files_missing': 'Please provide all CSVs.',
+      // 'import_type': 'Import Type',
+      'html_mode': 'HTML Mode',
+      'html_mode_help': 'Preview updates faster but is less accurate',
+      // 'view_licenses': 'View Licenses',
+      // 'webhook_url': 'Webhook URL',
+      // 'fullscreen_editor': 'Fullscreen Editor',
+      // 'sidebar_editor': 'Sidebar Editor',
+      'please_type_to_confirm': 'Please type \':value\' to confirm',
+      'purge': 'Purge',
+      // 'service': 'Service',
+      // 'clone_to': 'Clone To',
+      // 'clone_to_other': 'Clone to Other',
+      // 'labels': 'Labels',
+      'add_custom': 'Add Custom',
+      // 'payment_tax': 'Payment Tax',
+      // 'unpaid': 'Unpaid',
+      // 'white_label': 'White Label',
+      // 'delivery_note': 'Delivery Note',
+      // 'sent_invoices_are_locked': 'Sent invoices are locked',
+      // 'paid_invoices_are_locked': 'Paid invoices are locked',
+      // 'source_code': 'Source Code',
+      // 'app_platforms': 'App Platforms',
+      // 'invoice_late': 'Invoice Late',
+      // 'quote_expired': 'Quote Expired',
+      // 'partial_due': 'Partial Due',
+      // 'invoice_total': 'Invoice Total',
+      // 'quote_total': 'Quote Total',
+      // 'credit_total': 'Credit Total',
+      // 'recurring_invoice_total': 'Invoice Total',
+      'actions': 'Actions',
+      // 'expense_number': 'Expense Number',
+      // 'task_number': 'Task Number',
+      // 'project_number': 'Project Number',
+      // 'project_name': 'Project Name',
+      // 'warning': 'Warning',
+      // 'view_settings': 'View Settings',
+      'company_disabled_warning': 'Company is not activated',
+      // 'late_invoice': 'Late Invoice',
+      // 'expired_quote': 'Expired Quote',
+      // 'remind_invoice': 'Remind Invoice',
+      // 'cvv': 'CVV',
+      // 'client_name': 'Client Name',
+      // 'client_phone': 'Client Phone',
+      // 'required_fields': 'Required Fields',
+      // 'calculated_rate': 'Calculated Rate',
+      // 'default_task_rate': 'Default Task Rate',
+      // 'clear_cache': 'Clear Cache',
+      // 'sort_order': 'Sort Order',
+      // 'task_status': 'Status',
+      // 'task_statuses': 'Task Statuses',
+      // 'new_task_status': 'New Task Status',
+      // 'edit_task_status': 'Edit Task Status',
+      // 'created_task_status': 'Successfully created task status',
+      // 'updated_task_status': 'Successfully updated task status',
+      // 'archived_task_status': 'Successfully archived task status',
+      // 'deleted_task_status': 'Successfully deleted task status',
+      // 'removed_task_status': 'Successfully removed task status',
+      // 'restored_task_status': 'Successfully restored task status',
+      // 'archived_task_statuses': 'Successfully archived :value task statuses',
+      // 'deleted_task_statuses': 'Successfully deleted :value task statuses',
+      // 'restored_task_statuses': 'Successfully restored :value task statuses',
+      // 'search_task_status': 'Search 1 Task Status',
+      // 'search_task_statuses': 'Search :count Task Statuses',
+      // 'show_tasks_table': 'Show Tasks Table',
+      // 'show_tasks_table_help':
+      //     'Always show the tasks section when creating invoices',
+      // 'invoice_task_timelog': 'Invoice Task Timelog',
+      // 'invoice_task_timelog_help': 'Add time details to the invoice line items',
+      // 'invoice_task_datelog': 'Invoice Task Datelog',
+      // 'invoice_task_datelog_help': 'Add date details to the invoice line items',
+      // 'auto_start_tasks_help': 'Start tasks before saving',
+      // 'configure_statuses': 'Configure Statuses',
+      // 'task_settings': 'Task Settings',
+      // 'configure_categories': 'Configure Categories',
+      // 'expense_categories': 'Expense Categories',
+      // 'new_expense_category': 'New Expense Category',
+      // 'edit_expense_category': 'Edit Expense Category',
+      // 'created_expense_category': 'Successfully created expense category',
+      // 'updated_expense_category': 'Successfully updated expense category',
+      // 'archived_expense_category': 'Successfully archived expense category',
+      // 'deleted_expense_category': 'Successfully deleted expense category',
+      // 'removed_expense_category': 'Successfully removed expense category',
+      // 'restored_expense_category': 'Successfully restored expense category',
+      // 'archived_expense_categories':
+      //     'Successfully archived expense :value categories',
+      // 'deleted_expense_categories':
+      //     'Successfully deleted expense :value categories',
+      // 'restored_expense_categories':
+      //     'Successfully restored expense :value categories',
+      // 'search_expense_category': 'Search 1 Expense Category',
+      // 'search_expense_categories': 'Search :count Expense Categories',
+      // 'use_available_credits': 'Use Available Credits',
+      // 'show_option': 'Show Option',
+      // 'negative_payment_error': 'The payment amount can not be negative',
+      // 'view_changes': 'View Changes',
+      // 'force_update': 'Force Update',
+      // 'force_update_help':
+      //     'You are running the latest version but there may be pending fixes available.',
+      // 'mark_paid_help': 'Track the expense has been paid to the vendor',
+      // 'should_be_invoiced': 'Should be Invoiced',
+      // 'should_be_invoiced_help':
+      //     'Enable the expense to be invoiced to your client',
+      // 'add_documents_to_invoice_help': 'Make the documents visible to clients',
+      // 'convert_currency_help': 'Set an exchange rate',
+      // 'expense_settings': 'Expense Settings',
+      // 'clone_to_recurring': 'Clone to Recurring',
+      'crypto': 'Crypto',
+      'paypal': 'PayPal',
+      'alipay': 'Alipay',
+      'sofort': 'Sofort',
+      'apple_pay': 'Apple Pay',
+      'user_field': 'User Field',
+      'variables': 'Variables',
+      'show_password': 'Show Password',
+      'hide_password': 'Hide Password',
+      'copy_error': 'Copy Error',
+      // 'capture_card': 'Capture Card',
+      // 'auto_bill_enabled': 'Auto Bill Enabled',
+      // 'total_taxes': 'Total Taxes',
+      // 'line_taxes': 'Line Taxes', 'total_fields': 'Total Fields',
+      // 'stopped_recurring_invoice': 'Successfully stopped recurring invoice',
+      // 'started_recurring_invoice': 'Successfully started recurring invoice',
+      // 'resumed_recurring_invoice': 'Successfully resumed recurring invoice',
+      // 'gateway_refund': 'Gateway Refund',
+      // 'gateway_refund_help': 'Process the refund with the payment gateway',
+      // 'due_date_days': 'Due Date',
+      // 'paused': 'Paused',
+      'mark_active': 'Mark Active',
+      // 'day_count': 'Day :count',
+      // 'first_day_of_the_month': 'First Day of the Month',
+      // 'last_day_of_the_month': 'Last Day of the Month',
+      // 'use_payment_terms': 'Use Payment Terms',
+      // 'endless': 'Endless',
+      // 'next_send_date': 'Next Send Date',
+      // 'remaining_cycles': 'Remaining Cycles',
+      // 'recurring_invoice': 'Recurring Invoice',
+      // 'recurring_invoices': 'Recurring Invoices',
+      // 'new_recurring_invoice': 'New Recurring Invoice',
+      // 'edit_recurring_invoice': 'Edit Recurring Invoice',
+      // 'created_recurring_invoice': 'Successfully created recurring invoice',
+      // 'updated_recurring_invoice': 'Successfully updated recurring invoice',
+      // 'archived_recurring_invoice': 'Successfully archived recurring invoice',
+      // 'deleted_recurring_invoice': 'Successfully deleted recurring invoice',
+      // 'removed_recurring_invoice': 'Successfully removed recurring invoice',
+      // 'restored_recurring_invoice': 'Successfully restored recurring invoice',
+      // 'archived_recurring_invoices':
+      //     'Successfully archived recurring :value invoices',
+      // 'deleted_recurring_invoices':
+      //     'Successfully deleted recurring :value invoices',
+      // 'restored_recurring_invoices':
+      //     'Successfully restored recurring :value invoices',
+      // 'search_recurring_invoice': 'Search 1 Recurring Invoice',
+      // 'search_recurring_invoices': 'Search :count Recurring Invoices',
+      // 'send_date': 'Send Date',
+      // 'auto_bill_on': 'Auto Bill On',
+      // 'minimum_under_payment_amount': 'Minimum Under Payment Amount',
+      // 'profit': 'Profit',
+      // 'line_item': 'Line Item',
+      // 'allow_over_payment': 'Allow Over Payment',
+      // 'allow_over_payment_help':
+      //     'Support paying extra to accept tips in the client portal',
+      // 'allow_under_payment': 'Allow Under Payment',
+      // 'allow_under_payment_help':
+      //     'Support paying a minimum amount in the client portal',
+      // 'test_mode': 'Test Mode',
+      // 'opened': 'Opened',
+      // 'payment_reconciliation_failure': 'Reconciliation Failure',
+      // 'payment_reconciliation_success': 'Reconciliation Success',
+      // 'gateway_success': 'Gateway Success',
+      // 'gateway_failure': 'Gateway Failure',
+      // 'gateway_error': 'Gateway Error',
+      // 'email_send': 'Email Send',
+      // 'email_retry_queue': 'Email Retry Queue',
+      // 'failure': 'Failure',
+      // 'quota_exceeded': 'Quota Exceeded',
+      // 'upstream_failure': 'Upstream Failure',
+      'system_logs': 'System Logs',
+      'view_portal': 'View Portal',
+      'copy_link': 'Copy Link',
+      // 'token_billing': 'Token Billing',
+      'welcome_to_starter_template': 'Welcome to Starter Template',
+      'always': 'Enabled',
+      // 'optin': 'Disabled by default',
+      // 'optout': 'Enabled by default',
+      'label': 'Label',
+      // 'client_number': 'Client Number',
+      // 'auto_convert': 'Auto Convert',
+      'company_name': 'Company Name',
+      // 'reminder1_sent': 'Reminder 1 Sent',
+      // 'reminder2_sent': 'Reminder 2 Sent',
+      // 'reminder3_sent': 'Reminder 3 Sent',
+      // 'reminder_last_sent': 'Reminder Last Sent',
+      // 'pdf_page_info': 'Page :current of :total',
+      // 'emailed_invoices': 'Successfully queued invoices to be sent',
+      // 'emailed_quotes': 'Successfully queued quotes to be sent',
+      // 'emailed_credits': 'Successfully queued credits to be sent',
+      // 'gateway': 'Gateway',
+      // 'view_in_stripe': 'View in Stripe',
+      // 'rows_per_page': 'Rows Per Page',
+      // 'hours': 'Hours',
+      // 'statement': 'Statement',
+      // 'taxes': 'Taxes',
+      // 'surcharge': 'Surcharge',
+      // 'apply_payment': 'Apply Payment',
+      // 'apply_credit': 'Apply Credit',
+      // 'apply': 'Apply',
+      // 'unapplied': 'Unapplied',
+      'select_label': 'Select Label',
+      'custom_labels': 'Custom Labels',
+      // 'record_type': 'Record Type',
+      // 'record_name': 'Record Name',
+      // 'file_type': 'File Type',
+      'height': 'Height',
+      'width': 'Width',
+      'to': 'To',
+      // 'health_check': 'Health Check',
+
+      // 'last_login_at': 'Last Login At',
+      // 'company_key': 'Company Key',
+      // 'storefront': 'Storefront',
+      // 'storefront_help': 'Enable third-party apps to create invoices',
+      // 'client_created': 'Client Created',
+      // 'online_payment_email': 'Online Payment Email',
+      // 'manual_payment_email': 'Manual Payment Email',
+      // 'completed': 'Completed',
+      // 'gross': 'Gross',
+      // 'net_amount': 'Net Amount',
+      // 'net_balance': 'Net Balance',
+      // 'client_settings': 'Client Settings',
+      // 'selected_invoices': 'Selected Invoices',
+      // 'selected_payments': 'Selected Payments',
+      // 'selected_quotes': 'Selected Quotes',
+      // 'selected_tasks': 'Selected Tasks',
+      // 'selected_expenses': 'Selected Expenses',
+      // 'upcoming_invoices': 'Upcoming Invoices',
+      // 'past_due_invoices': 'Past Due Invoices',
+      // 'recent_payments': 'Recent Payments',
+      // 'upcoming_quotes': 'Upcoming Quotes',
+      // 'expired_quotes': 'Expired Quotes',
+      // 'create_client': 'Create Client',
+      // 'create_invoice': 'Create Invoice',
+      // 'create_quote': 'Create Quote',
+      // 'create_payment': 'Create Payment',
+      // 'create_vendor': 'Create Vendor',
+      // 'update_quote': 'Update Quote',
+      // 'delete_quote': 'Delete Quote',
+      // 'update_invoice': 'Update Invoice',
+      // 'delete_invoice': 'Delete Invoice',
+      // 'update_client': 'Update Client',
+      // 'delete_client': 'Delete Client',
+      // 'delete_payment': 'Delete Payment',
+      // 'update_vendor': 'Update Vendor',
+      // 'delete_vendor': 'Delete Vendor',
+      // 'create_expense': 'Create Expense',
+      // 'update_expense': 'Update Expense',
+      // 'delete_expense': 'Delete Expense',
+      // 'create_task': 'Create Task',
+      // 'update_task': 'Update Task',
+      // 'delete_task': 'Delete Task',
+      // 'approve_quote': 'Approve Quote',
+      'off': 'Off',
+      // 'when_paid': 'When Paid',
+      // 'expires_on': 'Expires On',
+      'free': 'Free',
+      'plan': 'Plan',
+      'show_sidebar': 'Show Sidebar',
+      'hide_sidebar': 'Hide Sidebar',
+      'event_type': 'Event Type',
+      'target_url': 'Target URL',
+      'copy': 'Copy',
+      // 'must_be_online': 'Please restart the app once connected to the internet',
+      // 'crons_not_enabled': 'The crons need to be enabled',
+      // 'api_webhooks': 'API Webhooks',
+      // 'search_webhooks': 'Search :count Webhooks',
+      // 'search_webhook': 'Search 1 Webhook',
+      // 'webhook': 'Webhook',
+      // 'webhooks': 'Webhooks',
+      // 'new_webhook': 'New Webhook',
+      // 'edit_webhook': 'Edit Webhook',
+      // 'created_webhook': 'Successfully created webhook',
+      // 'updated_webhook': 'Successfully updated webhook',
+      // 'archived_webhook': 'Successfully archived webhook',
+      // 'deleted_webhook': 'Successfully deleted webhook',
+      // 'removed_webhook': 'Successfully removed webhook',
+      // 'restored_webhook': 'Successfully restored webhook',
+      // 'archived_webhooks': 'Successfully archived :value webhooks',
+      // 'deleted_webhooks': 'Successfully deleted :value webhooks',
+      // 'removed_webhooks': 'Successfully removed :value webhooks',
+      // 'restored_webhooks': 'Successfully restored :value webhooks',
+      // 'api_tokens': 'API Tokens',
+      'api_docs': 'API Docs',
+      // 'search_tokens': 'Search :count Tokens',
+      // 'search_token': 'Search 1 Token',
+      'token': 'Token',
+      // 'tokens': 'Tokens',
+      // 'new_token': 'New Token',
+      // 'edit_token': 'Edit Token',
+      // 'created_token': 'Successfully created token',
+      // 'updated_token': 'Successfully updated token',
+      // 'archived_token': 'Successfully archived token',
+      // 'deleted_token': 'Successfully deleted token',
+      // 'removed_token': 'Successfully removed token',
+      // 'restored_token': 'Successfully restored token',
+      // 'archived_tokens': 'Successfully archived :value tokens',
+      // 'deleted_tokens': 'Successfully deleted :value tokens',
+      // 'restored_tokens': 'Successfully restored :value tokens',
+      // 'client_registration': 'Client Registration',
+      // 'client_registration_help':
+      //     'Enable clients to self register in the portal',
+      // 'email_invoice': 'Email Invoice',
+      // 'email_quote': 'Email Quote',
+      // 'email_credit': 'Email Credit',
+      // 'email_payment': 'Email Payment',
+      // 'client_email_not_set': 'Client does not have an email address set',
+      // 'ledger': 'Ledger',
+      // 'view_pdf': 'View PDF',
+      'all_records': 'All records',
+      'owned_by_user': 'Owned by user',
+      // 'credit_remaining': 'Credit Remaining',
+      // 'contact_name': 'Contact Name',
+      // 'use_default': 'Use Default',
+      // 'reminder_endless': 'Endless Reminders',
+      // 'number_of_days': 'Number of days',
+      // 'configure_payment_terms': 'Configure Payment Terms',
+      // 'payment_term': 'Payment Term',
+      // 'new_payment_term': 'New Payment Term',
+      // 'edit_payment_term': 'Edit Payment Term',
+      // 'created_payment_term': 'Successfully created payment term',
+      // 'updated_payment_term': 'Successfully updated payment term',
+      // 'archived_payment_term': 'Successfully archived payment term',
+      // 'deleted_payment_term': 'Successfully deleted payment term',
+      // 'removed_payment_term': 'Successfully removed payment term',
+      // 'restored_payment_term': 'Successfully restored payment term',
+      // 'archived_payment_terms': 'Successfully archived :value payment terms',
+      // 'deleted_payment_terms': 'Successfully deleted :value payment terms',
+      // 'restored_payment_terms': 'Successfully restored :value payment terms',
+      'email_sign_in': 'Sign in',
+      'change': 'Change',
+      'change_to_mobile_layout': 'Change to the mobile layout?',
+      'change_to_desktop_layout': 'Change to the desktop layout?',
+      'send_from_gmail': 'Send from Gmail',
+      'reversed': 'Reversed',
+      'cancelled': 'Cancelled',
+      // 'credit_amount': 'Credit Amount',
+      // 'quote_amount': 'Quote Amount',
+      // 'exclusive': 'Exclusive',
+      // 'inclusive': 'Inclusive',
+      'hide_menu': 'Hide Menu',
+      'show_menu': 'Show Menu',
+      // 'partially_refunded': 'Partially Refunded',
+      // 'search_documents': 'Search :count Documents',
+      // 'search_designs': 'Search :count Designs',
+      // 'search_invoices': 'Search :count Invoices',
+      // 'search_clients': 'Search :count Clients',
+      // 'search_products': 'Search :count Products',
+      // 'search_quotes': 'Search :count Quotes',
+      // 'search_credits': 'Search :count Credits',
+      // 'search_vendors': 'Search :count Vendors',
+      'search_users': 'Search :count Users',
+      // 'search_tax_rates': 'Search :count Tax Rates',
+      // 'search_tasks': 'Search :count Tasks',
+      'search_settings': 'Search Settings',
+      // 'search_projects': 'Search :count Projects',
+      // 'search_expenses': 'Search :count Expenses',
+      // 'search_payments': 'Search :count Payments',
+      // 'search_groups': 'Search :count Groups',
+      // 'search_company': 'Search Company',
+      // 'search_document': 'Search 1 Document',
+      // 'search_design': 'Search 1 Design',
+      // 'search_invoice': 'Search 1 Invoice',
+      // 'search_client': 'Search 1 Client',
+      // 'search_product': 'Search 1 Product',
+      // 'search_quote': 'Search 1 Quote',
+      // 'search_credit': 'Search 1 Credit',
+      // 'search_vendor': 'Search 1 Vendor',
+      // 'search_user': 'Search 1 User',
+      // 'search_tax_rate': 'Search 1 Tax Rate',
+      // 'search_task': 'Search 1 Tasks',
+      // 'search_project': 'Search 1 Project',
+      // 'search_expense': 'Search 1 Expense',
+      // 'search_payment': 'Search 1 Payment',
+      // 'search_group': 'Search 1 Group',
+      // 'refund_payment': 'Refund Payment',
+      // 'cancelled_invoice': 'Successfully cancelled invoice',
+      // 'cancelled_invoices': 'Successfully cancelled invoices',
+      // 'reversed_invoice': 'Successfully reversed invoice',
+      // 'reversed_invoices': 'Successfully reversed invoices',
+      'reverse': 'Reverse',
+      'full_name': 'Full Name',
+      'city_state_postal': 'City/State/Postal',
+      'postal_city_state': 'Postal/City/State',
+      // 'custom1': 'Custom 1',
+      // 'custom2': 'Custom 2',
+      // 'custom3': 'Custom 3',
+      // 'custom4': 'Custom 4',
+      'optional': 'Optional',
+      'license': 'License',
+      'purge_data': 'Purge Data',
+      'purge_successful': 'Successfully purged company data',
+      'purge_data_message':
+          'Warning: This will permanently erase your data, there is no undo.',
+      // 'invoice_balance': 'Invoice Balance',
+      // 'age_group_0': '0 - 30 Days',
+      // 'age_group_30': '30 - 60 Days',
+      // 'age_group_60': '60 - 90 Days',
+      // 'age_group_90': '90 - 120 Days',
+      // 'age_group_120': '120+ Days',
+      'refresh': 'Refresh',
+      'saved_design': 'Successfully saved design',
+      // 'client_details': 'Client Details',
+      // 'company_address': 'Company Address',
+      // 'invoice_details': 'Invoice Details',
+      // 'quote_details': 'Quote Details',
+      // 'credit_details': 'Credit Details',
+      // 'product_columns': 'Product Columns',
+      // 'task_columns': 'Task Columns',
+      // 'add_field': 'Add Field',
+      'all_events': 'All Events',
+      'permissions': 'Permissions',
+      'none': 'None',
+      'owned': 'Owned',
+      // 'payment_success': 'Payment Success',
+      // 'payment_failure': 'Payment Failure',
+      // 'invoice_sent': 'Invoice Sent',
+      // 'quote_sent': 'Quote Sent',
+      // 'credit_sent': 'Credit Sent',
+      // 'invoice_viewed': 'Invoice Viewed',
+      // 'quote_viewed': 'Quote Viewed',
+      // 'credit_viewed': 'Credit Viewed',
+      // 'quote_approved': 'Quote Approved',
+      'receive_all_notifications': 'Receive All Notifications',
+      'purchase_license': 'Purchase License',
+      'apply_license': 'Apply License',
+      'cancel_account': 'Delete Account',
+      'cancel_account_message':
+          'Warning: This will permanently delete your account, there is no undo',
+      'delete_company': 'Delete Company',
+      'delete_company_message':
+          'Warning: This will permanently delete your company, there is no undo',
+      'enabled_modules': 'Enabled Modules',
+      // 'converted_quote': 'Successfully converted quote',
+      // 'credit_design': 'Credit Design',
+      'includes': 'Includes',
+      'header': 'Header',
+      'load_design': 'Load Design',
+      'css_framework': 'CSS Framework',
+      'custom_designs': 'Custom Designs',
+      'designs': 'Designs',
+      'new_design': 'New Design',
+      'edit_design': 'Edit Design',
+      'created_design': 'Successfully created design',
+      'updated_design': 'Successfully updated design',
+      'archived_design': 'Successfully archived design',
+      'deleted_design': 'Successfully deleted design',
+      'removed_design': 'Successfully removed design',
+      'restored_design': 'Successfully restored design',
+      'archived_designs': 'Successfully archived :value designs',
+      'deleted_designs': 'Successfully deleted :value designs',
+      // 'restored_designs': 'Successfully restored :value designs',
+      // 'proposals': 'Proposals',
+      // 'tickets': 'Tickets',
+      // 'recurring_quotes': 'Recurring Quotes',
+      // 'recurring_tasks': 'Recurring Tasks',
+      'account_management': 'Account Management',
+      // 'credit_date': 'Credit Date',
+      // 'credit': 'Credit',
+      // 'credits': 'Credits',
+      // 'new_credit': 'New Credit',
+      // 'edit_credit': 'Edit Credit',
+      // 'created_credit': 'Successfully created credit',
+      // 'updated_credit': 'Successfully updated credit',
+      // 'archived_credit': 'Successfully archived credit',
+      // 'deleted_credit': 'Successfully deleted credit',
+      // 'removed_credit': 'Successfully removed credit',
+      // 'restored_credit': 'Successfully restored credit',
+      // 'archived_credits': 'Successfully archived :value credits',
+      // 'deleted_credits': 'Successfully deleted :value credits',
+      // 'restored_credits': 'Successfully restored :value credits',
+      // 'current_version': 'Current Version',
+      // 'latest_version': 'Latest Version',
+      // 'update_now': 'Update Now',
+      // 'a_new_version_is_available': 'A new version of the web app is available',
+      // 'update_available': 'Update Available',
+      // 'app_updated': 'Update successfully completed',
+      'learn_more': 'Learn More',
+      'integrations': 'Integrations',
+      // 'tracking_id': 'Tracking ID',
+      // 'slack_webhook_url': 'Slack Webhook URL',
+      // 'credit_footer': 'Credit Footer',
+      // 'credit_terms': 'Credit Terms',
+      'new_company': 'New Company',
+      'added_company': 'Successfully added company',
+      // 'company1': 'Custom Company 1',
+      // 'company2': 'Custom Company 2',
+      // 'company3': 'Custom Company 3',
+      // 'company4': 'Custom Company 4',
+      // 'product1': 'Custom Product 1',
+      // 'product2': 'Custom Product 2',
+      // 'product3': 'Custom Product 3',
+      // 'product4': 'Custom Product 4',
+      // 'client1': 'Custom Client 1',
+      // 'client2': 'Custom Client 2',
+      // 'client3': 'Custom Client 3',
+      // 'client4': 'Custom Client 4',
+      // 'contact1': 'Custom Contact 1',
+      // 'contact2': 'Custom Contact 2',
+      // 'contact3': 'Custom Contact 3',
+      // 'contact4': 'Custom Contact 4',
+      // 'task1': 'Custom Task 1',
+      // 'task2': 'Custom Task 2',
+      // 'task3': 'Custom Task 3',
+      // 'task4': 'Custom Task 4',
+      // 'project1': 'Custom Project 1',
+      // 'project2': 'Custom Project 2',
+      // 'project3': 'Custom Project 3',
+      // 'project4': 'Custom Project 4',
+      // 'expense1': 'Custom Expense 1',
+      // 'expense2': 'Custom Expense 2',
+      // 'expense3': 'Custom Expense 3',
+      // 'expense4': 'Custom Expense 4',
+      // 'vendor1': 'Custom Vendor 1',
+      // 'vendor2': 'Custom Vendor 2',
+      // 'vendor3': 'Custom Vendor 3',
+      // 'vendor4': 'Custom Vendor 4',
+      // 'invoice1': 'Custom Invoice 1',
+      // 'invoice2': 'Custom Invoice 2',
+      // 'invoice3': 'Custom Invoice 3',
+      // 'invoice4': 'Custom Invoice 4',
+      // 'payment1': 'Custom Payment 1',
+      // 'payment2': 'Custom Payment 2',
+      // 'payment3': 'Custom Payment 3',
+      // 'payment4': 'Custom Payment 4',
+      // 'surcharge1': 'Custom Surcharge 1',
+      // 'surcharge2': 'Custom Surcharge 2',
+      // 'surcharge3': 'Custom Surcharge 3',
+      // 'surcharge4': 'Custom Surcharge 4',
+      // 'group1': 'Custom Group 1',
+      // 'group2': 'Custom Group 2',
+      // 'group3': 'Custom Group 3',
+      // 'group4': 'Custom Group 4',
+      'reset': 'Reset',
+      'number': 'Number',
+      'export': 'Export',
+      'chart': 'Chart',
+      'count': 'Count',
+      // 'totals': 'Totals',
+      // 'blank': 'Blank',
+      // 'day': 'Day',
+      // 'month': 'Month',
+      // 'year': 'Year',
+      // 'subgroup': 'Subgroup',
+      'is_active': 'Is Active',
+      // 'group_by': 'Group By',
+      // 'credit_balance': 'Credit Balance',
+      // 'contact_last_login': 'Contact Last Login',
+      // 'contact_full_name': 'Contact Full Name',
+      // 'contact_phone': 'Contact Phone',
+      // 'contact_custom_value1': 'Contact Custom Value 1',
+      // 'contact_custom_value2': 'Contact Custom Value 2',
+      // 'contact_custom_value3': 'Contact Custom Value 3',
+      // 'contact_custom_value4': 'Contact Custom Value 4',
+      // 'shipping_address1': 'Shipping Street',
+      // 'shipping_address2': 'Shipping Apt/Suite',
+      // 'shipping_city': 'Shipping City',
+      // 'shipping_state': 'Shipping State/Province',
+      // 'shipping_postal_code': 'Shipping Postal Code',
+      // 'shipping_country': 'Shipping Country',
+      // 'billing_address1': 'Billing Street',
+      // 'billing_address2': 'Billing Apt/Suite',
+      // 'billing_city': 'Billing City',
+      // 'billing_state': 'Billing State/Province',
+      // 'billing_postal_code': 'Billing Postal Code',
+      // 'billing_country': 'Billing Country',
+      // 'client_id': 'Client ID',
+      'assigned_to': 'Assigned To',
+      'created_by': 'Created By',
+      'assigned_to_id': 'Assigned To ID',
+      'created_by_id': 'Created By ID',
+      'add_column': 'Add Column',
+      'edit_columns': 'Edit Columns',
+      'columns': 'Columns',
+      // 'aging': 'Aging',
+      // 'profit_and_loss': 'Profit and Loss',
+      'reports': 'Reports',
+      // 'report': 'Report',
+      'add_company': 'Add Company',
+      // 'unpaid_invoice': 'Unpaid Invoice',
+      // 'paid_invoice': 'Paid Invoice',
+      // 'unapproved_quote': 'Unapproved Quote',
+      // 'help': 'Help',
+      // 'refund': 'Refund',
+      // 'refund_date': 'Refund Date',
+      'filtered_by': 'Filtered by :value',
+      // 'contact_email': 'Contact Email',
+      'multiselect': 'Multiselect',
+      'entity_state': 'Entity State',
+      // 'verify_password': 'Verify Password',
+      // 'applied': 'Applied',
+      // 'include_recent_errors': 'Include recent errors from the logs',
+      // 'your_message_has_been_received':
+      //     'We have received your message and will try to respond promptly.',
+      // 'message': 'Message',
+      // 'from': 'From',
+      // 'show_product_details': 'Show Product Details',
+      // 'show_product_details_help':
+      //     'Include the description and cost in the product dropdown',
+      // 'pdf_min_requirements': 'The PDF renderer requires :version',
+      // 'adjust_fee_percent': 'Adjust Fee Percent',
+      // 'adjust_fee_percent_help': 'Ensure client fee matches the gateway fee',
+      // 'configure_settings': 'Configure Settings',
+      // 'support_forum': 'Support Forum',
+      'about': 'About',
+      'about_us': 'About us',
+      'documentation': 'Documentation',
+      'contact_us': 'Contact Us',
+      // 'subtotal': 'Subtotal',
+      // 'line_total': 'Line Total',
+      'item': 'Item',
+      // 'credit_email': 'Credit Email',
+      // 'iframe_url': 'iFrame URL',
+      // 'domain_url': 'Domain URL',
+      'password_is_too_short': 'Password must be at least 8 character long',
+      'password_is_too_easy':
+          'Password must contain an upper case character and a number',
+      // 'client_portal_tasks': 'Client Portal Tasks',
+      // 'client_portal_dashboard': 'Client Portal Dashboard',
+      'please_enter_a_value': 'Please enter a value',
+      'deleted_logo': 'Successfully deleted logo',
+      'yes': 'Yes',
+      'no': 'No',
+      'generate_number': 'Generate Number',
+      'when_saved': 'When Saved',
+      'when_sent': 'When Sent',
+      'select_company': 'Select Company',
+      'float': 'Float',
+      'collapse': 'Collapse',
+      'show_or_hide': 'Show/hide',
+      'menu_sidebar': 'Menu Sidebar',
+      'history_sidebar': 'History Sidebar',
+      'tablet': 'Tablet',
+      'mobile': 'Mobile',
+      'desktop': 'Desktop',
+      'layout': 'Layout',
+      'view': 'View',
+      'module': 'Module',
+      // 'first_custom': 'First Custom',
+      // 'second_custom': 'Second Custom',
+      // 'third_custom': 'Third Custom',
+      // 'show_cost': 'Show Cost',
+      // 'show_product_cost': 'Show Product Cost',
+      // 'show_cost_help':
+      //     'Display a product cost field to track the markup/profit',
+      // 'show_product_quantity': 'Show Product Quantity',
+      // 'show_product_quantity_help':
+      //     'Display a product quantity field, otherwise default to one',
+      // 'show_invoice_quantity': 'Show Invoice Quantity',
+      // 'show_invoice_quantity_help':
+      //     'Display a line item quantity field, otherwise default to one',
+      // 'show_product_discount': 'Show Product Discount',
+      // 'show_product_discount_help': 'Display a line item discount field',
+      // 'default_quantity': 'Default Quantity',
+      // 'default_quantity_help':
+      //     'Automatically set the line item quantity to one',
+      // 'one_tax_rate': 'One Tax Rate',
+      // 'two_tax_rates': 'Two Tax Rates',
+      // 'three_tax_rates': 'Three Tax Rates',
+      // 'default_tax_rate': 'Default Tax Rate',
+      // 'user': 'User',
+      // 'invoice_tax': 'Invoice Tax',
+      // 'line_item_tax': 'Line Item Tax',
+      // 'inclusive_taxes': 'Inclusive Taxes',
+      // 'invoice_tax_rates': 'Invoice Tax Rates',
+      // 'item_tax_rates': 'Item Tax Rates',
+      // 'no_client_selected': 'No client selected',
+      // 'configure_rates': 'Configure Rates',
+      // 'configure_gateways': 'Configure Gateways',
+      // 'tax_settings': 'Tax Settings',
+      // 'tax_settings_rates': 'Tax Rates',
+      'accent_color': 'Accent Color',
+      // 'switch': 'Switch',
+      'comma_sparated_list': 'Comma separated list',
+      'options': 'Options',
+      // 'single_line_text': 'Single-line text',
+      // 'multi_line_text': 'Multi-line text',
+      'dropdown': 'Dropdown',
+      // 'field_type': 'Field Type',
+      'recover_password_email_sent': 'A password recovery email has been sent',
+      'email_sent': 'Email Sent',
+      'submit': 'Submit',
+      'recover_password': 'Forgot Password?',
+      'send_link': 'Send Reset Link',
+      'recover_password_label':
+          'Please fill out your email below in order to receive reset password link',
+      // 'late_fees': 'Late Fees',
+      // 'credit_number': 'Credit Number',
+      // 'payment_number': 'Payment Number',
+      // 'late_fee_amount': 'Late Fee Amount',
+      // 'late_fee_percent': 'Late Fee Percent',
+      // 'before_due_date': 'Before the due date',
+      // 'after_due_date': 'After the due date',
+      // 'after_invoice_date': 'After the invoice date',
+      'days': 'Days',
+      // 'invoice_email': 'Invoice Email',
+      // 'payment_email': 'Payment Email',
+      // 'partial_payment': 'Partial Payment',
+      // 'payment_partial': 'Partial Payment',
+      // 'partial_payment_email': 'Partial Payment Email',
+      // 'quote_email': 'Quote Email',
+      // 'endless_reminder': 'Endless Reminder',
+      // 'filtered_by_user': 'Filtered by User',
+      'administrator': 'Administrator',
+      'administrator_help':
+          'Allow user to manage users, change settings and modify all records',
+      'user_management': 'User Management',
+      'users': 'Users',
+      'new_user': 'New User',
+      'edit_user': 'Edit User',
+      'created_user': 'Successfully created user',
+      'updated_user': 'Successfully updated user',
+      'archived_user': 'Successfully archived user',
+      'deleted_user': 'Successfully deleted user',
+      'removed_user': 'Successfully removed user',
+      'restored_user': 'Successfully restored user',
+      'archived_users': 'Successfully archived :value users',
+      'deleted_users': 'Successfully deleted :value users',
+      'removed_users': 'Successfully removed :value users',
+      'restored_users': 'Successfully restored :value users',
+      'general_settings': 'General Settings',
+      // 'invoice_options': 'Invoice Options',
+      // 'hide_paid_to_date': 'Hide Paid to Date',
+      // 'hide_paid_to_date_help':
+      //     'Only display the \'Paid to Date\' area on your invoices once a payment has been received.',
+      // 'invoice_embed_documents': 'Embed Documents',
+      // 'invoice_embed_documents_help': 'Include attached images in the invoice.',
+      // 'all_pages_header': 'Show Header on',
+      // 'all_pages_footer': 'Show Footer on',
+      // 'first_page': 'First page',
+      // 'all_pages': 'All pages',
+      // 'last_page': 'Last page',
+      // 'primary_font': 'Primary Font',
+      // 'secondary_font': 'Secondary Font',
+      // 'primary_color': 'Primary Color',
+      // 'secondary_color': 'Secondary Color',
+      // 'page_size': 'Page Size',
+      'font_size': 'Font Size',
+      // 'quote_design': 'Quote Design',
+      // 'invoice_fields': 'Invoice Fields',
+      // 'product_fields': 'Product Fields',
+      // 'invoice_terms': 'Invoice Terms',
+      // 'invoice_footer': 'Invoice Footer',
+      // 'quote_terms': 'Quote Terms',
+      // 'quote_footer': 'Quote Footer',
+      // 'auto_email_invoice': 'Auto Email',
+      // 'auto_email_invoice_help':
+      //     'Automatically email recurring invoices when they are created.',
+      // 'auto_archive_quote': 'Auto Archive',
+      // 'auto_archive_quote_help':
+      //     'Automatically archive quotes when they are converted.',
+      // 'auto_convert_quote': 'Auto Convert',
+      // 'auto_convert_quote_help':
+      //     'Automatically convert a quote to an invoice when approved by a client.',
+      'workflow_settings': 'Workflow Settings',
+      // 'freq_daily': 'Daily',
+      // 'freq_weekly': 'Weekly',
+      // 'freq_two_weeks': 'Two Weeks',
+      // 'freq_four_weeks': 'Four Weeks',
+      // 'freq_monthly': 'Monthly',
+      // 'freq_two_months': 'Two Months',
+      // 'freq_three_months': 'Three Months',
+      // 'freq_four_months': 'Four Months',
+      // 'freq_six_months': 'Six Months',
+      // 'freq_annually': 'Annually',
+      // 'freq_two_years': 'Two Years',
+      // 'freq_three_years': 'Three Years',
+      'never': 'Never',
+      'company': 'Company',
+      'generated_numbers': 'Generated Numbers',
+      // 'charge_taxes': 'Charge Taxes',
+      'next_reset': 'Next Reset',
+      'reset_counter': 'Reset Counter',
+      'recurring_prefix': 'Recurring Prefix',
+      'number_padding': 'Number Padding',
+      // 'general': 'General',
+      // 'surcharge_field': 'Surcharge Field',
+      // 'company_field': 'Company Field',
+      // 'company_value': 'Company Value',
+      // 'credit_field': 'Credit Field',
+      // 'invoice_field': 'Invoice Field',
+      // 'invoice_surcharge': 'Invoice Surcharge',
+      // 'client_field': 'Client Field',
+      // 'product_field': 'Product Field',
+      // 'payment_field': 'Payment Field',
+      // 'contact_field': 'Contact Field',
+      // 'vendor_field': 'Vendor Field',
+      // 'expense_field': 'Expense Field',
+      // 'project_field': 'Project Field',
+      // 'task_field': 'Task Field',
+      // 'group_field': 'Group Field',
+      'number_counter': 'Number Counter',
+      'prefix': 'Prefix',
+      'number_pattern': 'Number Pattern',
+      'messages': 'Messages',
+      // 'custom_css': 'Custom CSS',
+      // 'custom_javascript': 'Custom JavaScript',
+      // 'signature_on_pdf': 'Show on PDF',
+      // 'signature_on_pdf_help':
+      //     'Show the client signature on the invoice/quote PDF.',
+      // 'show_accept_invoice_terms': 'Invoice Terms Checkbox',
+      // 'show_accept_invoice_terms_help':
+      //     'Require client to confirm that they accept the invoice terms.',
+      // 'show_accept_quote_terms': 'Quote Terms Checkbox',
+      // 'show_accept_quote_terms_help':
+      //     'Require client to confirm that they accept the quote terms.',
+      // 'require_invoice_signature': 'Invoice Signature',
+      // 'require_invoice_signature_help':
+      //     'Require client to provide their signature.',
+      // 'require_quote_signature': 'Quote Signature',
+      // 'enable_portal_password': 'Password Protect Invoices',
+      // 'enable_portal_password_help':
+      //     'If enabled the contact will be able to set a password when viewing their first invoice.',
+      // 'authorization': 'Authorization',
+      // 'subdomain': 'Subdomain',
+      'domain': 'Domain',
+      // 'portal_mode': 'Portal Mode',
+      'email_signature': 'Email Signature',
+      'enable_email_markup_help':
+          'Make it easier for your clients to pay you by adding schema.org markup to your emails.',
+      'plain': 'Plain',
+      'light': 'Light',
+      'dark': 'Dark',
+      'email_design': 'Email Design',
+      'attach_pdf': 'Attach PDF',
+      'attach_documents': 'Attach Documents',
+      'attach_ubl': 'Attach UBL',
+      'email_style': 'Email Style',
+      'enable_email_markup': 'Enable Markup',
+      'reply_to_email': 'Reply-To Email',
+      'reply_to_name': 'Reply-To Name',
+      'bcc_email': 'BCC Email',
+      // 'processed': 'Processed',
+      // 'credit_card': 'Credit Card',
+      // 'bank_transfer': 'Bank Transfer',
+      // 'priority': 'Priority',
+      // 'fee_amount': 'Fee Amount',
+      // 'fee_percent': 'Fee Percent',
+      // 'fee_cap': 'Fee Cap',
+      // 'limits_and_fees': 'Limits/Fees',
+      // 'enable_min': 'Enable Min',
+      // 'enable_max': 'Enable Max',
+      // 'min_limit': 'Min Limit',
+      // 'max_limit': 'Max Limit',
+      // 'min': 'Min',
+      // 'max': 'Max',
+      // 'accepted_card_logos': 'Accepted Card Logos',
+      // 'credentials': 'Credentials',
+      // 'update_address': 'Update Address',
+      // 'update_address_help': 'Update client\'s address with provided details',
+      // 'rate': 'Rate',
+      // 'tax_rate': 'Tax Rate',
+      // 'new_tax_rate': 'New Tax Rate',
+      // 'edit_tax_rate': 'Edit Tax Rate',
+      // 'created_tax_rate': 'Successfully created tax rate',
+      // 'updated_tax_rate': 'Successfully updated tax rate',
+      // 'archived_tax_rate': 'Successfully archived tax rate',
+      // 'deleted_tax_rate': 'Successfully deleted tax rate',
+      // 'restored_tax_rate': 'Successfully restored tax rate',
+      // 'archived_tax_rates': 'Successfully archived :value tax rates',
+      // 'deleted_tax_rates': 'Successfully deleted :value tax rates',
+      // 'restored_tax_rates': 'Successfully restored :value tax rates',
+      // 'fill_products': 'Fill Products',
+      // 'fill_products_help':
+      //     'Selecting a product will automatically fill in the description and cost',
+      // 'update_products': 'Update Products',
+      // 'update_products_help':
+      //     'Updating an invoice will automatically update the product library',
+      // 'convert_products': 'Convert Products',
+      // 'convert_products_help':
+      //     'Automatically convert product prices using current exchange rate',
+      'fees': 'Fees',
+      'limits': 'Limits',
+      'provider': 'Provider',
+      'company_gateway': 'Gateway',
+      'company_gateways': 'Payment Gateways',
+      'new_company_gateway': 'New Gateway',
+      'edit_company_gateway': 'Edit Gateway',
+      'created_company_gateway': 'Successfully created gateway',
+      'updated_company_gateway': 'Successfully updated gateway',
+      'archived_company_gateway': 'Successfully archived gateway',
+      'deleted_company_gateway': 'Successfully deleted gateway',
+      'restored_company_gateway': 'Successfully restored gateway',
+      'archived_company_gateways': 'Successfully archived :value gateways',
+      'deleted_company_gateways': 'Successfully deleted :value gateways',
+      'restored_company_gateways': 'Successfully restored :value gateways',
+      'continue_editing': 'Continue Editing',
+      'discard_changes': 'Discard Changes',
+      'default_value': 'Default value',
+      'disabled': 'Disabled',
+      'currency_format': 'Currency Format',
+      'first_day_of_the_week': 'First Day of the Week',
+      'first_month_of_the_year': 'First Month of the Year',
+      'sunday': 'Sunday',
+      'monday': 'Monday',
+      'tuesday': 'Tuesday',
+      'wednesday': 'Wednesday',
+      'thursday': 'Thursday',
+      'friday': 'Friday',
+      'saturday': 'Saturday',
+      'january': 'January',
+      'february': 'February',
+      'march': 'March',
+      'april': 'April',
+      'may': 'May',
+      'june': 'June',
+      'july': 'July',
+      'august': 'August',
+      'september': 'September',
+      'october': 'October',
+      'november': 'November',
+      'december': 'December',
+      'symbol': 'Symbol',
+      'ocde': 'Code',
+      'date_format': 'Date Format',
+      'datetime_format': 'Datetime Format',
+      'military_time': 'Military Time',
+      'military_time_help': '24 Hour Display',
+      // 'send_reminders': 'Send Reminders',
+      'timezone': 'Timezone',
+      // 'filtered_by_project': 'Filtered by Project',
+      // 'filtered_by_group': 'Filtered by Group',
+      // 'filtered_by_invoice': 'Filtered by Invoice',
+      // 'filtered_by_client': 'Filtered by Client',
+      // 'filtered_by_vendor': 'Filtered by Vendor',
+      // 'group_settings': 'Group Settings',
+      // 'group': 'Group',
+      // 'groups': 'Groups',
+      // 'new_group': 'New Group',
+      // 'edit_group': 'Edit Group',
+      // 'created_group': 'Successfully created group',
+      // 'updated_group': 'Successfully updated group',
+      // 'archived_groups': 'Successfully archived :value groups',
+      // 'deleted_groups': 'Successfully deleted :value groups',
+      // 'restored_groups': 'Successfully restored :value groups',
+      // 'archived_group': 'Successfully archived group',
+      // 'deleted_group': 'Successfully deleted group',
+      // 'restored_group': 'Successfully restored group',
+      'upload_logo': 'Upload Logo',
+      'uploaded_logo': 'Successfully uploaded logo',
+      'logo': 'Logo',
+      'saved_settings': 'Successfully saved settings',
+      // 'product_settings': 'Product Settings',
+      'device_settings': 'Device Settings',
+      'defaults': 'Defaults',
+      'basic_settings': 'Basic Settings',
+      'advanced_settings': 'Advanced Settings',
+      'company_details': 'Company Details',
+      'user_details': 'User Details',
+      'localization': 'Localization',
+      // 'online_payments': 'Online Payments',
+      // 'tax_rates': 'Tax Rates',
+      'notifications': 'Notifications',
+      'import_export': 'Import | Export',
+      'custom_fields': 'Custom Fields',
+      // 'invoice_design': 'Invoice Design',
+      // 'buy_now_buttons': 'Buy Now Buttons',
+      'email_settings': 'Email Settings',
+      'templates_and_reminders': 'Templates & Reminders',
+      // 'credit_cards_and_banks': 'Credit Cards & Banks',
+      'data_visualizations': 'Data Visualizations',
+      'price': 'Price',
+      'email_sign_up': 'Create account',
+      'or': 'OR',
+      'already_have_account': 'Already have an account?',
+      'not_have_account': 'Don\'t have an account?',
+      'google_sign_up': 'Sign up with Google',
+      // 'thank_you_for_your_purchase': 'Thank you for your purchase!',
+      // 'redeem': 'Redeem',
+      'back': 'Back',
+      // 'past_purchases': 'Past Purchases',
+      // 'annual_subscription': 'Annual Subscription',
+      'pro_plan': 'Pro Plan',
+      // 'enterprise_plan': 'Enterprise Plan',
+      // 'count_users': ':count users',
+      'upgrade': 'Launch your dating site',
+      'please_enter_a_first_name': 'Please enter a first name',
+      'please_enter_a_last_name': 'Please enter a last name',
+      'please_agree_to_terms_and_privacy':
+          'Please agree to the terms of service and privacy policy to create an account.',
+      'please_agree_to_terms':
+          'Please agree to the terms of service to create an account.',
+      'please_agree_to_privacy':
+          'Please agree to the privacy policy to create an account.',
+      'i_agree_to_the': 'I agree to the',
+      'terms_of_service': 'Terms of Service',
+      'both_terms_of_service_and_Privacy':
+          'Terms of Service and Privacy Policy',
+      'privacy_policy': 'Privacy Policy',
+      'sign_up': 'Sign Up',
+      'get_started': 'Get Started',
+      'sign_up_account_label': 'Create an account by using the form below.',
+      'account_login': 'Account Login',
+      'view_website': 'View Website',
+      'create_account': 'Create Account',
+      'email_login': 'Email Login',
+      'email_login_error': 'Incorrect email or password',
+      'signup_error': 'Signup failed. Please try again later.',
+      'create_new': 'Create New',
+      'no_record_selected': 'No record selected',
+      'error_unsaved_changes': 'Please save or cancel your changes',
+      'download': 'Download',
+      // 'requires_an_enterprise_plan': 'Requires an Enterprise plan',
+      // 'take_picture': 'Take Picture',
+      // 'upload_files': 'Upload Files',
+      // 'document': 'Document',
+      // 'documents': 'Documents',
+      // 'new_document': 'New Document',
+      // 'edit_document': 'Edit Document',
+      // 'uploaded_document': 'Successfully uploaded document',
+      // 'updated_document': 'Successfully updated document',
+      // 'archived_document': 'Successfully archived document',
+      // 'deleted_document': 'Successfully deleted document',
+      // 'restored_document': 'Successfully restored document',
+      // 'archived_documents': 'Successfully archived :value documents',
+      // 'deleted_documents': 'Successfully deleted :value documents',
+      // 'restored_documents': 'Successfully restored :value documents',
+      // 'no_history': 'No History',
+      // 'expense_date': 'Expense Date',
+      'pending': 'Pending',
+      'expense_status_1': 'Logged',
+      // 'expense_status_2': 'Pending',
+      // 'expense_status_3': 'Invoiced',
+      // 'converted': 'Converted',
+      // 'add_documents_to_invoice': 'Add Documents to Invoice',
+      // 'exchange_rate': 'Exchange Rate',
+      // 'convert_currency': 'Convert Currency',
+      // 'mark_paid': 'Mark Paid',
+      'category': 'Category',
+      'address': 'Address',
+      // 'new_vendor': 'New Vendor',
+      // 'created_vendor': 'Successfully created vendor',
+      // 'updated_vendor': 'Successfully updated vendor',
+      // 'archived_vendor': 'Successfully archived vendor',
+      // 'deleted_vendor': 'Successfully deleted vendor',
+      // 'restored_vendor': 'Successfully restored vendor',
+      // 'archived_vendors': 'Successfully archived :value vendors',
+      // 'deleted_vendors': 'Successfully deleted :value vendors',
+      // 'restored_vendors': 'Successfully restored :value vendors',
+      // 'new_expense': 'New Expense',
+      // 'created_expense': 'Successfully created expense',
+      // 'updated_expense': 'Successfully updated expense',
+      // 'archived_expense': 'Successfully archived expense',
+      // 'deleted_expense': 'Successfully deleted expense',
+      // 'restored_expense': 'Successfully restored expense',
+      // 'archived_expenses': 'Successfully archived :value expenses',
+      // 'deleted_expenses': 'Successfully deleted :value expenses',
+      // 'restored_expenses': 'Successfully restored :value expenses',
+      // 'copy_shipping': 'Copy Shipping',
+      // 'copy_billing': 'Copy Billing',
+      'design': 'Design',
+      'failed_to_find_record': 'Failed to find record',
+      // 'invoiced': 'Invoiced',
+      'logged': 'Logged',
+      // 'running': 'Running',
+      // 'resume': 'Resume',
+      // 'task_errors': 'Please correct any overlapping times',
+      'start': 'Start',
+      // 'stop': 'Stop',
+      // 'started_task': 'Successfully started task',
+      // 'stopped_task': 'Successfully stopped task',
+      // 'resumed_task': 'Successfully resumed task',
+      // 'now': 'Now',
+      // 'auto_start_tasks': 'Auto Start Tasks',
+      // 'timer': 'Timer',
+      // 'manual': 'Manual',
+      // 'budgeted': 'Budgeted',
+      // 'start_time': 'Start Time',
+      // 'end_time': 'End Time',
+      // 'date': 'Date',
+      // 'times': 'Times',
+      // 'duration': 'Duration',
+      // 'new_task': 'New Task',
+      // 'created_task': 'Successfully created task',
+      // 'updated_task': 'Successfully updated task',
+      // 'archived_task': 'Successfully archived task',
+      // 'deleted_task': 'Successfully deleted task',
+      // 'restored_task': 'Successfully restored task',
+      // 'archived_tasks': 'Successfully archived :value tasks',
+      // 'deleted_tasks': 'Successfully deleted :value tasks',
+      // 'restored_tasks': 'Successfully restored :value tasks',
+      'please_enter_a_name': 'Please enter a name',
+      // 'budgeted_hours': 'Budgeted Hours',
+      // 'created_project': 'Successfully created project',
+      // 'updated_project': 'Successfully updated project',
+      // 'archived_project': 'Successfully archived project',
+      // 'deleted_project': 'Successfully deleted project',
+      // 'restored_project': 'Successfully restored project',
+      // 'archived_projects': 'Successfully archived :value projects',
+      // 'deleted_projects': 'Successfully deleted :value projects',
+      // 'restored_projects': 'Successfully restored :value projects',
+      // 'new_project': 'New Project',
+      'thank_you_for_using_our_app': 'Thank you for using our app!',
+      'if_you_like_it': 'If you like it please',
+      'click_here': 'click here',
+      'click_here_capital': 'Click here',
+      'to_rate_it': 'to rate it.',
+      'average': 'Average',
+      'unapproved': 'Unapproved',
+      'authenticate_to_change_setting':
+          'Please authenticate to change this setting',
+      'locked': 'Locked',
+      'authenticate': 'Authenticate',
+      'please_authenticate': 'Please authenticate',
+      'biometric_authentication': 'Biometric Authentication',
+      'footer': 'Footer',
+      'compare': 'Compare',
+      'google_sign_in': 'Continue with Google',
+      'today': 'Today',
+      'custom_range': 'Custom',
+      'date_range': 'Date Range',
+      'current': 'Current',
+      'previous': 'Previous',
+      'current_period': 'Current Period',
+      'comparison_period': 'Comparison Period',
+      'previous_period': 'Previous Period',
+      'previous_year': 'Previous Year',
+      'compare_to': 'Compare to',
+      'last7_days': 'Last 7 Days',
+      'last_week': 'Last Week',
+      'last30_days': 'Last 30 Days',
+      'this_month': 'This Month',
+      'last_month': 'Last Month',
+      'this_year': 'This Year',
+      'last_year': 'Last Year',
+      'all_time': 'All Time',
+      'custom': 'Custom',
+      // 'clone_to_invoice': 'Clone to Invoice',
+      // 'clone_to_quote': 'Clone to Quote',
+      // 'clone_to_credit': 'Clone to Credit',
+      // 'view_invoice': 'View Invoice',
+      // 'convert': 'Convert',
+      'more': 'More',
+      // 'edit_client': 'Edit Client',
+      // 'edit_product': 'Edit Product',
+      // 'edit_invoice': 'Edit Invoice',
+      // 'edit_quote': 'Edit Quote',
+      // 'edit_payment': 'Edit Payment',
+      // 'edit_task': 'Edit Task',
+      // 'edit_expense': 'Edit Expense',
+      // 'edit_vendor': 'Edit Vendor',
+      // 'edit_project': 'Edit Project',
+      // 'edit_recurring_quote': 'Edit Recurring Quote',
+      // 'billing_address': 'Billing Address',
+      // 'shipping_address': 'Shipping Address',
+      // 'total_revenue': 'Total Revenue',
+      // 'average_invoice': 'Average Invoice',
+      // 'outstanding': 'Outstanding',
+      // 'invoices_sent': 'Invoices Sent',
+      // 'active_clients': 'Active Clients',
+      'close': 'Close',
+
+      // Update dialog strings
+      'app_updated': 'Update successfully completed',
+      'update_available': 'Update Available',
+      'force_update': 'Force Update',
+      'a_new_version_is_available': 'A new version of the web app is available',
+      'force_update_help':
+          'You are running the latest version but there may be pending fixes available.',
+      'installed_version': 'Installed Version',
+      'latest_version': 'Latest Version',
+      'to_update_run': 'To update run',
+      'latest_requires_php_version':
+          'Note: the latest version requires PHP :version',
+      'view_changes': 'View Changes',
+      'update_now': 'Update Now',
+      'update_fail_help':
+          'Changes to the codebase may be blocking the update, you can run this command to discard the changes:',
+
+      'filter': 'Filters',
+      'sort': 'Sort',
+      'search': 'Search',
+      'active': 'Active',
+      'archived': 'Archived',
+      'deleted': 'Deleted',
+      'dashboard': 'Dashboard',
+      'archive': 'Archive',
+      'delete': 'Delete',
+      'reported': 'Reported',
+      'restore': 'Restore',
+      'refresh_complete': 'Refresh Complete',
+      'please_enter_your_email': 'Please enter your email',
+      'please_enter_your_password': 'Please enter your password',
+      'please_enter_your_url': 'Please enter your URL',
+      'please_enter_a_product_key': 'Please enter a product key',
+      'ascending': 'Ascending',
+      'descending': 'Descending',
+      'save': 'Save',
+      'an_error_occurred': 'An error occurred',
+      // 'paid_to_date': 'Paid to Date',
+      // 'balance_due': 'Balance Due',
+      // 'balance': 'Balance',
+      'overview': 'Overview',
+      'details': 'Details',
+      'phone': 'Phone',
+      'website': 'Website',
+      'vat_number': 'VAT Number',
+      'id_number': 'ID Number',
+      'create': 'Create',
+      'copied_to_clipboard': 'Copied :value to the clipboard',
+      'error': 'Error',
+      'could_not_launch': 'Could not launch',
+      'contacts': 'Contacts',
+      'additional': 'Additional',
+      'first_name': 'First Name',
+      'last_name': 'Last Name',
+      'add_contact': 'Add Contact',
+      'are_you_sure': 'Are you sure?',
+      'cancel': 'Cancel',
+      'ok': 'Ok',
+      'remove': 'Remove',
+      'email_is_invalid': 'Email is invalid',
+      // 'product': 'Product',
+      // 'products': 'Products',
+      // 'new_product': 'New Product',
+      // 'created_product': 'Successfully created product',
+      // 'updated_product': 'Successfully updated product',
+      // 'archived_product': 'Successfully archived product',
+      // 'deleted_product': 'Successfully deleted product',
+      // 'restored_product': 'Successfully restored product',
+      // 'archived_products': 'Successfully archived :value products',
+      // 'deleted_products': 'Successfully deleted :value products',
+      // 'restored_products': 'Successfully restored :value products',
+      // 'product_key': 'Product',
+      'notes': 'Notes',
+      // 'cost': 'Cost',
+      // 'client': 'Client',
+      // 'clients': 'Clients',
+      // 'new_client': 'New Client',
+      // 'created_client': 'Successfully created client',
+      // 'updated_client': 'Successfully updated client',
+      // 'archived_client': 'Successfully archived client',
+      // 'archived_clients': 'Successfully archived :value clients',
+      // 'deleted_client': 'Successfully deleted client',
+      // 'deleted_clients': 'Successfully deleted :value clients',
+      // 'restored_client': 'Successfully restored client',
+      // 'restored_clients': 'Successfully restored :value clients',
+      'address1': 'Street',
+      'address2': 'Apt/Suite',
+      'city': 'City',
+      'state': 'State/Province',
+      'postal_code': 'Postal Code',
+      'country': 'Country',
+      // 'invoice': 'Invoice',
+      // 'invoices': 'Invoices',
+      // 'new_invoice': 'New Invoice',
+      // 'created_invoice': 'Successfully created invoice',
+      // 'updated_invoice': 'Successfully updated invoice',
+      // 'archived_invoice': 'Successfully archived invoice',
+      // 'deleted_invoice': 'Successfully deleted invoice',
+      // 'restored_invoice': 'Successfully restored invoice',
+      // 'archived_invoices': 'Successfully archived :value invoices',
+      // 'deleted_invoices': 'Successfully deleted :value invoices',
+      // 'restored_invoices': 'Successfully restored :value invoices',
+      // 'emailed_invoice': 'Successfully queued invoice to be sent',
+      // 'emailed_payment': 'Successfully queued payment to be sent',
+      'amount': 'Amount',
+      // 'invoice_number': 'Invoice Number',
+      // 'invoice_date': 'Invoice Date',
+      'discount': 'Discount',
+      'po_number': 'PO Number',
+      'terms': 'Terms',
+      // 'public_notes': 'Public Notes',
+      // 'private_notes': 'Private Notes',
+      'frequency': 'Frequency',
+      // 'start_date': 'Start Date',
+      // 'end_date': 'End Date',
+      // 'quote_number': 'Quote Number',
+      // 'quote_date': 'Quote Date',
+      // 'valid_until': 'Valid Until',
+      'items': 'Items',
+      // 'partial_deposit': 'Partial/Deposit',
+      'description': 'Description',
+      // 'unit_cost': 'Unit Cost',
+      'quantity': 'Quantity',
+      'add_item': 'Add Item',
+      'contact': 'Contact',
+      // 'work_phone': 'Phone',
+      // 'total_amount': 'Total Amount',
+      // 'pdf': 'PDF',
+      // 'due_date': 'Due Date',
+      // 'partial_due_date': 'Partial Due Date',
+      // 'paid_date': 'Paid Date',
+      'status': 'Status',
+      // 'invoice_status_id': 'Invoice Status',
+      // 'quote_status': 'Quote Status',
+      // 'click_plus_to_add_item': 'Click + to add an item',
+      // 'click_plus_to_add_time': 'Click ▶ to add time',
+      'count_selected': ':count selected',
+      // 'total': 'Total',
+      'percent': 'Percent',
+      'edit': 'Edit',
+      'dismiss': 'Dismiss',
+      // 'please_select_a_date': 'Please select a date',
+      // 'please_select_a_client': 'Please select a client',
+      // 'please_select_an_invoice': 'Please select an invoice',
+      // 'task_rate': 'Task Rate',
+      'settings': 'Settings',
+      'language': 'Language',
+      'currency': 'Currency',
+      'created_at': 'Created At',
+      'created_on': 'Created On',
+      'updated_at': 'Updated At',
+      'sent': 'Sent',
+      'viewed': 'Viewed',
+      'done': 'Done',
+      'dark_mode': 'Dark Mode',
+      'restart_app_to_apply_change': 'Restart the app to apply the change',
+      'refresh_data': 'Refresh Data',
+      'blank_contact': 'Blank Contact',
+      'activity': 'Activity',
+      'no_records_found': 'No records found',
+      'clone': 'Clone',
+      'loading': 'Loading',
+      'industry': 'Industry',
+      'size': 'Size',
+      'enabled': 'Enabled',
+      'initial_email': 'Initial Email',
+      'template': 'Template',
+      'send': 'Send',
+      'subject': 'Subject',
+      'body': 'Body',
+      'send_email': 'Send Email',
+      'button': 'Button',
+      'preview': 'Preview',
+      'customize': 'Customize',
+      'history': 'Activity log',
+      'project': 'Project',
+      // 'projects': 'Projects',
+      // 'activity_1': ':user created client :client',
+      // 'activity_2': ':user archived client :client',
+      // 'activity_3': ':user deleted client :client',
+      // 'activity_4': ':user created invoice :invoice',
+      // 'activity_5': ':user updated invoice :invoice',
+      // 'activity_6': ':user emailed invoice :invoice to :contact',
+      // 'activity_7': ':contact viewed invoice :invoice',
+      // 'activity_8': ':user archived invoice :invoice',
+      // 'activity_9': ':user deleted invoice :invoice',
+      // 'activity_10': ':contact entered payment :payment for invoice :invoice',
+      // 'activity_11': ':user updated payment :payment',
+      // 'activity_12': ':user archived payment :payment',
+      // 'activity_13': ':user deleted payment :payment',
+      // 'activity_14': ':user entered :credit credit',
+      // 'activity_15': ':user updated :credit credit',
+      // 'activity_16': ':user archived :credit credit',
+      // 'activity_17': ':user deleted :credit credit',
+      // 'activity_18': ':user created quote :quote',
+      // 'activity_19': ':user updated quote :quote',
+      // 'activity_20': ':user emailed quote :quote to :contact',
+      // 'activity_21': ':contact viewed quote :quote',
+      // 'activity_22': ':user archived quote :quote',
+      // 'activity_23': ':user deleted quote :quote',
+      // 'activity_24': ':user restored quote :quote',
+      // 'activity_25': ':user restored invoice :invoice',
+      // 'activity_26': ':user restored client :client',
+      // 'activity_27': ':user restored payment :payment',
+      // 'activity_28': ':user restored :credit credit',
+      // 'activity_29': ':contact approved quote :quote',
+      // 'activity_30': ':user created vendor :vendor',
+      // 'activity_31': ':user archived vendor :vendor',
+      // 'activity_32': ':user deleted vendor :vendor',
+      // 'activity_33': ':user restored vendor :vendor',
+      // 'activity_34': ':user created expense :expense',
+      // 'activity_35': ':user archived expense :expense',
+      // 'activity_36': ':user deleted expense :expense',
+      // 'activity_37': ':user restored expense :expense',
+      // 'activity_39': ':user cancelled payment :payment',
+      // 'activity_40': ':user refunded payment :payment',
+      // 'activity_41': 'Payment :payment failed',
+      // 'activity_42': ':user created task :task',
+      // 'activity_43': ':user updated task :task',
+      // 'activity_44': ':user archived task :task',
+      // 'activity_45': ':user deleted task :task',
+      // 'activity_46': ':user restored task :task',
+      // 'activity_47': ':user updated expense :expense',
+      // 'activity_48': ':user created user',
+      // 'activity_49': ':user updated user',
+      // 'activity_50': ':user archived user',
+      // 'activity_51': ':user deleted user',
+      // 'activity_52': ':user restored user',
+      // 'activity_53': ':user marked invoice :invoice as sent',
+      // 'activity_54': ':user applied payment :payment to invoice :invoice',
+      // 'activity_55': '',
+      // 'activity_56': '',
+      // 'activity_57': 'System failed to email invoice :invoice',
+      // 'activity_58': ':user reversed invoice :invoice',
+      // 'activity_59': ':user cancelled invoice :invoice',
+      // 'activity_60': ':contact viewed quote :quote',
+      // 'activity_61': ':user updated client :client',
+      // 'activity_62': ':user updated vendor :vendor',
+      // 'activity_63':
+      //     ':user emailed first reminder for invoice :invoice to :contact',
+      // 'activity_64':
+      //     ':user emailed second reminder for invoice :invoice to :contact',
+      // 'activity_65':
+      //     ':user emailed third reminder for invoice :invoice to :contact',
+      // 'activity_66':
+      //     ':user emailed endless reminder for invoice :invoice to :contact',
+      // 'activity_80': ':user created subscription',
+      // 'activity_81': ':user updated subscription',
+      // 'activity_82': ':user archived subscription',
+      // 'activity_83': ':user deleted subscription',
+      // 'activity_84': ':user restored subscription',
+      'one_time_password': 'One Time Password',
+      // 'emailed_quote': 'Successfully queued quote to be sent',
+      // 'emailed_credit': 'Successfully queued credit to be sent',
+      // 'marked_quote_as_sent': 'Successfully marked quote as sent',
+      // 'marked_credit_as_sent': 'Successfully marked credit as sent',
+      // 'expired': 'Expired',
+      'all': 'All',
+      'select': 'Select',
+      'long_press_multiselect': 'Long-press Multiselect',
+      // 'custom_value1': 'Custom Value 1',
+      // 'custom_value2': 'Custom Value 2',
+      // 'custom_value3': 'Custom Value 3',
+      // 'custom_value4': 'Custom Value 4',
+      // 'email_style_custom': 'Custom Email Style',
+      // 'custom_message_dashboard': 'Custom Dashboard Message',
+      // 'custom_message_unpaid_invoice': 'Custom Unpaid Invoice Message',
+      // 'custom_message_paid_invoice': 'Custom Paid Invoice Message',
+      // 'custom_message_unapproved_quote': 'Custom Unapproved Quote Message',
+      // 'lock_invoices': 'Lock Invoices',
+      // 'translations': 'Translations',
+      // 'task_number_pattern': 'Task Number Pattern',
+      // 'task_number_counter': 'Task Number Counter',
+      // 'expense_number_pattern': 'Expense Number Pattern',
+      // 'expense_number_counter': 'Expense Number Counter',
+      // 'vendor_number_pattern': 'Vendor Number Pattern',
+      // 'vendor_number_counter': 'Vendor Number Counter',
+      // 'ticket_number_pattern': 'Ticket Number Pattern',
+      // 'ticket_number_counter': 'Ticket Number Counter',
+      // 'payment_number_pattern': 'Payment Number Pattern',
+      // 'payment_number_counter': 'Payment Number Counter',
+      // 'invoice_number_pattern': 'Invoice Number Pattern',
+      // 'invoice_number_counter': 'Invoice Number Counter',
+      // 'quote_number_pattern': 'Quote Number Pattern',
+      // 'quote_number_counter': 'Quote Number Counter',
+      // 'client_number_pattern': 'Credit Number Pattern',
+      // 'client_number_counter': 'Credit Number Counter',
+      // 'credit_number_pattern': 'Credit Number Pattern',
+      // 'credit_number_counter': 'Credit Number Counter',
+      // 'reset_counter_date': 'Reset Counter Date',
+      // 'counter_padding': 'Counter Padding',
+      // 'shared_invoice_quote_counter': 'Shared Invoice/Quote Counter',
+      // 'default_tax_name_1': 'Default Tax Name 1',
+      // 'default_tax_rate_1': 'Default Tax Rate 1',
+      // 'default_tax_name_2': 'Default Tax Name 2',
+      // 'default_tax_rate_2': 'Default Tax Rate 2',
+      // 'default_tax_name_3': 'Default Tax Name 3',
+      // 'default_tax_rate_3': 'Default Tax Rate 3',
+      // 'email_subject_invoice': 'Email Invoice Subject',
+      // 'email_subject_quote': 'Email Quote Subject',
+      // 'email_subject_payment': 'Email Payment Subject',
+      // 'email_subject_payment_partial': 'Email Partial Payment Subject',
+      'show_table': 'Show Table',
+      'show_list': 'Show List',
+      'type': 'Type',
+      'archived_at': 'Archived At',
+      'is_deleted': 'Is Deleted',
+      'status_color_theme': 'Status Color Theme',
+      'load_color_theme': 'Load Color Theme',
+      "account_Pending": "Account Pending Approval",
+      "account_Pending_message":
+          "Your account is currently pending administrator approval. Please check back later.",
+    },
+  };
+
+//#region Auth
+  String get email => _localizedValues[localeCode]!['email']!;
+
+  String get password => _localizedValues[localeCode]!['password']!;
+
+  String get url => _localizedValues[localeCode]!['url']!;
+
+  String get secret => _localizedValues[localeCode]!['secret']!;
+
+  String get name => _localizedValues[localeCode]!['name']!;
+
+  String get logout => _localizedValues[localeCode]!['logout']!;
+
+  String get changePassword =>
+      _localizedValues[localeCode]!['change_password'] ??
+      _localizedValues['en']!['change_password']!;
+
+  String get currentPassword =>
+      _localizedValues[localeCode]!['old_password'] ??
+      _localizedValues['en']!['old_password']!;
+
+  String get newPassword =>
+      _localizedValues[localeCode]!['new_password'] ??
+      _localizedValues['en']!['new_password']!;
+
+  String get confirmPassword =>
+      _localizedValues[localeCode]!['confirm_password'] ??
+      _localizedValues['en']!['confirm_password']!;
+
+  String get changePasswordError =>
+      _localizedValues[localeCode]!['change_password_error'] ??
+      _localizedValues['en']!['change_password_error']!;
+
+  String get changePasswordSuccess =>
+      _localizedValues[localeCode]!['change_password_success'] ??
+      _localizedValues['en']!['change_password_success']!;
+
+  String get confirmPasswordError =>
+      _localizedValues[localeCode]!['confirm_password_error'] ??
+      _localizedValues['en']!['confirm_password_error']!;
+  String get accountPending =>
+      _localizedValues[localeCode]!['account_Pending'] ??
+      _localizedValues['en']!['account_Pending']!;
+  String get accountPendingMessage =>
+      _localizedValues[localeCode]!['account_Pending_message'] ??
+      _localizedValues['en']!['account_Pending_message']!;
+
+  String get login => _localizedValues[localeCode]!['login']!;
+
+  String get welcomeBack =>
+      _localizedValues[localeCode]!['welcome_back'] ??
+      _localizedValues['en']!['welcome_back']!;
+
+  String get googleSignIn => _localizedValues[localeCode]!['google_sign_in']!;
+
+  String get hosted => _localizedValues[localeCode]![
+      'hosted']!; //it will be useful later on if we allow clients to deploy on their servers
+
+  String get selfhosted => _localizedValues[localeCode]!['selfhosted']!;
+
+  String get hostedLogin => _localizedValues[localeCode]!['hosted_login']!;
+  String get selfhostLogin => _localizedValues[localeCode]!['selfhost_login']!;
+
+//#endregion
+
+  String get deletedDesign => _localizedValues[localeCode]!['deleted_design']!;
+
+  String get close => _localizedValues[localeCode]!['close']!;
+
+  // Update dialog getters
+  String get appUpdated => _localizedValues[localeCode]!['app_updated']!;
+  String get updateAvailable =>
+      _localizedValues[localeCode]!['update_available']!;
+  String get forceUpdate => _localizedValues[localeCode]!['force_update']!;
+  String get aNewVersionIsAvailable =>
+      _localizedValues[localeCode]!['a_new_version_is_available']!;
+  String get forceUpdateHelp =>
+      _localizedValues[localeCode]!['force_update_help']!;
+  String get installedVersion =>
+      _localizedValues[localeCode]!['installed_version']!;
+  String get latestVersion => _localizedValues[localeCode]!['latest_version']!;
+  String get toUpdateRun => _localizedValues[localeCode]!['to_update_run']!;
+  String get latestRequiresPhpVersion =>
+      _localizedValues[localeCode]!['latest_requires_php_version']!;
+  String get viewChanges => _localizedValues[localeCode]!['view_changes']!;
+  String get updateNow => _localizedValues[localeCode]!['update_now']!;
+  String get updateFailHelp =>
+      _localizedValues[localeCode]!['update_fail_help']!;
+
+  String get save => _localizedValues[localeCode]!['save']!;
+
+  String get pleaseEnterAProductKey =>
+      _localizedValues[localeCode]!['please_enter_a_product_key']!;
+
+  String get thankYouForUsingOurApp =>
+      _localizedValues[localeCode]!['thank_you_for_using_our_app']!;
+
+  String get ifYouLikeIt => _localizedValues[localeCode]!['if_you_like_it']!;
+
+  String get clickHere => _localizedValues[localeCode]!['click_here']!;
+
+  String get clickHereCapital =>
+      _localizedValues[localeCode]!['click_here_capital']!;
+
+  String get toRateIt => _localizedValues[localeCode]!['to_rate_it']!;
+
+  String get average => _localizedValues[localeCode]!['average']!;
+
+  String get unapproved => _localizedValues[localeCode]!['unapproved']!;
+
+  String get authenticateToChangeSetting =>
+      _localizedValues[localeCode]!['authenticate_to_change_setting']!;
+
+  String get locked => _localizedValues[localeCode]!['locked']!;
+
+  String get authenticate => _localizedValues[localeCode]!['authenticate']!;
+
+  String get pleaseAuthenticate =>
+      _localizedValues[localeCode]!['please_authenticate']!;
+
+  String get biometricAuthentication =>
+      _localizedValues[localeCode]!['biometric_authentication']!;
+
+  String get footer => _localizedValues[localeCode]!['footer']!;
+
+  String get compare => _localizedValues[localeCode]!['compare']!;
+
+  String get today => _localizedValues[localeCode]!['today']!;
+
+  String get customRange => _localizedValues[localeCode]!['custom_range']!;
+
+  String get dateRange => _localizedValues[localeCode]!['date_range']!;
+
+  String get current => _localizedValues[localeCode]!['current']!;
+
+  String get previous => _localizedValues[localeCode]!['previous']!;
+
+  String get currentPeriod => _localizedValues[localeCode]!['current_period']!;
+
+  String get comparisonPeriod =>
+      _localizedValues[localeCode]!['comparison_period']!;
+
+  String get previousPeriod =>
+      _localizedValues[localeCode]!['previous_period']!;
+
+  String get previousYear => _localizedValues[localeCode]!['previous_year']!;
+
+  String get compareTo => _localizedValues[localeCode]!['compare_to']!;
+
+  String get last7Days => _localizedValues[localeCode]!['last7_days']!;
+
+  String get lastWeek => _localizedValues[localeCode]!['last_week']!;
+
+  String get last30Days => _localizedValues[localeCode]!['last30_days']!;
+
+  String get thisMonth => _localizedValues[localeCode]!['this_month']!;
+
+  String get lastMonth => _localizedValues[localeCode]!['last_month']!;
+
+  String get thisYear => _localizedValues[localeCode]!['this_year']!;
+
+  String get lastYear => _localizedValues[localeCode]!['last_year']!;
+
+  String get allTime => _localizedValues[localeCode]!['all_time']!;
+
+  String get more => _localizedValues[localeCode]!['more']!;
+
+  String get custom => _localizedValues[localeCode]!['custom']!;
+
+  String get filter => _localizedValues[localeCode]!['filter']!;
+
+  String get sort => _localizedValues[localeCode]!['sort']!;
+
+  String get search => _localizedValues[localeCode]!['search']!;
+
+  String get active => _localizedValues[localeCode]!['active']!;
+
+  String get archived => _localizedValues[localeCode]!['archived']!;
+
+  String get deleted => _localizedValues[localeCode]!['deleted']!;
+
+  String get dashboard => _localizedValues[localeCode]!['dashboard']!;
+
+  String get archive => _localizedValues[localeCode]!['archive']!;
+
+  String get delete => _localizedValues[localeCode]!['delete']!;
+
+  String get restore => _localizedValues[localeCode]!['restore']!;
+
+  String get refreshComplete =>
+      _localizedValues[localeCode]!['refresh_complete']!;
+
+  String get pleaseEnterYourEmail =>
+      _localizedValues[localeCode]!['please_enter_your_email']!;
+
+  String get cancel =>
+      _localizedValues[localeCode]!['cancel'] ??
+      _localizedValues['en']!['cancel']!;
+
+  String get pleaseEnterYourPassword =>
+      _localizedValues[localeCode]!['please_enter_your_password']!;
+
+  String get pleaseEnterYourUrl =>
+      _localizedValues[localeCode]!['please_enter_your_url']!;
+
+  String get pleaseEnterAFirstName =>
+      _localizedValues[localeCode]!['please_enter_a_first_name']!;
+
+  String get pleaseEnterALastName =>
+      _localizedValues[localeCode]!['please_enter_a_last_name']!;
+
+  String get ascending => _localizedValues[localeCode]!['ascending']!;
+
+  String get descending => _localizedValues[localeCode]!['descending']!;
+
+  String get anErrorOccurred =>
+      _localizedValues[localeCode]!['an_error_occurred']!;
+
+  String get overview => _localizedValues[localeCode]!['overview']!;
+
+  String get details => _localizedValues[localeCode]!['details']!;
+
+  String get phone => _localizedValues[localeCode]!['phone']!;
+
+  String get website => _localizedValues[localeCode]!['website']!;
+
+  String get vatNumber => _localizedValues[localeCode]!['vat_number']!;
+
+  String get idNumber => _localizedValues[localeCode]!['id_number']!;
+
+  String get create => _localizedValues[localeCode]!['create']!;
+
+  String get copiedToClipboard =>
+      _localizedValues[localeCode]!['copied_to_clipboard']!;
+
+  String get error => _localizedValues[localeCode]!['error']!;
+
+  String get couldNotLaunch =>
+      _localizedValues[localeCode]!['could_not_launch']!;
+
+  String get contacts => _localizedValues[localeCode]!['contacts']!;
+
+  String get additional => _localizedValues[localeCode]!['additional']!;
+
+  String get firstName => _localizedValues[localeCode]!['first_name']!;
+
+  String get lastName => _localizedValues[localeCode]!['last_name']!;
+
+  String get addContact => _localizedValues[localeCode]!['add_contact']!;
+
+  String get areYouSure => _localizedValues[localeCode]!['are_you_sure']!;
+
+  String get ok => _localizedValues[localeCode]!['ok']!;
+
+  String get remove => _localizedValues[localeCode]!['remove']!;
+
+  String get downloadsFolderDoesNotExist =>
+      _localizedValues[localeCode]!['downloads_folder_does_not_exist'] ??
+      _localizedValues['en']!['downloads_folder_does_not_exist']!;
+
+//  String get newVendor => _localizedValues[localeCode]!['new_vendor']!;
+
+//   String get product => _localizedValues[localeCode]!['product']!;
+
+//   String get createdVendor => _localizedValues[localeCode]!['created_vendor']!;
+
+//   String get updatedVendor => _localizedValues[localeCode]!['updated_vendor']!;
+
+//   String get archivedVendor =>
+//       _localizedValues[localeCode]!['archived_vendor']!;
+
+//   String get deletedVendor => _localizedValues[localeCode]!['deleted_vendor']!;
+
+//   String get restoredVendor =>
+//       _localizedValues[localeCode]!['restored_vendor']!;
+
+//   String get archivedVendors =>
+//       _localizedValues[localeCode]!['archived_vendors']!;
+
+//   String get deletedVendors =>
+//       _localizedValues[localeCode]!['deleted_vendors']!;
+
+//   String get restoredVendors =>
+//       _localizedValues[localeCode]!['restored_vendors']!;
+// String get emailIsInvalid =>
+//       _localizedValues[localeCode]!['email_is_invalid']!;
+
+//   String get products => _localizedValues[localeCode]!['products']!;
+
+//   String get newProduct => _localizedValues[localeCode]!['new_product']!;
+
+//   String get createdProduct =>
+//       _localizedValues[localeCode]!['created_product']!;
+
+//   String get updatedProduct =>
+//       _localizedValues[localeCode]!['updated_product']!;
+
+//   String get archivedProduct =>
+//       _localizedValues[localeCode]!['archived_product']!;
+
+//   String get deletedProduct =>
+//       _localizedValues[localeCode]!['deleted_product']!;
+
+//   String get productKey => _localizedValues[localeCode]!['product_key']!;
+
+  String get notes => _localizedValues[localeCode]!['notes']!;
+
+//   String get cost => _localizedValues[localeCode]!['cost']!;
+
+//   String get client => _localizedValues[localeCode]!['client']!;
+
+//   String get restoredProduct =>
+//       _localizedValues[localeCode]!['restored_product']!;
+
+//   String get clients => _localizedValues[localeCode]!['clients']!;
+
+//   String get newClient => _localizedValues[localeCode]!['new_client']!;
+
+//   String get createdClient => _localizedValues[localeCode]!['created_client']!;
+
+//   String get updatedClient => _localizedValues[localeCode]!['updated_client']!;
+
+//   String get archivedClient =>
+//       _localizedValues[localeCode]!['archived_client']!;
+
+//   String get deletedClient => _localizedValues[localeCode]!['deleted_client']!;
+
+//   String get restoredClient =>
+//       _localizedValues[localeCode]!['restored_client']!;
+
+//   String get archivedProducts =>
+//       _localizedValues[localeCode]!['archived_products']!;
+
+//   String get deletedProducts =>
+//       _localizedValues[localeCode]!['deleted_products']!;
+
+//   String get restoredProducts =>
+//       _localizedValues[localeCode]!['restored_products']!;
+
+  String get address1 => _localizedValues[localeCode]!['address1']!;
+
+  String get address2 => _localizedValues[localeCode]!['address2']!;
+
+  String get city => _localizedValues[localeCode]!['city']!;
+
+  String get state => _localizedValues[localeCode]!['state']!;
+
+  String get postalCode => _localizedValues[localeCode]!['postal_code']!;
+
+  String get country => _localizedValues[localeCode]!['country']!;
+
+  String get continueEditing =>
+      _localizedValues[localeCode]!['continue_editing']!;
+
+  String get discount => _localizedValues[localeCode]!['discount']!;
+  String get poNumber => _localizedValues[localeCode]!['po_number']!;
+
+  String get frequency => _localizedValues[localeCode]!['frequency']!;
+
+  String get description => _localizedValues[localeCode]!['description']!;
+
+  String get quantity => _localizedValues[localeCode]!['quantity']!;
+
+  String get addItem => _localizedValues[localeCode]!['add_item']!;
+
+  String get contact => _localizedValues[localeCode]!['contact']!;
+
+  String get status => _localizedValues[localeCode]!['status']!;
+
+  String get countSelected => _localizedValues[localeCode]!['count_selected']!;
+
+  String get edit => _localizedValues[localeCode]!['edit']!;
+
+  String get percent => _localizedValues[localeCode]!['percent']!;
+
+  String get dismiss => _localizedValues[localeCode]!['dismiss']!;
+
+  String get settings => _localizedValues[localeCode]!['settings']!;
+
+  String get language => _localizedValues[localeCode]!['language']!;
+
+  String get currency => _localizedValues[localeCode]!['currency']!;
+
+  String get createdAt => _localizedValues[localeCode]!['created_at']!;
+
+  String get createdOn => _localizedValues[localeCode]!['created_on']!;
+
+  String get updatedAt => _localizedValues[localeCode]!['updated_at']!;
+
+  String get done => _localizedValues[localeCode]!['done']!;
+
+  String get darkMode => _localizedValues[localeCode]!['dark_mode']!;
+
+  String get restartAppToApplyChange =>
+      _localizedValues[localeCode]!['restart_app_to_apply_change']!;
+
+  String get refreshData => _localizedValues[localeCode]!['refresh_data']!;
+
+  String get blankContact => _localizedValues[localeCode]!['blank_contact']!;
+
+  String get activity => _localizedValues[localeCode]!['activity']!;
+
+  String get noRecordsFound =>
+      _localizedValues[localeCode]!['no_records_found']!;
+
+  String get clone => _localizedValues[localeCode]!['clone']!;
+
+  String get loading => _localizedValues[localeCode]!['loading']!;
+
+  String get industry => _localizedValues[localeCode]!['industry']!;
+
+  String get size => _localizedValues[localeCode]!['size']!;
+
+  String get enabled => _localizedValues[localeCode]!['enabled']!;
+
+  String get initialEmail => _localizedValues[localeCode]!['initial_email']!;
+
+  String get template => _localizedValues[localeCode]!['template']!;
+
+  String get send => _localizedValues[localeCode]!['send']!;
+
+  String get subject => _localizedValues[localeCode]!['subject']!;
+
+  String get body => _localizedValues[localeCode]!['body']!;
+
+  String get sendEmail => _localizedValues[localeCode]!['send_email']!;
+
+  String get button => _localizedValues[localeCode]!['button']!;
+
+  String get preview => _localizedValues[localeCode]!['preview']!;
+
+  String get customize => _localizedValues[localeCode]!['customize']!;
+
+  String get history => _localizedValues[localeCode]!['history']!;
+
+  String get project => _localizedValues[localeCode]!['project']!;
+
+  String get oneTimePassword =>
+      _localizedValues[localeCode]!['one_time_password']!;
+
+  String get pleaseEnterAName =>
+      _localizedValues[localeCode]!['please_enter_a_name']!;
+
+  String get start => _localizedValues[localeCode]!['start']!;
+
+  String get logged => _localizedValues[localeCode]!['logged']!;
+
+  String get failedToFindRecord =>
+      _localizedValues[localeCode]!['failed_to_find_record']!;
+
+  String get passwordIsTooShort =>
+      _localizedValues[localeCode]!['password_is_too_short']!;
+
+  String get design => _localizedValues[localeCode]!['design']!;
+
+  String get address => _localizedValues[localeCode]!['address']!;
+
+  String get category => _localizedValues[localeCode]!['category']!;
+
+  String get errorUnsavedChanges =>
+      _localizedValues[localeCode]!['error_unsaved_changes']!;
+
+  String get pending => _localizedValues[localeCode]!['pending']!;
+
+  String get download => _localizedValues[localeCode]!['download']!;
+
+  String get noRecordSelected =>
+      _localizedValues[localeCode]!['no_record_selected']!;
+
+  String get createNew => _localizedValues[localeCode]!['create_new']!;
+
+  String get emailLogin => _localizedValues[localeCode]!['email_login']!;
+
+  String get emailLoginError =>
+      _localizedValues[localeCode]!['email_login_error'] ??
+      _localizedValues['en']!['email_login_error']!;
+
+  String get signupError =>
+      _localizedValues[localeCode]!['signup_error'] ??
+      _localizedValues['en']!['signup_error']!;
+
+  String get createAccount => _localizedValues[localeCode]!['create_account']!;
+
+  String get viewWebsite => _localizedValues[localeCode]!['view_website']!;
+
+  String get accountLogin => _localizedValues[localeCode]!['account_login']!;
+
+  String get signUp => _localizedValues[localeCode]!['sign_up']!;
+
+  String get getStarted => _localizedValues[localeCode]!['get_started']!;
+
+  String get signUpAccountLabel =>
+      _localizedValues[localeCode]!['sign_up_account_label']!;
+
+  String get googleSignUp => _localizedValues[localeCode]!['google_sign_up']!;
+
+  String get pleaseAgreeToTermsAndPrivacy =>
+      _localizedValues[localeCode]!['please_agree_to_terms_and_privacy']!;
+
+  String get pleaseAgreeToTerms =>
+      _localizedValues[localeCode]!['please_agree_to_terms']!;
+
+  String get pleaseAgreeToPrivacy =>
+      _localizedValues[localeCode]!['please_agree_to_privacy']!;
+
+  String get iAgreeToThe => _localizedValues[localeCode]!['i_agree_to_the']!;
+
+  String get termsOfService =>
+      _localizedValues[localeCode]!['terms_of_service']!;
+
+  String get bothTermsAndPrivacy =>
+      _localizedValues[localeCode]!['both_terms_of_service_and_Privacy']!;
+
+  String get privacyPolicy => _localizedValues[localeCode]!['privacy_policy']!;
+
+  String get upgrade => _localizedValues[localeCode]!['upgrade']!;
+
+  String get proPlan => _localizedValues[localeCode]!['pro_plan']!;
+
+  String get back => _localizedValues[localeCode]!['back']!;
+
+  String get select => _localizedValues[localeCode]!['select']!;
+
+  String get longPressSelectionIsDefault =>
+      _localizedValues[localeCode]!['long_press_multiselect']!;
+
+  String get all => _localizedValues[localeCode]!['all']!;
+
+  String get emailSignUp =>
+      _localizedValues[localeCode]!['email_sign_up'] ??
+      _localizedValues['en']!['email_sign_up']!;
+  String get or =>
+      _localizedValues[localeCode]!['or'] ?? _localizedValues['en']!['or']!;
+  String get alreadyHaveAccount =>
+      _localizedValues[localeCode]!['already_have_account'] ??
+      _localizedValues['en']!['already_have_account']!;
+  String get notHaveAccount =>
+      _localizedValues[localeCode]!['not_have_account'] ??
+      _localizedValues['en']!['not_have_account']!;
+  // Like/Match related strings
+  String get liked =>
+      _localizedValues[localeCode]!['liked'] ??
+      _localizedValues['en']!['liked']!;
+  String get likedMe =>
+      _localizedValues[localeCode]!['likedMe'] ??
+      _localizedValues['en']!['likedMe']!;
+  String get matches =>
+      _localizedValues[localeCode]!['matches'] ??
+      _localizedValues['en']!['matches']!;
+  String get passes =>
+      _localizedValues[localeCode]!['passes'] ??
+      _localizedValues['en']!['passes']!;
+  String get comments =>
+      _localizedValues[localeCode]!['comments'] ??
+      _localizedValues['en']!['comments']!;
+
+// Empty state messages
+  String get noLikedProfilesYet =>
+      _localizedValues[localeCode]!['noLikedProfilesYet'] ??
+      _localizedValues['en']!['noLikedProfilesYet']!;
+  String get noLikedMeProfilesYet =>
+      _localizedValues[localeCode]!['noLikedMeProfilesYet'] ??
+      _localizedValues['en']!['noLikedMeProfilesYet']!;
+  String get noMatchesYet =>
+      _localizedValues[localeCode]!['noMatchesYet'] ??
+      _localizedValues['en']!['noMatchesYet']!;
+  String get noPassesYet =>
+      _localizedValues[localeCode]!['noPassesYet'] ??
+      _localizedValues['en']!['noPassesYet']!;
+  String get noCommentsYet =>
+      _localizedValues[localeCode]!['noCommentsYet'] ??
+      _localizedValues['en']!['noCommentsYet']!;
+
+// Action labels
+  String get match =>
+      _localizedValues[localeCode]!['match'] ??
+      _localizedValues['en']!['match']!;
+  String get like =>
+      _localizedValues[localeCode]!['like'] ?? _localizedValues['en']!['like']!;
+  String get pass =>
+      _localizedValues[localeCode]!['pass'] ?? _localizedValues['en']!['pass']!;
+  String get block =>
+      _localizedValues[localeCode]!['block'] ??
+      _localizedValues['en']!['block']!;
+  String get favorite =>
+      _localizedValues[localeCode]!['favorite'] ??
+      _localizedValues['en']!['favorite']!;
+  String get report =>
+      _localizedValues[localeCode]!['report'] ??
+      _localizedValues['en']!['report']!;
+  String get reported =>
+      _localizedValues[localeCode]!['reported'] ??
+      _localizedValues['en']!['reported']!;
+  String get message =>
+      _localizedValues[localeCode]!['message'] ??
+      _localizedValues['en']!['message']!;
+
+// Status messages
+  String get youLiked =>
+      _localizedValues[localeCode]!['youLiked'] ??
+      _localizedValues['en']!['youLiked']!;
+  String get youLikedThisProfile =>
+      _localizedValues[localeCode]!['youLikedThisProfile'] ??
+      _localizedValues['en']!['youLikedThisProfile']!;
+  String get thisProfileLikedYou =>
+      _localizedValues[localeCode]!['thisProfileLikedYou'] ??
+      _localizedValues['en']!['thisProfileLikedYou']!;
+  String get youMatchedWithThisProfile =>
+      _localizedValues[localeCode]!['youMatchedWithThisProfile'] ??
+      _localizedValues['en']!['youMatchedWithThisProfile']!;
+  String get youPassedOnThisProfile =>
+      _localizedValues[localeCode]!['youPassedOnThisProfile'] ??
+      _localizedValues['en']!['youPassedOnThisProfile']!;
+  String get noComment =>
+      _localizedValues[localeCode]!['noComment'] ??
+      _localizedValues['en']!['noComment']!;
+  String get chatStarted =>
+      _localizedValues[localeCode]!['chatStarted'] ??
+      _localizedValues['en']!['chatStarted']!;
+  String get matched =>
+      _localizedValues[localeCode]!['matched'] ??
+      _localizedValues['en']!['matched']!;
+  String get passed =>
+      _localizedValues[localeCode]!['passed'] ??
+      _localizedValues['en']!['passed']!;
+  String get commented =>
+      _localizedValues[localeCode]!['commented'] ??
+      _localizedValues['en']!['commented']!;
+  String get ago =>
+      _localizedValues[localeCode]!['ago'] ?? _localizedValues['en']!['ago']!;
+
+  String get companyDetails =>
+      _localizedValues[localeCode]!['company_details']!;
+
+  String get userDetails => _localizedValues[localeCode]!['user_details']!;
+
+  String get localization => _localizedValues[localeCode]!['localization']!;
+
+  String get notifications => _localizedValues[localeCode]!['notifications']!;
+
+  String get importExport => _localizedValues[localeCode]!['import_export']!;
+
+  String get customFields => _localizedValues[localeCode]!['custom_fields']!;
+
+  String get emailSettings => _localizedValues[localeCode]!['email_settings']!;
+
+  String get templatesAndReminders =>
+      _localizedValues[localeCode]!['templates_and_reminders']!;
+
+  String get dataVisualizations =>
+      _localizedValues[localeCode]!['data_visualizations']!;
+
+  String get basicSettings => _localizedValues[localeCode]!['basic_settings']!;
+
+  String get advancedSettings =>
+      _localizedValues[localeCode]!['advanced_settings']!;
+
+  String get defaults => _localizedValues[localeCode]!['defaults']!;
+
+  String get deviceSettings =>
+      _localizedValues[localeCode]!['device_settings']!;
+
+  String get savedSettings => _localizedValues[localeCode]!['saved_settings']!;
+
+  String get logo => _localizedValues[localeCode]!['logo']!;
+
+  String get uploadLogo => _localizedValues[localeCode]!['upload_logo']!;
+
+  String get uploadedLogo => _localizedValues[localeCode]!['uploaded_logo']!;
+
+  String get timezone => _localizedValues[localeCode]!['timezone']!;
+
+  String get dateFormat => _localizedValues[localeCode]!['date_format']!;
+
+  String get datetimeFormat =>
+      _localizedValues[localeCode]!['datetime_format']!;
+
+  String get militaryTime => _localizedValues[localeCode]!['military_time']!;
+
+  String get militaryTimeHelp =>
+      _localizedValues[localeCode]!['military_time_help']!;
+
+  String get symbol => _localizedValues[localeCode]!['symbol']!;
+
+  String get code => _localizedValues[localeCode]!['ocde']!;
+
+  String get sunday => _localizedValues[localeCode]!['sunday']!;
+
+  String get monday => _localizedValues[localeCode]!['monday']!;
+
+  String get tuesday => _localizedValues[localeCode]!['tuesday']!;
+
+  String get wednesday => _localizedValues[localeCode]!['wednesday']!;
+
+  String get thursday => _localizedValues[localeCode]!['thursday']!;
+
+  String get friday => _localizedValues[localeCode]!['friday']!;
+
+  String get saturday => _localizedValues[localeCode]!['saturday']!;
+
+  String get january => _localizedValues[localeCode]!['january']!;
+
+  String get february => _localizedValues[localeCode]!['february']!;
+
+  String get march => _localizedValues[localeCode]!['march']!;
+
+  String get april => _localizedValues[localeCode]!['april']!;
+
+  String get may => _localizedValues[localeCode]!['may']!;
+
+  String get june => _localizedValues[localeCode]!['june']!;
+
+  String get july => _localizedValues[localeCode]!['july']!;
+
+  String get august => _localizedValues[localeCode]!['august']!;
+
+  String get september => _localizedValues[localeCode]!['september']!;
+
+  String get october => _localizedValues[localeCode]!['october']!;
+
+  String get november => _localizedValues[localeCode]!['november']!;
+
+  String get december => _localizedValues[localeCode]!['december']!;
+
+  String get firstDayOfTheWeek =>
+      _localizedValues[localeCode]!['first_day_of_the_week']!;
+
+  String get firstMonthOfTheYear =>
+      _localizedValues[localeCode]!['first_month_of_the_year']!;
+
+  String get currencyFormat =>
+      _localizedValues[localeCode]!['currency_format']!;
+  String get disabled => _localizedValues[localeCode]!['disabled']!;
+
+  String get defaultValue => _localizedValues[localeCode]!['default_value']!;
+
+  String get discardChanges =>
+      _localizedValues[localeCode]!['discard_changes']!;
+
+  String get editCompanyGateway =>
+      _localizedValues[localeCode]!['edit_company_gateway']!;
+  String get newCompanyGateway =>
+      _localizedValues[localeCode]!['new_company_gateway']!;
+  String get updatedCompanyGateway =>
+      _localizedValues[localeCode]!['updated_company_gateway']!;
+
+  String get processed => _localizedValues[localeCode]!['processed']!;
+
+  String get replyToEmail => _localizedValues[localeCode]!['reply_to_email']!;
+
+  String get replyToName => _localizedValues[localeCode]!['reply_to_name']!;
+
+  String get bccEmail => _localizedValues[localeCode]!['bcc_email']!;
+
+  String get attachPdf => _localizedValues[localeCode]!['attach_pdf']!;
+
+  String get attachDocuments =>
+      _localizedValues[localeCode]!['attach_documents']!;
+
+  String get attachUbl => _localizedValues[localeCode]!['attach_ubl']!;
+
+  String get emailStyle => _localizedValues[localeCode]!['email_style']!;
+
+  String get enableMarkup =>
+      _localizedValues[localeCode]!['enable_email_markup']!;
+
+  String get enableMarkupHelp =>
+      _localizedValues[localeCode]!['enable_email_markup_help']!;
+
+  String get emailDesign => _localizedValues[localeCode]!['email_design']!;
+
+  String get plain => _localizedValues[localeCode]!['plain']!;
+
+  String get light => _localizedValues[localeCode]!['light']!;
+
+  String get dark => _localizedValues[localeCode]!['dark']!;
+
+  String get emailSignature =>
+      _localizedValues[localeCode]!['email_signature']!;
+
+  String get domain => _localizedValues[localeCode]!['domain']!;
+
+  String get subdomain => _localizedValues[localeCode]!['subdomain']!;
+
+  String get authorization => _localizedValues[localeCode]!['authorization']!;
+
+//   String get enablePortalPassword =>
+//       _localizedValues[localeCode]!['enable_portal_password']!;
+
+//   String get enablePortalPasswordHelp =>
+//       _localizedValues[localeCode]!['enable_portal_password_help']!;
+//   String get customCss => _localizedValues[localeCode]!['custom_css']!;
+
+//   String get customJavascript =>
+//       _localizedValues[localeCode]!['custom_javascript']!;
+
+  String get messages => _localizedValues[localeCode]!['messages']!;
+
+  String get prefix => _localizedValues[localeCode]!['prefix']!;
+
+  String get numberPattern => _localizedValues[localeCode]!['number_pattern']!;
+
+  String get numberCounter => _localizedValues[localeCode]!['number_counter']!;
+
+//   String get general => _localizedValues[localeCode]!['general']!;
+
+  String get numberPadding => _localizedValues[localeCode]!['number_padding']!;
+
+  String get recurringPrefix =>
+      _localizedValues[localeCode]!['recurring_prefix']!;
+
+  String get resetCounter => _localizedValues[localeCode]!['reset_counter']!;
+
+  String get nextReset => _localizedValues[localeCode]!['next_reset']!;
+
+//   String get companyField => _localizedValues[localeCode]!['company_field']!;
+
+//   String get companyValue => _localizedValues[localeCode]!['company_value']!;
+
+  String get generatedNumbers =>
+      _localizedValues[localeCode]!['generated_numbers']!;
+
+  String get company => _localizedValues[localeCode]!['company']!;
+
+//   String get surchargeField =>
+//       _localizedValues[localeCode]!['surcharge_field']!;
+
+  String get never => _localizedValues[localeCode]!['never']!;
+
+  String get workflowSettings =>
+      _localizedValues[localeCode]!['workflow_settings']!;
+
+//   String get autoEmailInvoice =>
+//       _localizedValues[localeCode]!['auto_email_invoice']!;
+
+//   String get autoEmailInvoiceHelp =>
+//       _localizedValues[localeCode]!['auto_email_invoice_help']!;
+
+//   String get autoArchiveQuote =>
+//       _localizedValues[localeCode]!['auto_archive_quote']!;
+
+//   String get autoArchiveQuoteHelp =>
+//       _localizedValues[localeCode]!['auto_archive_quote_help']!;
+//   String get autoConvertQuote =>
+//       _localizedValues[localeCode]!['auto_convert_quote']!;
+
+//   String get autoConvertQuoteHelp =>
+//       _localizedValues[localeCode]!['auto_convert_quote_help']!;
+
+  String get fontSize => _localizedValues[localeCode]!['font_size']!;
+
+//   String get primaryColor => _localizedValues[localeCode]!['primary_color']!;
+
+//   String get secondaryColor =>
+//       _localizedValues[localeCode]!['secondary_color']!;
+
+//   String get primaryFont => _localizedValues[localeCode]!['primary_font']!;
+
+//   String get secondaryFont => _localizedValues[localeCode]!['secondary_font']!;
+
+  String get newUser => _localizedValues[localeCode]!['new_user']!;
+
+  String get createdUser => _localizedValues[localeCode]!['created_user']!;
+
+  String get updatedUser => _localizedValues[localeCode]!['updated_user']!;
+
+  String get archivedUser => _localizedValues[localeCode]!['archived_user']!;
+
+  String get deletedUser => _localizedValues[localeCode]!['deleted_user']!;
+
+  String get removedUser => _localizedValues[localeCode]!['removed_user']!;
+  String get restoredUser => _localizedValues[localeCode]!['restored_user']!;
+
+  String get archivedUsers => _localizedValues[localeCode]!['archived_users']!;
+
+  String get deletedUsers => _localizedValues[localeCode]!['deleted_users']!;
+
+  String get removedUsers => _localizedValues[localeCode]!['removed_users']!;
+
+  String get restoredUsers => _localizedValues[localeCode]!['restored_users']!;
+
+  String get editUser => _localizedValues[localeCode]!['edit_user']!;
+
+  String get users => _localizedValues[localeCode]!['users']!;
+
+  String get userManagement =>
+      _localizedValues[localeCode]!['user_management']!;
+
+  String get administrator =>
+      _localizedValues[localeCode]!['administrator'] ??
+      _localizedValues['en']!['administrator']!;
+
+  String get administratorHelp =>
+      _localizedValues[localeCode]!['administrator_help']!;
+
+  String get days => _localizedValues[localeCode]!['days']!;
+
+  String get schedule => _localizedValues[localeCode]!['schedule']!;
+
+//   String get lateFeeAmount => _localizedValues[localeCode]!['late_fee_amount']!;
+
+//   String get lateFeePercent =>
+//       _localizedValues[localeCode]!['late_fee_percent']!;
+
+  String get recoverPassword =>
+      _localizedValues[localeCode]!['recover_password']!;
+
+  String get sendLink =>
+      _localizedValues[localeCode]!['send_link'] ??
+      _localizedValues['en']!['send_link']!;
+
+  String get recoverPasswordLabel =>
+      _localizedValues[localeCode]!['recover_password_label']!;
+
+  String get submit => _localizedValues[localeCode]!['submit']!;
+
+  String get recoverPasswordEmailSent =>
+      _localizedValues[localeCode]!['recover_password_email_sent']!;
+
+  String get emailSent => _localizedValues[localeCode]!['email_sent']!;
+
+//   String get fieldType => _localizedValues[localeCode]!['field_type']!;
+
+//   String get singleLineText =>
+//       _localizedValues[localeCode]!['single_line_text']!;
+
+//   String get multiLineText => _localizedValues[localeCode]!['multi_line_text']!;
+
+  String get dropdown => _localizedValues[localeCode]!['dropdown']!;
+
+  String get options => _localizedValues[localeCode]!['options']!;
+
+  String get commaSeparatedList =>
+      _localizedValues[localeCode]!['comma_sparated_list']!;
+
+//   String get switchLabel => _localizedValues[localeCode]!['switch']!;
+
+  String get accentColor => _localizedValues[localeCode]!['accent_color']!;
+
+//   String get lockInvoices => _localizedValues[localeCode]!['lock_invoices']!;
+// String get firstCustom => _localizedValues[localeCode]!['first_custom']!;
+
+//   String get secondCustom => _localizedValues[localeCode]!['second_custom']!;
+
+//   String get thirdCustom => _localizedValues[localeCode]!['third_custom']!;
+
+  String get module => _localizedValues[localeCode]!['module']!;
+
+  String get view => _localizedValues[localeCode]!['view']!;
+
+  String get layout => _localizedValues[localeCode]!['layout']!;
+
+  String get mobile => _localizedValues[localeCode]!['mobile']!;
+
+  String get desktop => _localizedValues[localeCode]!['desktop']!;
+
+  String get tablet => _localizedValues[localeCode]!['tablet']!;
+
+  String get float => _localizedValues[localeCode]!['float']!;
+
+  String get collapse => _localizedValues[localeCode]!['collapse']!;
+
+  String get showOrHide => _localizedValues[localeCode]!['show_or_hide']!;
+
+  String get menuSidebar => _localizedValues[localeCode]!['menu_sidebar']!;
+
+  String get historySidebar =>
+      _localizedValues[localeCode]!['history_sidebar']!;
+
+  String get selectCompany => _localizedValues[localeCode]!['select_company']!;
+
+  String get showTable => _localizedValues[localeCode]!['show_table']!;
+
+  String get showList => _localizedValues[localeCode]!['show_list']!;
+
+  String get whenSaved => _localizedValues[localeCode]!['when_saved']!;
+
+  String get whenSent => _localizedValues[localeCode]!['when_sent']!;
+
+  String get generateNumber =>
+      _localizedValues[localeCode]!['generate_number']!;
+
+  String get yes => _localizedValues[localeCode]!['yes']!;
+
+  String get no => _localizedValues[localeCode]!['no']!;
+
+  String get deletedLogo => _localizedValues[localeCode]!['deleted_logo']!;
+
+  String get pleaseEnterAValue =>
+      _localizedValues[localeCode]!['please_enter_a_value']!;
+
+  String get deletedDesigns =>
+      _localizedValues[localeCode]!['deleted_designs']!;
+
+  String get passwordIsTooEasy =>
+      _localizedValues[localeCode]!['password_is_too_easy']!;
+
+//   String get iFrameUrl => _localizedValues[localeCode]!['iframe_url']!;
+
+//   String get domainUrl => _localizedValues[localeCode]!['domain_url']!;
+
+//   String get creditEmail => _localizedValues[localeCode]!['credit_email']!;
+
+  String get item => _localizedValues[localeCode]!['item']!;
+  String get contactUs => _localizedValues[localeCode]!['contact_us']!;
+
+  String get documentation => _localizedValues[localeCode]!['documentation']!;
+
+  String get about => _localizedValues[localeCode]!['about']!;
+
+  String get aboutUs =>
+      _localizedValues[localeCode]!['about_us'] ??
+      _localizedValues['en']!['about_us']!;
+
+//   String get supportForum => _localizedValues[localeCode]!['support_forum']!;
+
+//   String get configureSettings =>
+//       _localizedValues[localeCode]!['configure_settings']!;
+
+//   String get adjustFeePercent =>
+//       _localizedValues[localeCode]!['adjust_fee_percent']!;
+
+//   String get adjustFeePercentHelp =>
+//       _localizedValues[localeCode]!['adjust_fee_percent_help']!;
+
+  String get pdfMinRequirements =>
+      _localizedValues[localeCode]!['pdf_min_requirements']!;
+
+  String get verifyPassword =>
+      _localizedValues[localeCode]!['verify_password']!;
+
+  String get entityState => _localizedValues[localeCode]!['entity_state']!;
+
+  String get multiselect => _localizedValues[localeCode]!['multiselect']!;
+
+//   String get contactEmail => _localizedValues[localeCode]!['contact_email']!;
+
+  String get filteredBy => _localizedValues[localeCode]!['filtered_by']!;
+
+//   String get refund => _localizedValues[localeCode]!['refund']!;
+  String get addCompany => _localizedValues[localeCode]!['add_company']!;
+
+  String get reports => _localizedValues[localeCode]!['reports']!;
+
+  String get editColumns => _localizedValues[localeCode]!['edit_columns']!;
+
+  String get addColumn => _localizedValues[localeCode]!['add_column']!;
+
+  String get columns => _localizedValues[localeCode]!['columns']!;
+//   String get groupBy => _localizedValues[localeCode]!['group_by']!;
+
+  String get isActive => _localizedValues[localeCode]!['is_active']!;
+
+//   String get subgroup => _localizedValues[localeCode]!['subgroup']!;
+
+//   String get day => _localizedValues[localeCode]!['day']!;
+
+//   String get month => _localizedValues[localeCode]!['month']!;
+
+//   String get year => _localizedValues[localeCode]!['year']!;
+
+//   String get blank => _localizedValues[localeCode]!['blank']!;
+
+  String get count => _localizedValues[localeCode]!['count']!;
+
+  String get chart => _localizedValues[localeCode]!['chart']!;
+
+  String get export => _localizedValues[localeCode]!['export']!;
+
+  String get number => _localizedValues[localeCode]!['number']!;
+
+  String get reset => _localizedValues[localeCode]!['reset']!;
+
+  String get addedCompany => _localizedValues[localeCode]!['added_company']!;
+  String get newCompany => _localizedValues[localeCode]!['new_company']!;
+  String get integrations => _localizedValues[localeCode]!['integrations']!;
+
+  String get learnMore => _localizedValues[localeCode]!['learn_more']!;
+
+//   String get webhook => _localizedValues[localeCode]!['webhook']!;
+
+//   String get webhooks => _localizedValues[localeCode]!['webhooks']!;
+
+//   String get newWebhook => _localizedValues[localeCode]!['new_webhook']!;
+
+//   String get createdWebhook =>
+//       _localizedValues[localeCode]!['created_webhook']!;
+
+//   String get updatedWebhook =>
+//       _localizedValues[localeCode]!['updated_webhook']!;
+
+//   String get archivedWebhook =>
+//       _localizedValues[localeCode]!['archived_webhook']!;
+
+//   String get deletedWebhook =>
+//       _localizedValues[localeCode]!['deleted_webhook']!;
+
+//   String get restoredWebhook =>
+//       _localizedValues[localeCode]!['restored_webhook']!;
+
+//   String get archivedWebhooks =>
+//       _localizedValues[localeCode]!['archived_webhooks']!;
+
+//   String get deletedWebhooks =>
+//       _localizedValues[localeCode]!['deleted_webhooks']!;
+
+//   String get restoredWebhooks =>
+//       _localizedValues[localeCode]!['restored_webhooks']!;
+
+//   String get editWebhook => _localizedValues[localeCode]!['edit_webhook']!;
+
+  String get token => _localizedValues[localeCode]!['token']!;
+
+//   String get tokens => _localizedValues[localeCode]!['tokens']!;
+
+//   String get newToken => _localizedValues[localeCode]!['new_token']!;
+
+//   String get createdToken => _localizedValues[localeCode]!['created_token']!;
+
+//   String get updatedToken => _localizedValues[localeCode]!['updated_token']!;
+
+//   String get archivedToken => _localizedValues[localeCode]!['archived_token']!;
+
+//   String get deletedToken => _localizedValues[localeCode]!['deleted_token']!;
+
+//   String get restoredToken => _localizedValues[localeCode]!['restored_token']!;
+
+//   String get archivedTokens =>
+//       _localizedValues[localeCode]!['archived_tokens']!;
+
+//   String get deletedTokens => _localizedValues[localeCode]!['deleted_tokens']!;
+
+//   String get restoredTokens =>
+//       _localizedValues[localeCode]!['restored_tokens']!;
+
+//   String get editToken => _localizedValues[localeCode]!['edit_token']!;
+
+  String get newDesign => _localizedValues[localeCode]!['new_design']!;
+  String get archivedDesign =>
+      _localizedValues[localeCode]!['archived_design']!;
+
+  String get archivedDesigns =>
+      _localizedValues[localeCode]!['archived_designs']!;
+
+  String get restoredDesign =>
+      _localizedValues[localeCode]!['restored_design']!;
+
+  String get restoredDesigns =>
+      _localizedValues[localeCode]!['restored_designs']!;
+
+  String get editDesign => _localizedValues[localeCode]!['edit_design']!;
+  String get accountManagement =>
+      _localizedValues[localeCode]!['account_management']!;
+
+  String get customDesigns => _localizedValues[localeCode]!['custom_designs']!;
+
+  String get cssFramework => _localizedValues[localeCode]!['css_framework']!;
+
+  String get loadDesign => _localizedValues[localeCode]!['load_design']!;
+
+  String get header => _localizedValues[localeCode]!['header']!;
+
+  String get includes => _localizedValues[localeCode]!['includes']!;
+
+  String get enabledModules =>
+      _localizedValues[localeCode]!['enabled_modules']!;
+
+  String get cancelAccount => _localizedValues[localeCode]!['cancel_account']!;
+
+  String get cancelAccountMessage =>
+      _localizedValues[localeCode]!['cancel_account_message']!;
+
+  String get deleteCompany => _localizedValues[localeCode]!['delete_company']!;
+
+  String get deleteCompanyMessage =>
+      _localizedValues[localeCode]!['delete_company_message']!;
+  String get purchaseLicense =>
+      _localizedValues[localeCode]!['purchase_license']!;
+
+  String get applyLicense => _localizedValues[localeCode]!['apply_license']!;
+
+  String get receiveAllNotifications =>
+      _localizedValues[localeCode]!['receive_all_notifications']!;
+
+  String get none => _localizedValues[localeCode]!['none']!;
+
+  String get owned => _localizedValues[localeCode]!['owned']!;
+
+  String get permissions => _localizedValues[localeCode]!['permissions']!;
+
+  String get allEvents => _localizedValues[localeCode]!['all_events']!;
+
+//   String get addField => _localizedValues[localeCode]!['add_field']!;
+
+//   String get clientDetails => _localizedValues[localeCode]!['client_details']!;
+
+  String get savedDesign => _localizedValues[localeCode]!['saved_design']!;
+
+  String get refresh => _localizedValues[localeCode]!['refresh']!;
+
+  String get purgeData => _localizedValues[localeCode]!['purge_data']!;
+
+//   String get type => _localizedValues[localeCode]!['type']!;
+
+//   String get importType => _localizedValues[localeCode]!['import_type']!;
+
+  String get import => _localizedValues[localeCode]!['import']!;
+
+  String get purgeSuccessful =>
+      _localizedValues[localeCode]!['purge_successful']!;
+
+  String get purgeDataMessage =>
+      _localizedValues[localeCode]!['purge_data_message']!;
+
+  String get license => _localizedValues[localeCode]!['license']!;
+
+  String get optional => _localizedValues[localeCode]!['optional']!;
+
+// String get custom1 => _localizedValues[localeCode]!['custom1']!;
+
+//   String get custom2 => _localizedValues[localeCode]!['custom2']!;
+
+//   String get custom3 => _localizedValues[localeCode]!['custom3']!;
+
+//   String get custom4 => _localizedValues[localeCode]!['custom4']!;
+
+  String get fullName => _localizedValues[localeCode]!['full_name']!;
+
+  String get cityStatePostal =>
+      _localizedValues[localeCode]!['city_state_postal']!;
+
+  String get postalCityState =>
+      _localizedValues[localeCode]!['postal_city_state']!;
+
+  String get reverse => _localizedValues[localeCode]!['reverse']!;
+
+  String get hideMenu => _localizedValues[localeCode]!['hide_menu']!;
+
+  String get showMenu => _localizedValues[localeCode]!['show_menu']!;
+
+  String get reversed => _localizedValues[localeCode]!['reversed']!;
+
+  String get cancelled => _localizedValues[localeCode]!['cancelled']!;
+
+  String get sendFromGmail => _localizedValues[localeCode]!['send_from_gmail']!;
+
+  String get changeToMobileLayout =>
+      _localizedValues[localeCode]!['change_to_mobile_layout']!;
+
+  String get changeToDekstopLayout =>
+      _localizedValues[localeCode]!['change_to_desktop_layout']!;
+
+  String get change => _localizedValues[localeCode]!['change']!;
+
+  String get emailSignIn => _localizedValues[localeCode]!['email_sign_in']!;
+
+  String get allRecords => _localizedValues[localeCode]!['all_records']!;
+
+  String get ownedByUser => _localizedValues[localeCode]!['owned_by_user']!;
+//   String get subtotal => _localizedValues[localeCode]!['subtotal']!;
+
+//   String get searchTokens => _localizedValues[localeCode]!['search_tokens']!;
+
+//   String get searchWebhooks =>
+//       _localizedValues[localeCode]!['search_webhooks']!;
+
+//   String get apiTokens => _localizedValues[localeCode]!['api_tokens']!;
+
+  String get apiDocs => _localizedValues[localeCode]!['api_docs']!;
+
+//   String get apiWebhooks => _localizedValues[localeCode]!['api_webhooks']!;
+
+//   String get cronsNotEnabled =>
+//       _localizedValues[localeCode]!['crons_not_enabled']!;
+
+//   String get mustBeOnline => _localizedValues[localeCode]!['must_be_online']!;
+
+  String get copy => _localizedValues[localeCode]!['copy']!;
+
+  String get targetUrl => _localizedValues[localeCode]!['target_url']!;
+
+  String get eventType => _localizedValues[localeCode]!['event_type']!;
+
+  String get showSidebar => _localizedValues[localeCode]!['show_sidebar']!;
+
+  String get hideSidebar => _localizedValues[localeCode]!['hide_sidebar']!;
+
+  String get plan => _localizedValues[localeCode]!['plan']!;
+
+  String get free => _localizedValues[localeCode]!['free']!;
+
+//   String get expiresOn => _localizedValues[localeCode]!['expires_on']!;
+
+  String get off => _localizedValues[localeCode]!['off']!;
+
+//   String get healthCheck => _localizedValues[localeCode]!['health_check']!;
+
+  String get to => _localizedValues[localeCode]!['to']!;
+
+//   String get recordType => _localizedValues[localeCode]!['record_type']!;
+
+//   String get recordName => _localizedValues[localeCode]!['record_name']!;
+
+//   String get fileType => _localizedValues[localeCode]!['file_type']!;
+
+  String get height => _localizedValues[localeCode]!['height']!;
+
+  String get width => _localizedValues[localeCode]!['width']!;
+
+  String get customLabels => _localizedValues[localeCode]!['custom_labels']!;
+
+  String get selectLabel => _localizedValues[localeCode]!['select_label']!;
+
+//   String get unapplied => _localizedValues[localeCode]!['unapplied']!;
+
+  String get companyName => _localizedValues[localeCode]!['company_name']!;
+
+  String get label => _localizedValues[localeCode]!['label']!;
+
+  String get always => _localizedValues[localeCode]!['always']!;
+
+//   String get optIn => _localizedValues[localeCode]!['optin']!;
+
+//   String get optOut => _localizedValues[localeCode]!['optout']!;
+
+  String get welcomeToStarterTemplate =>
+      _localizedValues[localeCode]!['welcome_to_starter_template']!;
+
+  String get copyLink => _localizedValues[localeCode]!['copy_link']!;
+
+  String get viewPortal => _localizedValues[localeCode]!['view_portal']!;
+
+  String get systemLogs => _localizedValues[localeCode]!['system_logs']!;
+  String get copyError => _localizedValues[localeCode]!['copy_error']!;
+
+  String get showPassword => _localizedValues[localeCode]!['show_password']!;
+
+  String get hidePassword => _localizedValues[localeCode]!['hide_password']!;
+
+  String get variables => _localizedValues[localeCode]!['variables']!;
+
+  String get userField => _localizedValues[localeCode]!['user_field']!;
+
+  String get paypal => _localizedValues[localeCode]!['paypal']!;
+
+  String get alipay => _localizedValues[localeCode]!['alipay']!;
+
+  String get sofort => _localizedValues[localeCode]!['sofort']!;
+
+  String get applePay => _localizedValues[localeCode]!['apple_pay']!;
+
+  String get crypto => _localizedValues[localeCode]!['crypto']!;
+
+  // String get markPaidHelp => _localizedValues[localeCode]!['mark_paid_help']!;
+
+  String get addCustom => _localizedValues[localeCode]!['add_custom']!;
+
+  String get companyDisabledWarning =>
+      _localizedValues[localeCode]!['company_disabled_warning']!;
+
+  String get viewSettings => _localizedValues[localeCode]!['view_settings']!;
+
+  String get actions => _localizedValues[localeCode]!['actions']!;
+  String get warning => _localizedValues[localeCode]!['warning']!;
+  String get labels => _localizedValues[localeCode]!['labels']!;
+
+//   String get cloneToOther => _localizedValues[localeCode]!['clone_to_other']!;
+
+//   String get cloneTo => _localizedValues[localeCode]!['clone_to']!;
+
+//   String get service => _localizedValues[localeCode]!['service']!;
+
+  String get purge => _localizedValues[localeCode]!['purge']!;
+
+  String get pleaseTypeToConfirm =>
+      _localizedValues[localeCode]!['please_type_to_confirm']!;
+
+//   String get startedImport => _localizedValues[localeCode]!['started_import']!;
+
+//   String get updateApp => _localizedValues[localeCode]!['update_app']!;
+
+//   String get runningTasks => _localizedValues[localeCode]!['running_tasks']!;
+
+//   String get recentTasks => _localizedValues[localeCode]!['recent_tasks']!;
+
+  String get debugModeIsEnabled =>
+      _localizedValues[localeCode]!['debug_mode_is_enabled']!;
+
+  String get debugModeIsEnabledHelp =>
+      _localizedValues[localeCode]!['debug_mode_is_enabled_help']!;
+// String get emptyColumns => _localizedValues[localeCode]!['empty_columns']!;
+
+  String get show => _localizedValues[localeCode]!['show']!;
+
+  String get hide => _localizedValues[localeCode]!['hide']!;
+
+  String get color => _localizedValues[localeCode]!['color']!;
+  String get counterPatternError =>
+      _localizedValues[localeCode]!['counter_pattern_error']!;
+
+  String get emailSentToConfirmEmail =>
+      _localizedValues[localeCode]!['email_sent_to_confirm_email']!;
+  String get listLongPress => _localizedValues[localeCode]!['list_long_press']!;
+
+  String get showActions => _localizedValues[localeCode]!['show_actions']!;
+
+  String get startMultiselect =>
+      _localizedValues[localeCode]!['start_multiselect']!;
+
+  String get selectAGmailUser =>
+      _localizedValues[localeCode]!['select_a_gmail_user']!;
+
+  String get confirmYourEmailAddress =>
+      _localizedValues[localeCode]!['confirm_your_email_address']!;
+
+  String get resendEmail => _localizedValues[localeCode]!['resend_email']!;
+
+  String get iHaveConfirmedEmail =>
+      _localizedValues[localeCode]!['i_have_confirmed_email']!;
+
+  String get securitySettings =>
+      _localizedValues[localeCode]!['security_settings']!;
+
+  String get searchUsers => _localizedValues[localeCode]!['search_users']!;
+
+  String get webSessionTimeout =>
+      _localizedValues[localeCode]!['web_session_timeout']!;
+
+  String get countHours => _localizedValues[localeCode]!['count_hours']!;
+
+  String get countDays => _localizedValues[localeCode]!['count_days']!;
+
+  String get countDay => _localizedValues[localeCode]!['count_day']!;
+
+  String get sessionAboutToExpire =>
+      _localizedValues[localeCode]!['session_about_to_expire']!;
+
+  String get stayLoggedIn => _localizedValues[localeCode]!['stay_logged_in']!;
+
+  String get requirePasswordWithSocialLogin =>
+      _localizedValues[localeCode]!['require_password_with_social_login']!;
+
+  String get enableTwoFactor =>
+      _localizedValues[localeCode]!['enable_two_factor']!;
+
+  String get disableTwoFactor =>
+      _localizedValues[localeCode]!['disable_two_factor']!;
+
+  String get disabledTwoFactor =>
+      _localizedValues[localeCode]!['disabled_two_factor']!;
+
+  String get connectGoogle => _localizedValues[localeCode]!['connect_google']!;
+
+  String get disconnectGoogle =>
+      _localizedValues[localeCode]!['disconnect_google']!;
+
+// String get twoFactorSetupHelp =>
+//       _localizedValues[localeCode]!['two_factor_setup_help']!;
+
+  String get enabledTwoFactor =>
+      _localizedValues[localeCode]!['enabled_two_factor']!;
+
+  String get smsCode => _localizedValues[localeCode]!['sms_code']!;
+
+  String get sendSms => _localizedValues[localeCode]!['send_sms']!;
+
+  String get enterPhoneToEnableTwoFactor =>
+      _localizedValues[localeCode]!['enter_phone_to_enable_two_factor']!;
+
+  String get viewDocs => _localizedValues[localeCode]!['view_docs']!;
+
+  String get connectedGoogle =>
+      _localizedValues[localeCode]!['connected_google']!;
+
+  String get disconnectedGoogle =>
+      _localizedValues[localeCode]!['disconnected_google']!;
+
+//   String get resendInvite => _localizedValues[localeCode]!['resend_invite']!;
+
+  String get pleaseSelectACountry =>
+      _localizedValues[localeCode]!['please_select_a_country']!;
+
+  String get helpTranslate => _localizedValues[localeCode]!['help_translate']!;
+
+  String get changingPhoneDisablesTwoFactor =>
+      _localizedValues[localeCode]!['changing_phone_disables_two_factor']!;
+
+  String get pleaseFirstSetAPassword =>
+      _localizedValues[localeCode]!['please_first_set_a_password']!;
+
+  String get anErrorOccurredTryAgain =>
+      _localizedValues[localeCode]!['an_error_occurred_try_again']!;
+
+  String get activateCompany =>
+      _localizedValues[localeCode]!['activate_company']!;
+
+  String get activateCompanyHelp =>
+      _localizedValues[localeCode]!['activate_company_help']!;
+
+  String get useLastEmail => _localizedValues[localeCode]!['use_last_email']!;
+  String get passwordTimeout =>
+      _localizedValues[localeCode]!['password_timeout']!;
+  String get countMinutes => _localizedValues[localeCode]!['count_minutes']!;
+
+  String get connectGmail => _localizedValues[localeCode]!['connect_gmail']!;
+
+  String get disconnectGmail =>
+      _localizedValues[localeCode]!['disconnect_gmail']!;
+
+  String get connectedGmail =>
+      _localizedValues[localeCode]!['connected_gmail']!;
+
+  String get disconnectedGmail =>
+      _localizedValues[localeCode]!['disconnected_gmail']!;
+
+  String get subdomainIsNotAvailable =>
+      _localizedValues[localeCode]!['subdomain_is_not_available']!;
+
+  String get security => _localizedValues[localeCode]!['security']!;
+
+  String get emailBounced => _localizedValues[localeCode]!['email_bounced']!;
+  String get upgradeToPaidPlan =>
+      _localizedValues[localeCode]!['upgrade_to_paid_plan']!;
+
+  String get ownerUpgradeToPaidPlan =>
+      _localizedValues[localeCode]!['owner_upgrade_to_paid_plan']!;
+
+  String get viewDateFormats =>
+      _localizedValues[localeCode]!['view_date_formats']!;
+
+  String get addBodyVariableMessage =>
+      _localizedValues[localeCode]!['add_body_variable_message']!;
+
+  String get bodyVariableMissing =>
+      _localizedValues[localeCode]!['body_variable_missing']!;
+
+  String get subdomainHelp => _localizedValues[localeCode]!['subdomain_help']!;
+
+  String get moveTop => _localizedValues[localeCode]!['move_top']!;
+
+  String get moveUp => _localizedValues[localeCode]!['move_up']!;
+
+  String get moveDown => _localizedValues[localeCode]!['move_down']!;
+
+  String get moveBottom => _localizedValues[localeCode]!['move_bottom']!;
+
+  String get enable => _localizedValues[localeCode]!['enable']!;
+
+  String get kanban =>
+      _localizedValues[localeCode]!['kanban'] ??
+      _localizedValues['en']!['kanban']!;
+
+  String get searchKanban =>
+      _localizedValues[localeCode]!['search_kanban'] ??
+      _localizedValues['en']!['search_kanban']!;
+
+  String get searchKanbans =>
+      _localizedValues[localeCode]!['search_kanbans'] ??
+      _localizedValues['en']!['search_kanbans']!;
+
+//   String get partialValue =>
+//       _localizedValues[localeCode]!['partial_value'] ??
+//       _localizedValues['en']!['partial_value']!;
+
+//   String get unassigned =>
+//       _localizedValues[localeCode]!['unassigned'] ??
+//       _localizedValues['en']!['unassigned']!;
+
+  String get lastUpdated =>
+      _localizedValues[localeCode]!['last_updated'] ??
+      _localizedValues['en']!['last_updated']!;
+
+  String get pro =>
+      _localizedValues[localeCode]!['pro'] ?? _localizedValues['en']!['pro']!;
+
+  String get endAllSessions =>
+      _localizedValues[localeCode]!['end_all_sessions'] ??
+      _localizedValues['en']!['end_all_sessions']!;
+
+  String get countSession =>
+      _localizedValues[localeCode]!['count_session'] ??
+      _localizedValues['en']!['count_session']!;
+
+  String get countSessions =>
+      _localizedValues[localeCode]!['count_sessions'] ??
+      _localizedValues['en']!['count_sessions']!;
+  String get endedAllSessions =>
+      _localizedValues[localeCode]!['ended_all_sessions'] ??
+      _localizedValues['en']!['ended_all_sessions']!;
+
+  String get yearsDataShown =>
+      _localizedValues[localeCode]!['years_data_shown'] ??
+      _localizedValues['en']!['years_data_shown']!;
+
+//   String get step1SignIn =>
+//       _localizedValues[localeCode]!['step_1_sign_in'] ??
+//       _localizedValues['en']!['step_1_sign_in']!;
+
+//   String get step2Authorize =>
+//       _localizedValues[localeCode]!['step_2_authorize'] ??
+//       _localizedValues['en']!['step_2_authorize']!;
+
+  String get includeDeletedClients =>
+      _localizedValues[localeCode]!['include_deleted_clients'] ??
+      _localizedValues['en']!['include_deleted_clients']!;
+
+  String get includeDeletedClientsHelp =>
+      _localizedValues[localeCode]!['include_deleted_clients_help'] ??
+      _localizedValues['en']!['include_deleted_clients_help']!;
+
+  String get exportedData =>
+      _localizedValues[localeCode]!['exported_data'] ??
+      _localizedValues['en']!['exported_data']!;
+
+  String get draftMode =>
+      _localizedValues[localeCode]!['html_mode'] ??
+      _localizedValues['en']!['html_mode']!;
+
+  String get draftModeHelp =>
+      _localizedValues[localeCode]!['html_mode_help'] ??
+      _localizedValues['en']!['html_mode_help']!;
+
+  String get waitForData =>
+      _localizedValues[localeCode]!['wait_for_data'] ??
+      _localizedValues['en']!['wait_for_data']!;
+  String get json =>
+      _localizedValues[localeCode]!['json'] ?? _localizedValues['en']!['json']!;
+
+  String get jsonFileMissing =>
+      _localizedValues[localeCode]!['json_file_missing'] ??
+      _localizedValues['en']!['json_file_missing']!;
+
+  String get jsonOptionMissing =>
+      _localizedValues[localeCode]!['json_option_missing'] ??
+      _localizedValues['en']!['json_option_missing']!;
+
+  String get importData =>
+      _localizedValues[localeCode]!['import_data'] ??
+      _localizedValues['en']!['import_data']!;
+
+  String get importSettings =>
+      _localizedValues[localeCode]!['import_settings'] ??
+      _localizedValues['en']!['import_settings']!;
+
+  String get sendTime =>
+      _localizedValues[localeCode]!['send_time'] ??
+      _localizedValues['en']!['send_time']!;
+
+  String get subdomainGuide =>
+      _localizedValues[localeCode]!['subdomain_guide'] ??
+      _localizedValues['en']!['subdomain_guide']!;
+
+  String get changeEmail =>
+      _localizedValues[localeCode]!['change_email'] ??
+      _localizedValues['en']!['change_email']!;
+
+  String get freeTrial =>
+      _localizedValues[localeCode]!['free_trial'] ??
+      _localizedValues['en']!['free_trial']!;
+
+  String get freeTrialEndsInDays =>
+      _localizedValues[localeCode]!['free_trial_ends_in_days'] ??
+      _localizedValues['en']!['free_trial_ends_in_days']!;
+
+  String get freeTrialEndsToday =>
+      _localizedValues[localeCode]!['free_trial_ends_today'] ??
+      _localizedValues['en']!['free_trial_ends_today']!;
+
+  String get checkStatus =>
+      _localizedValues[localeCode]!['check_status'] ??
+      _localizedValues['en']!['check_status']!;
+
+  String get reviewApp =>
+      _localizedValues[localeCode]!['review_app'] ??
+      _localizedValues['en']!['review_app']!;
+  String get colors =>
+      _localizedValues[localeCode]!['colors'] ??
+      _localizedValues['en']!['colors']!;
+
+  String get customColors =>
+      _localizedValues[localeCode]!['custom_colors'] ??
+      _localizedValues['en']!['custom_colors']!;
+
+  String get statusColorTheme =>
+      _localizedValues[localeCode]!['status_color_theme'] ??
+      _localizedValues['en']!['status_color_theme']!;
+
+  String get loadColorTheme =>
+      _localizedValues[localeCode]!['load_color_theme'] ??
+      _localizedValues['en']!['load_color_theme']!;
+
+  String get clearAll =>
+      _localizedValues[localeCode]!['clear_all'] ??
+      _localizedValues['en']!['clear_all']!;
+
+  String get contrast =>
+      _localizedValues[localeCode]!['contrast'] ??
+      _localizedValues['en']!['contrast']!;
+
+  String get exportColors =>
+      _localizedValues[localeCode]!['export_colors'] ??
+      _localizedValues['en']!['export_colors']!;
+
+  String get importColors =>
+      _localizedValues[localeCode]!['import_colors'] ??
+      _localizedValues['en']!['import_colors']!;
+
+  String get previousPage =>
+      _localizedValues[localeCode]!['previous_page'] ??
+      _localizedValues['en']!['previous_page']!;
+
+  String get nextPage =>
+      _localizedValues[localeCode]!['next_page'] ??
+      _localizedValues['en']!['next_page']!;
+
+  String get enableMarkdown =>
+      _localizedValues[localeCode]!['enable_markdown'] ??
+      _localizedValues['en']!['enable_markdown']!;
+
+  String get enableMarkdownHelp =>
+      _localizedValues[localeCode]!['enable_markdown_help'] ??
+      _localizedValues['en']!['enable_markdown_help']!;
+
+  String get useWebAppToConnectGmail =>
+      _localizedValues[localeCode]!['use_web_app_to_connect_gmail'] ??
+      _localizedValues['en']!['use_web_app_to_connect_gmail']!;
+
+  String get selectMethod =>
+      _localizedValues[localeCode]!['select_method'] ??
+      _localizedValues['en']!['select_method']!;
+
+  String get googleAnalyticsTrackingId =>
+      _localizedValues[localeCode]!['google_analytics_tracking_id'] ??
+      _localizedValues['en']!['google_analytics_tracking_id']!;
+
+  String get googleAnalytics =>
+      _localizedValues[localeCode]!['google_analytics'] ??
+      _localizedValues['en']!['google_analytics']!;
+
+  String get useCommaAsDecimalPlace =>
+      _localizedValues[localeCode]!['use_comma_as_decimal_place'] ??
+      _localizedValues['en']!['use_comma_as_decimal_place']!;
+
+  String get decimalComma =>
+      _localizedValues[localeCode]!['decimal_comma'] ??
+      _localizedValues['en']!['decimal_comma']!;
+
+  String get persistData =>
+      _localizedValues[localeCode]!['persist_data'] ??
+      _localizedValues['en']!['persist_data']!;
+
+  String get changePlan =>
+      _localizedValues[localeCode]!['change_plan'] ??
+      _localizedValues['en']!['change_plan']!;
+  String get fromName =>
+      _localizedValues[localeCode]!['from_name'] ??
+      _localizedValues['en']!['from_name']!;
+
+  String get forBestPerformance =>
+      _localizedValues[localeCode]!['for_best_performance'] ??
+      _localizedValues['en']!['for_best_performance']!;
+
+  String get app =>
+      _localizedValues[localeCode]!['app'] ?? _localizedValues['en']!['app']!;
+
+  String get whyAreYouLeaving =>
+      _localizedValues[localeCode]!['why_are_you_leaving'] ??
+      _localizedValues['en']!['why_are_you_leaving']!;
+
+  String get updatedCompany =>
+      _localizedValues[localeCode]!['updated_company'] ??
+      _localizedValues['en']!['updated_company']!;
+
+  String get setDefaultCompany =>
+      _localizedValues[localeCode]!['set_default_company'] ??
+      _localizedValues['en']!['set_default_company']!;
+
+  String get system =>
+      _localizedValues[localeCode]!['system'] ??
+      _localizedValues['en']!['system']!;
+
+  String get persistDataHelp =>
+      _localizedValues[localeCode]!['persist_data_help'] ??
+      _localizedValues['en']!['persist_data_help']!;
+
+  String get pleaseSetAPassword =>
+      _localizedValues[localeCode]!['please_set_a_password'] ??
+      _localizedValues['en']!['please_set_a_password']!;
+
+  String get setPassword =>
+      _localizedValues[localeCode]!['set_password'] ??
+      _localizedValues['en']!['set_password']!;
+
+  String get clickSelected =>
+      _localizedValues[localeCode]!['click_selected'] ??
+      _localizedValues['en']!['click_selected']!;
+
+  String get editRecord =>
+      _localizedValues[localeCode]!['edit_record'] ??
+      _localizedValues['en']!['edit_record']!;
+
+  String get hidePreview =>
+      _localizedValues[localeCode]!['hide_preview'] ??
+      _localizedValues['en']!['hide_preview']!;
+
+  String get showPdfPreview =>
+      _localizedValues[localeCode]!['show_pdf_preview'] ??
+      _localizedValues['en']!['show_pdf_preview']!;
+
+  String get showPdfPreviewHelp =>
+      _localizedValues[localeCode]!['show_pdf_preview_help'] ??
+      _localizedValues['en']!['show_pdf_preview_help']!;
+
+  String get normal =>
+      _localizedValues[localeCode]!['normal'] ??
+      _localizedValues['en']!['normal']!;
+
+  String get large =>
+      _localizedValues[localeCode]!['large'] ??
+      _localizedValues['en']!['large']!;
+
+  String get extraLarge =>
+      _localizedValues[localeCode]!['extra_large'] ??
+      _localizedValues['en']!['extra_large']!;
+
+  String get remaining =>
+      _localizedValues[localeCode]!['remaining'] ??
+      _localizedValues['en']!['remaining']!;
+
+  String get htmlPreviewWarning =>
+      _localizedValues[localeCode]!['html_preview_warning'] ??
+      _localizedValues['en']!['html_preview_warning']!;
+
+  String get waitForLoading =>
+      _localizedValues[localeCode]!['wait_for_loading'] ??
+      _localizedValues['en']!['wait_for_loading']!;
+
+  String get waitForSaving =>
+      _localizedValues[localeCode]!['wait_for_saving'] ??
+      _localizedValues['en']!['wait_for_saving']!;
+
+  String get small =>
+      _localizedValues[localeCode]!['small'] ??
+      _localizedValues['en']!['small']!;
+
+  String get upgradeToAddCompany =>
+      _localizedValues[localeCode]!['upgrade_to_add_company'] ??
+      _localizedValues['en']!['upgrade_to_add_company']!;
+
+  String get customEmailsDisabledHelp =>
+      _localizedValues[localeCode]!['custom_emails_disabled_help'] ??
+      _localizedValues['en']!['custom_emails_disabled_help']!;
+
+  String get startFreeTrialMessage =>
+      _localizedValues[localeCode]!['start_free_trial_message'] ??
+      _localizedValues['en']!['start_free_trial_message']!;
+
+  String get startFreeTrial =>
+      _localizedValues[localeCode]!['start_free_trial'] ??
+      _localizedValues['en']!['start_free_trial']!;
+
+  String get releaseNotes =>
+      _localizedValues[localeCode]!['release_notes'] ??
+      _localizedValues['en']!['release_notes']!;
+
+//   String get jsonHelp =>
+//       _localizedValues[localeCode]!['json_help'] ??
+//       _localizedValues['en']!['json_help']!;
+
+  String get enableEmailMarkdown =>
+      _localizedValues[localeCode]!['enable_email_markdown'] ??
+      _localizedValues['en']!['enable_email_markdown']!;
+
+  String get enableEmailMarkdownHelp =>
+      _localizedValues[localeCode]!['enable_email_markdown_help'] ??
+      _localizedValues['en']!['enable_email_markdown_help']!;
+
+  String get enablePdfMarkdown =>
+      _localizedValues[localeCode]!['enable_pdf_markdown'] ??
+      _localizedValues['en']!['enable_pdf_markdown']!;
+
+  String get afterSaving =>
+      _localizedValues[localeCode]!['after_saving'] ??
+      _localizedValues['en']!['after_saving']!;
+
+  String get viewRecord =>
+      _localizedValues[localeCode]!['view_record'] ??
+      _localizedValues['en']!['view_record']!;
+
+  String get enableTouchEvents =>
+      _localizedValues[localeCode]!['enable_touch_events'] ??
+      _localizedValues['en']!['enable_touch_events']!;
+
+  String get enableTouchEventsHelp =>
+      _localizedValues[localeCode]!['enable_touch_events_help'] ??
+      _localizedValues['en']!['enable_touch_events_help']!;
+
+//   String get feesSample =>
+//       _localizedValues[localeCode]!['fees_sample'] ??
+//       _localizedValues['en']!['fees_sample']!;
+
+  String get changeStatus =>
+      _localizedValues[localeCode]!['change_status'] ??
+      _localizedValues['en']!['change_status']!;
+
+  String get changedStatus =>
+      _localizedValues[localeCode]!['changed_status'] ??
+      _localizedValues['en']!['changed_status']!;
+//   String get autoArchivePaidInvoices =>
+//       _localizedValues[localeCode]!['auto_archive_paid_invoices'] ??
+//       _localizedValues['en']!['auto_archive_paid_invoices']!;
+
+//   String get autoArchiveCancelledInvoices =>
+//       _localizedValues[localeCode]!['auto_archive_cancelled_invoices'] ??
+//       _localizedValues['en']!['auto_archive_cancelled_invoices']!;
+
+//   String get autoArchiveCancelledInvoicesHelp =>
+//       _localizedValues[localeCode]!['auto_archive_cancelled_invoices_help'] ??
+//       _localizedValues['en']!['auto_archive_cancelled_invoices_help']!;
+
+  String get createdRecord =>
+      _localizedValues[localeCode]!['created_record'] ??
+      _localizedValues['en']!['created_record']!;
+
+//   String get week =>
+//       _localizedValues[localeCode]!['week'] ?? _localizedValues['en']!['week']!;
+
+  String get addToInvoice =>
+      _localizedValues[localeCode]!['add_to_invoice'] ??
+      _localizedValues['en']!['add_to_invoice']!;
+
+  String get noInvoicesFound =>
+      _localizedValues[localeCode]!['no_invoices_found'] ??
+      _localizedValues['en']!['no_invoices_found']!;
+
+  String get registerLabel =>
+      _localizedValues[localeCode]!['register_label'] ??
+      _localizedValues['en']!['register_label']!;
+
+  String get loginLabel =>
+      _localizedValues[localeCode]!['login_label'] ??
+      _localizedValues['en']!['login_label']!;
+
+  String get noAccount =>
+      _localizedValues[localeCode]!['login_label'] ??
+      _localizedValues['en']!['login_label']!;
+
+//   String get multipleClientError =>
+//       _localizedValues[localeCode]!['multiple_client_error'] ??
+//       _localizedValues['en']!['multiple_client_error']!;
+
+  String get enableTooltips =>
+      _localizedValues[localeCode]!['enable_tooltips'] ??
+      _localizedValues['en']!['enable_tooltips']!;
+
+  String get enableTooltipsHelp =>
+      _localizedValues[localeCode]!['enable_tooltips_help'] ??
+      _localizedValues['en']!['enable_tooltips_help']!;
+
+  String get addCountry =>
+      _localizedValues[localeCode]!['add_country'] ??
+      _localizedValues['en']!['add_country']!;
+
+//   String get useQuoteTerms =>
+//       _localizedValues[localeCode]!['use_quote_terms'] ??
+//       _localizedValues['en']!['use_quote_terms']!;
+
+//   String get useQuoteTermsHelp =>
+//       _localizedValues[localeCode]!['use_quote_terms_help'] ??
+//       _localizedValues['en']!['use_quote_terms_help']!;
+
+//   String get stopOnUnpaid =>
+//       _localizedValues[localeCode]!['stop_on_unpaid'] ??
+//       _localizedValues['en']!['stop_on_unpaid']!;
+
+//   String get stopOnUnpaidHelp =>
+//       _localizedValues[localeCode]!['stop_on_unpaid_help'] ??
+//       _localizedValues['en']!['stop_on_unpaid_help']!;
+  String get left =>
+      _localizedValues[localeCode]!['left'] ?? _localizedValues['en']!['left']!;
+
+  String get right =>
+      _localizedValues[localeCode]!['right'] ??
+      _localizedValues['en']!['right']!;
+
+  String get center =>
+      _localizedValues[localeCode]!['center'] ??
+      _localizedValues['en']!['center']!;
+
+  String get enableReactApp =>
+      _localizedValues[localeCode]!['enable_react_app'] ??
+      _localizedValues['en']!['enable_react_app']!;
+
+  String get microsoftSignUp =>
+      _localizedValues[localeCode]!['microsoft_sign_up'] ??
+      _localizedValues['en']!['microsoft_sign_up']!;
+
+  String get microsoftSignIn =>
+      _localizedValues[localeCode]!['microsoft_sign_in'] ??
+      _localizedValues['en']!['microsoft_sign_in']!;
+
+  String get disconnectedMicrosoft =>
+      _localizedValues[localeCode]!['disconnected_microsoft'] ??
+      _localizedValues['en']!['disconnected_microsoft']!;
+
+  String get connectMicrosoft =>
+      _localizedValues[localeCode]!['connect_microsoft'] ??
+      _localizedValues['en']!['connect_microsoft']!;
+
+  String get disconnectMicrosoft =>
+      _localizedValues[localeCode]!['disconnect_microsoft'] ??
+      _localizedValues['en']!['disconnect_microsoft']!;
+
+  String get connectedMicrosoft =>
+      _localizedValues[localeCode]!['connected_microsoft'] ??
+      _localizedValues['en']!['connected_microsoft']!;
+
+  String get emailProvider =>
+      _localizedValues[localeCode]!['email_provider'] ??
+      _localizedValues['en']!['email_provider']!;
+
+  String get useWebAppToConnectMicrosoft =>
+      _localizedValues[localeCode]!['use_web_app_to_connect_microsoft'] ??
+      _localizedValues['en']!['use_web_app_to_connect_microsoft']!;
+
+  String get connectEmail =>
+      _localizedValues[localeCode]!['connect_email'] ??
+      _localizedValues['en']!['connect_email']!;
+
+  String get disconnectEmail =>
+      _localizedValues[localeCode]!['disconnect_email'] ??
+      _localizedValues['en']!['disconnect_email']!;
+
+  String get disconnectedEmail =>
+      _localizedValues[localeCode]!['disconnected_email'] ??
+      _localizedValues['en']!['disconnected_email']!;
+
+//   String get pleaseSelectAVendor =>
+//       _localizedValues[localeCode]!['please_select_a_vendor'] ??
+//       _localizedValues['en']!['please_select_a_vendor']!;
+
+  String get accepted =>
+      _localizedValues[localeCode]!['accepted'] ??
+      _localizedValues['en']!['accepted']!;
+  String get accept =>
+      _localizedValues[localeCode]!['accept'] ??
+      _localizedValues['en']!['accept']!;
+
+  String get qrIban =>
+      _localizedValues[localeCode]!['qr_iban'] ??
+      _localizedValues['en']!['qr_iban']!;
+
+  String get besrId =>
+      _localizedValues[localeCode]!['besr_id'] ??
+      _localizedValues['en']!['besr_id']!;
+
+  String get enableFlexibleSearch =>
+      _localizedValues[localeCode]!['enable_flexible_search'] ??
+      _localizedValues['en']!['enable_flexible_search']!;
+
+  String get enableFlexibleSearchHelp =>
+      _localizedValues[localeCode]!['enable_flexible_search_help'] ??
+      _localizedValues['en']!['enable_flexible_search_help']!;
+
+//   String get lastSentTemplate =>
+//       _localizedValues[localeCode]!['last_sent_template'] ??
+//       _localizedValues['en']!['last_sent_template']!;
+
+  String get add =>
+      _localizedValues[localeCode]!['add'] ?? _localizedValues['en']!['add']!;
+
+  String get areYouEnjoyingTheApp =>
+      _localizedValues[localeCode]!['are_you_enjoying_the_app'] ??
+      _localizedValues['en']!['are_you_enjoying_the_app']!;
+
+  String get wouldYouRateIt =>
+      _localizedValues[localeCode]!['would_you_rate_it'] ??
+      _localizedValues['en']!['would_you_rate_it']!;
+
+  String get wouldYouTellUsMore =>
+      _localizedValues[localeCode]!['would_you_tell_us_more'] ??
+      _localizedValues['en']!['would_you_tell_us_more']!;
+
+  String get yesItsGreat =>
+      _localizedValues[localeCode]!['yes_its_great'] ??
+      _localizedValues['en']!['yes_its_great']!;
+
+  String get notSoMuch =>
+      _localizedValues[localeCode]!['not_so_much'] ??
+      _localizedValues['en']!['not_so_much']!;
+
+  String get sureHappyTo =>
+      _localizedValues[localeCode]!['sure_happy_to'] ??
+      _localizedValues['en']!['sure_happy_to']!;
+
+  String get noNotNow =>
+      _localizedValues[localeCode]!['no_not_now'] ??
+      _localizedValues['en']!['no_not_now']!;
+
+  String get field =>
+      _localizedValues[localeCode]!['field'] ??
+      _localizedValues['en']!['field']!;
+
+  String get disconnectedApple =>
+      _localizedValues[localeCode]!['disconnected_apple'] ??
+      _localizedValues['en']!['disconnected_apple']!;
+
+  String get connectApple =>
+      _localizedValues[localeCode]!['connect_apple'] ??
+      _localizedValues['en']!['connect_apple']!;
+
+  String get disconnectApple =>
+      _localizedValues[localeCode]!['disconnect_apple'] ??
+      _localizedValues['en']!['disconnect_apple']!;
+
+  String get activate =>
+      _localizedValues[localeCode]!['activate'] ??
+      _localizedValues['en']!['activate']!;
+
+  String get restorePurchases =>
+      _localizedValues[localeCode]!['restore_purchases'] ??
+      _localizedValues['en']!['restore_purchases']!;
+
+  String get verifyPhoneNumber =>
+      _localizedValues[localeCode]!['verify_phone_number'] ??
+      _localizedValues['en']!['verify_phone_number']!;
+
+  String get verifyPhoneNumberHelp =>
+      _localizedValues[localeCode]!['verify_phone_number_help'] ??
+      _localizedValues['en']!['verify_phone_number_help']!;
+  String get becomeMember =>
+      _localizedValues[localeCode]!['become_member'] ??
+      _localizedValues['en']!['become_member']!;
+
+  String get invalidPhoneNumber =>
+      _localizedValues[localeCode]!['invalid_phone_number'] ??
+      _localizedValues['en']!['invalid_phone_number']!;
+
+  String get enterPhoneNumber =>
+      _localizedValues[localeCode]!['enter_phone_number'] ??
+      _localizedValues['en']!['enter_phone_number']!;
+
+  String get resend =>
+      _localizedValues[localeCode]!['resend'] ??
+      _localizedValues['en']!['resend']!;
+
+  String get verify =>
+      _localizedValues[localeCode]!['verify'] ??
+      _localizedValues['en']!['verify']!;
+
+  String get codeWasSent =>
+      _localizedValues[localeCode]!['code_was_sent'] ??
+      _localizedValues['en']!['code_was_sent']!;
+
+  String get pleaseEnterACode =>
+      _localizedValues[localeCode]!['please_enter_a_code'] ??
+      _localizedValues['en']!['please_enter_a_code']!;
+
+  String get verifiedPhoneNumber =>
+      _localizedValues[localeCode]!['verified_phone_number'] ??
+      _localizedValues['en']!['verified_phone_number']!;
+
+  // String get dueOn =>
+  //     _localizedValues[localeCode]!['due_on'] ??
+  //     _localizedValues['en']!['due_on']!;
+
+  String get includeDeleted =>
+      _localizedValues[localeCode]!['include_deleted'] ??
+      _localizedValues['en']!['include_deleted']!;
+
+  String get includeDeletedHelp =>
+      _localizedValues[localeCode]!['include_deleted_help'] ??
+      _localizedValues['en']!['include_deleted_help']!;
+
+  String get wouldYouRateTheApp =>
+      _localizedValues[localeCode]!['would_you_rate_the_app'] ??
+      _localizedValues['en']!['would_you_rate_the_app']!;
+
+  String get longPressToSelect =>
+      _localizedValues[localeCode]!['long_press_to_select'] ??
+      _localizedValues['en']!['long_press_to_select']!;
+
+  String get sendCode =>
+      _localizedValues[localeCode]!['send_code'] ??
+      _localizedValues['en']!['send_code']!;
+
+  String get previewLocation =>
+      _localizedValues[localeCode]!['preview_location'] ??
+      _localizedValues['en']!['preview_location']!;
+
+  String get bottom =>
+      _localizedValues[localeCode]!['bottom'] ??
+      _localizedValues['en']!['bottom']!;
+
+  String get side =>
+      _localizedValues[localeCode]!['side'] ?? _localizedValues['en']!['side']!;
+
+//   String get vendorPostalCode =>
+//       _localizedValues[localeCode]!['vendor_postal_code'] ??
+//       _localizedValues['en']!['vendor_postal_code']!;
+
+  String get resendCode =>
+      _localizedValues[localeCode]!['resend_code'] ??
+      _localizedValues['en']!['resend_code']!;
+
+  String get verifyPhoneNumber2faHelp =>
+      _localizedValues[localeCode]!['verify_phone_number_2fa_help'] ??
+      _localizedValues['en']!['verify_phone_number_2fa_help']!;
+
+  String get codeWasSentTo =>
+      _localizedValues[localeCode]!['code_was_sent_to'] ??
+      _localizedValues['en']!['code_was_sent_to']!;
+
+  String get changeNumber =>
+      _localizedValues[localeCode]!['change_number'] ??
+      _localizedValues['en']!['change_number']!;
+
+  String get disable2fa =>
+      _localizedValues[localeCode]!['disable_2fa'] ??
+      _localizedValues['en']!['disable_2fa']!;
+
+  String get matomoUrl =>
+      _localizedValues[localeCode]!['matomo_url'] ??
+      _localizedValues['en']!['matomo_url']!;
+
+  String get matomoId =>
+      _localizedValues[localeCode]!['matomo_id'] ??
+      _localizedValues['en']!['matomo_id']!;
+
+  String get setupWizardLogo =>
+      _localizedValues[localeCode]!['setup_wizard_logo'] ??
+      _localizedValues['en']!['setup_wizard_logo']!;
+
+  String get upload =>
+      _localizedValues[localeCode]!['upload'] ??
+      _localizedValues['en']!['upload']!;
+
+  String get importDesign =>
+      _localizedValues[localeCode]!['import_design'] ??
+      _localizedValues['en']!['import_design']!;
+
+  String get importedDesign =>
+      _localizedValues[localeCode]!['imported_design'] ??
+      _localizedValues['en']!['imported_design']!;
+
+  String get invalidDesign =>
+      _localizedValues[localeCode]!['invalid_design'] ??
+      _localizedValues['en']!['invalid_design']!;
+
+  String get last365Days =>
+      _localizedValues[localeCode]!['last365_days'] ??
+      _localizedValues['en']!['last365_days']!;
+
+  String get clickPlusToCreateRecord =>
+      _localizedValues[localeCode]!['click_plus_to_create_record'] ??
+      _localizedValues['en']!['click_plus_to_create_record']!;
+
+  String get noDataFound =>
+      _localizedValues[localeCode]!['no_data_found'] ??
+      _localizedValues['en']!['no_data_found']!;
+
+  String get emailAlignment =>
+      _localizedValues[localeCode]!['email_alignment'] ??
+      _localizedValues['en']!['email_alignment']!;
+
+  String get showEmailFooter =>
+      _localizedValues[localeCode]!['show_email_footer'] ??
+      _localizedValues['en']!['show_email_footer']!;
+
+  String get showPreview =>
+      _localizedValues[localeCode]!['show_preview'] ??
+      _localizedValues['en']!['show_preview']!;
+
+  String get fromEmail =>
+      _localizedValues[localeCode]!['from_email'] ??
+      _localizedValues['en']!['from_email']!;
+  String get viewAll =>
+      _localizedValues[localeCode]!['view_all'] ??
+      _localizedValues['en']!['view_all']!;
+
+  String get editAll =>
+      _localizedValues[localeCode]!['edit_all'] ??
+      _localizedValues['en']!['edit_all']!;
+
+  String get viewReportPermission =>
+      _localizedValues[localeCode]!['view_report_permission'] ??
+      _localizedValues['en']!['view_report_permission']!;
+
+  String get endpoint =>
+      _localizedValues[localeCode]!['endpoint'] ??
+      _localizedValues['en']!['endpoint']!;
+
+  String get apiKey =>
+      _localizedValues[localeCode]!['api_key'] ??
+      _localizedValues['en']!['api_key']!;
+
+  String get apiToken =>
+      _localizedValues[localeCode]!['api_token'] ??
+      _localizedValues['en']!['api_token']!;
+
+  String get browserPdfViewer =>
+      _localizedValues[localeCode]!['browser_pdf_viewer'] ??
+      _localizedValues['en']!['browser_pdf_viewer']!;
+
+  String get browserPdfViewerHelp =>
+      _localizedValues[localeCode]!['browser_pdf_viewer_help'] ??
+      _localizedValues['en']!['browser_pdf_viewer_help']!;
+
+  String get lightDarkMode =>
+      _localizedValues[localeCode]!['light_dark_mode'] ??
+      _localizedValues['en']!['light_dark_mode']!;
+
+  String get useMobileToManagePlan =>
+      _localizedValues[localeCode]!['use_mobile_to_manage_plan'] ??
+      _localizedValues['en']!['use_mobile_to_manage_plan']!;
+
+  String get viewDashboardPermission =>
+      _localizedValues[localeCode]!['view_dashboard_permission'] ??
+      _localizedValues['en']!['view_dashboard_permission']!;
+
+  String get fileSavedInPath =>
+      _localizedValues[localeCode]!['file_saved_in_path'] ??
+      _localizedValues['en']!['file_saved_in_path']!;
+
+  String get cacheData =>
+      _localizedValues[localeCode]!['cache_data'] ??
+      _localizedValues['en']!['cache_data']!;
+
+  String get recurring =>
+      _localizedValues[localeCode]!['recurring'] ??
+      _localizedValues['en']!['recurring']!;
+
+  String get userLoggedInNotification =>
+      _localizedValues[localeCode]!['user_logged_in_notification'] ??
+      _localizedValues['en']!['user_logged_in_notification']!;
+
+  String get userLoggedInNotificationHelp =>
+      _localizedValues[localeCode]!['user_logged_in_notification_help'] ??
+      _localizedValues['en']!['user_logged_in_notification_help']!;
+
+  String get downloadsFolder =>
+      _localizedValues[localeCode]!['downloads_folder'] ??
+      _localizedValues['en']!['downloads_folder']!;
+
+  String get saveFilesToThisFolder =>
+      _localizedValues[localeCode]!['save_files_to_this_folder'] ??
+      _localizedValues['en']!['save_files_to_this_folder']!;
+
+  String get lastLogin =>
+      _localizedValues[localeCode]!['last_login'] ??
+      _localizedValues['en']!['last_login']!;
+
+  String get recordState =>
+      _localizedValues[localeCode]!['record_state'] ??
+      _localizedValues['en']!['record_state']!;
+
+  String get taskItem =>
+      _localizedValues[localeCode]!['task_item'] ??
+      _localizedValues['en']!['task_item']!;
+
+  String get quarter =>
+      _localizedValues[localeCode]!['quarter'] ??
+      _localizedValues['en']!['quarter']!;
+
+  String get deliveryNoteDesign =>
+      _localizedValues[localeCode]!['delivery_note_design'] ??
+      _localizedValues['en']!['delivery_note_design']!;
+
+  String get statementDesign =>
+      _localizedValues[localeCode]!['statement_design'] ??
+      _localizedValues['en']!['statement_design']!;
+
+  String get templateHelp =>
+      _localizedValues[localeCode]!['template_help'] ??
+      _localizedValues['en']!['template_help']!;
+
+  String get reactivateEmail =>
+      _localizedValues[localeCode]!['reactivate_email'] ??
+      _localizedValues['en']!['reactivate_email']!;
+
+  String get emailReactivated =>
+      _localizedValues[localeCode]!['email_reactivated'] ??
+      _localizedValues['en']!['email_reactivated']!;
+
+  String get watchVideo =>
+      _localizedValues[localeCode]!['watch_video'] ??
+      _localizedValues['en']!['watch_video']!;
+
+  String get viewExtension =>
+      _localizedValues[localeCode]!['view_extension'] ??
+      _localizedValues['en']!['view_extension']!;
+
+  String get runTemplate =>
+      _localizedValues[localeCode]!['run_template'] ??
+      _localizedValues['en']!['run_template']!;
+
+  String get host =>
+      _localizedValues[localeCode]!['host'] ?? _localizedValues['en']!['host']!;
+
+  String get port =>
+      _localizedValues[localeCode]!['port'] ?? _localizedValues['en']!['port']!;
+
+  String get encryption =>
+      _localizedValues[localeCode]!['encryption'] ??
+      _localizedValues['en']!['encryption']!;
+
+  String get localDomain =>
+      _localizedValues[localeCode]!['local_domain'] ??
+      _localizedValues['en']!['local_domain']!;
+
+  String get verifyPeer =>
+      _localizedValues[localeCode]!['verify_peer'] ??
+      _localizedValues['en']!['verify_peer']!;
+
+  String get username =>
+      _localizedValues[localeCode]!['username'] ??
+      _localizedValues['en']!['username']!;
+
+  String get emailReport =>
+      _localizedValues[localeCode]!['email_report'] ??
+      _localizedValues['en']!['email_report']!;
+
+  String get mobileVersion =>
+      _localizedValues[localeCode]!['mobile_version'] ??
+      _localizedValues['en']!['mobile_version']!;
+
+//   String get pleaseSelectAnInvoiceOrCredit =>
+//       _localizedValues[localeCode]!['please_select_an_invoice_or_credit'] ??
+//       _localizedValues['en']!['please_select_an_invoice_or_credit']!;
+
+  String get sendTestEmail =>
+      _localizedValues[localeCode]!['send_test_email'] ??
+      _localizedValues['en']!['send_test_email']!;
+
+  String get testEmailSent =>
+      _localizedValues[localeCode]!['test_email_sent'] ??
+      _localizedValues['en']!['test_email_sent']!;
+
+  String get checkCredentials =>
+      _localizedValues[localeCode]!['check_credentials'] ??
+      _localizedValues['en']!['check_credentials']!;
+
+  String get validCredentials =>
+      _localizedValues[localeCode]!['valid_credentials'] ??
+      _localizedValues['en']!['valid_credentials']!;
+
+  String get invalidCredentials =>
+      _localizedValues[localeCode]!['invalid_credentials'] ??
+      _localizedValues['en']!['invalid_credentials']!;
+
+  String get rappenRounding =>
+      _localizedValues[localeCode]!['rappen_rounding'] ??
+      _localizedValues['en']!['rappen_rounding']!;
+
+  String get rappenRoundingHelp =>
+      _localizedValues[localeCode]!['rappen_rounding_help'] ??
+      _localizedValues['en']!['rappen_rounding_help']!;
+
+  String get flutterWebWarning =>
+      _localizedValues[localeCode]!['flutter_web_warning'] ??
+      _localizedValues['en']!['flutter_web_warning']!;
+
+//   String get alwaysShowRequiredFields =>
+//       _localizedValues[localeCode]!['always_show_required_fields'] ??
+//       _localizedValues['en']!['always_show_required_fields']!;
+
+//   String get alwaysShowRequiredFieldsHelp =>
+//       _localizedValues[localeCode]!['always_show_required_fields_help'] ??
+//       _localizedValues['en']!['always_show_required_fields_help']!;
+
+//   String get advancedCards =>
+//       _localizedValues[localeCode]!['advanced_cards'] ??
+//       _localizedValues['en']!['advanced_cards']!;
+
+  String get bulkUpdate =>
+      _localizedValues[localeCode]!['bulk_update'] ??
+      _localizedValues['en']!['bulk_update']!;
+
+  String get bulkUpdated =>
+      _localizedValues[localeCode]!['bulk_updated'] ??
+      _localizedValues['en']!['bulk_updated']!;
+
+  String get webApp =>
+      _localizedValues[localeCode]!['web_app'] ??
+      _localizedValues['en']!['web_app']!;
+
+  String get desktopApp =>
+      _localizedValues[localeCode]!['desktop_app'] ??
+      _localizedValues['en']!['desktop_app']!;
+  String get time =>
+      _localizedValues[localeCode]!['time'] ?? _localizedValues['en']!['time']!;
+
+  String get reconnect =>
+      _localizedValues[localeCode]!['reconnect'] ??
+      _localizedValues['en']!['reconnect']!;
+
+  String get disconnected =>
+      _localizedValues[localeCode]!['disconnected'] ??
+      _localizedValues['en']!['disconnected']!;
+
+  String get addComment =>
+      _localizedValues[localeCode]!['add_comment'] ??
+      _localizedValues['en']!['add_comment']!;
+
+  String get comment =>
+      _localizedValues[localeCode]!['comment'] ??
+      _localizedValues['en']!['comment']!;
+
+  String get addedComment =>
+      _localizedValues[localeCode]!['added_comment'] ??
+      _localizedValues['en']!['added_comment']!;
+
+  String get referralProgram =>
+      _localizedValues[localeCode]!['referral_program'] ??
+      _localizedValues['en']!['referral_program']!;
+
+  String get referralUrl =>
+      _localizedValues[localeCode]!['referral_url'] ??
+      _localizedValues['en']!['referral_url']!;
+
+  String get taskAssignedNotification =>
+      _localizedValues[localeCode]!['task_assigned_notification'] ??
+      _localizedValues['en']!['task_assigned_notification']!;
+
+  String get taskAssignedNotificationHelp =>
+      _localizedValues[localeCode]!['task_assigned_notification_help'] ??
+      _localizedValues['en']!['task_assigned_notification_help']!;
+
+  String get uploadLogoShort =>
+      _localizedValues[localeCode]!['upload_logo_short'] ??
+      _localizedValues['en']!['upload_logo_short']!;
+
+  String get sslHostOverride =>
+      _localizedValues[localeCode]!['ssl_host_override'] ??
+      _localizedValues['en']!['ssl_host_override']!;
+  String get title =>
+      _localizedValues[localeCode]!['title'] ??
+      _localizedValues['en']!['title']!;
+  // STARTER: lang field - do not remove comment
+  String get payment =>
+      _localizedValues[localeCode]!['payment'] ??
+      _localizedValues['en']!['payment']!;
+  String get payments =>
+      _localizedValues[localeCode]!['payments'] ??
+      _localizedValues['en']!['payments']!;
+  String get newPayment =>
+      _localizedValues[localeCode]!['new_payment'] ??
+      _localizedValues['en']!['new_payment']!;
+  String get createdPayment =>
+      _localizedValues[localeCode]!['created_payment'] ??
+      _localizedValues['en']!['created_payment']!;
+  String get updatedPayment =>
+      _localizedValues[localeCode]!['updated_payment'] ??
+      _localizedValues['en']!['updated_payment']!;
+  String get archivedPayment =>
+      _localizedValues[localeCode]!['archived_payment'] ??
+      _localizedValues['en']!['archived_payment']!;
+  String get deletedPayment =>
+      _localizedValues[localeCode]!['deleted_payment'] ??
+      _localizedValues['en']!['deleted_payment']!;
+  String get restoredPayment =>
+      _localizedValues[localeCode]!['restored_payment'] ??
+      _localizedValues['en']!['restored_payment']!;
+  String get editPayment =>
+      _localizedValues[localeCode]!['edit_payment'] ??
+      _localizedValues['en']!['edit_payment']!;
+  String get searchPayment =>
+      _localizedValues[localeCode]!['search_payment'] ??
+      _localizedValues['en']!['search_payment']!;
+  String get searchPayments =>
+      _localizedValues[localeCode]!['search_payments'] ??
+      _localizedValues['en']!['search_payments']!;
+
+  String get id =>
+      _localizedValues[localeCode]!['id'] ?? _localizedValues['en']!['id']!;
+  String get idempotencyKey =>
+      _localizedValues[localeCode]!['idempotencyKey'] ??
+      _localizedValues['en']!['idempotencyKey']!;
+  String get isChanged =>
+      _localizedValues[localeCode]!['isChanged'] ??
+      _localizedValues['en']!['isChanged']!;
+  String get amount =>
+      _localizedValues[localeCode]!['amount'] ??
+      _localizedValues['en']!['amount']!;
+  String get transactionReference =>
+      _localizedValues[localeCode]!['transactionReference'] ??
+      _localizedValues['en']!['transactionReference']!;
+  String get date =>
+      _localizedValues[localeCode]!['date'] ?? _localizedValues['en']!['date']!;
+  String get typeId =>
+      _localizedValues[localeCode]!['typeId'] ??
+      _localizedValues['en']!['typeId']!;
+  String get privateNotes =>
+      _localizedValues[localeCode]!['privateNotes'] ??
+      _localizedValues['en']!['privateNotes']!;
+  String get exchangeRate =>
+      _localizedValues[localeCode]!['exchangeRate'] ??
+      _localizedValues['en']!['exchangeRate']!;
+  String get exchangeCurrencyId =>
+      _localizedValues[localeCode]!['exchangeCurrencyId'] ??
+      _localizedValues['en']!['exchangeCurrencyId']!;
+  String get refunded =>
+      _localizedValues[localeCode]!['refunded'] ??
+      _localizedValues['en']!['refunded']!;
+  String get applied =>
+      _localizedValues[localeCode]!['applied'] ??
+      _localizedValues['en']!['applied']!;
+  String get statusId =>
+      _localizedValues[localeCode]!['statusId'] ??
+      _localizedValues['en']!['statusId']!;
+  String get archivedAt =>
+      _localizedValues[localeCode]!['archivedAt'] ??
+      _localizedValues['en']!['archivedAt']!;
+  String get isDeleted =>
+      _localizedValues[localeCode]!['isDeleted'] ??
+      _localizedValues['en']!['isDeleted']!;
+  String get isManual =>
+      _localizedValues[localeCode]!['isManual'] ??
+      _localizedValues['en']!['isManual']!;
+  String get paymentables =>
+      _localizedValues[localeCode]!['paymentables'] ??
+      _localizedValues['en']!['paymentables']!;
+  String get invoices =>
+      _localizedValues[localeCode]!['invoices'] ??
+      _localizedValues['en']!['invoices']!;
+  String get assignedUserId =>
+      _localizedValues[localeCode]!['assignedUserId'] ??
+      _localizedValues['en']!['assignedUserId']!;
+  String get createdUserId =>
+      _localizedValues[localeCode]!['createdUserId'] ??
+      _localizedValues['en']!['createdUserId']!;
+  String get companyGatewayId =>
+      _localizedValues[localeCode]!['companyGatewayId'] ??
+      _localizedValues['en']!['companyGatewayId']!;
+  String get clientContactId =>
+      _localizedValues[localeCode]!['clientContactId'] ??
+      _localizedValues['en']!['clientContactId']!;
+  String get currencyId =>
+      _localizedValues[localeCode]!['currencyId'] ??
+      _localizedValues['en']!['currencyId']!;
+  String get transactionId =>
+      _localizedValues[localeCode]!['transactionId'] ??
+      _localizedValues['en']!['transactionId']!;
+  String get invitationId =>
+      _localizedValues[localeCode]!['invitationId'] ??
+      _localizedValues['en']!['invitationId']!;
+  String get isApplying =>
+      _localizedValues[localeCode]!['isApplying'] ??
+      _localizedValues['en']!['isApplying']!;
+  String get product =>
+      _localizedValues[localeCode]!['product'] ??
+      _localizedValues['en']!['product']!;
+  String get products =>
+      _localizedValues[localeCode]!['products'] ??
+      _localizedValues['en']!['products']!;
+  String get shop =>
+      _localizedValues[localeCode]!['shop'] ?? _localizedValues['en']!['shop']!;
+  String get myPhotos =>
+      _localizedValues[localeCode]!['myPhotos'] ??
+      _localizedValues['en']!['myPhotos']!;
+  String get myPosts =>
+      _localizedValues[localeCode]!['myPosts'] ??
+      _localizedValues['en']!['myPosts']!;
+  String get myProducts =>
+      _localizedValues[localeCode]!['myProducts'] ??
+      _localizedValues['en']!['myProducts']!;
+  String get newProduct =>
+      _localizedValues[localeCode]!['new_product'] ??
+      _localizedValues['en']!['new_product']!;
+  String get createdProduct =>
+      _localizedValues[localeCode]!['created_product'] ??
+      _localizedValues['en']!['created_product']!;
+  String get updatedProduct =>
+      _localizedValues[localeCode]!['updated_product'] ??
+      _localizedValues['en']!['updated_product']!;
+  String get archivedProduct =>
+      _localizedValues[localeCode]!['archived_product'] ??
+      _localizedValues['en']!['archived_product']!;
+  String get deletedProduct =>
+      _localizedValues[localeCode]!['deleted_product'] ??
+      _localizedValues['en']!['deleted_product']!;
+  String get restoredProduct =>
+      _localizedValues[localeCode]!['restored_product'] ??
+      _localizedValues['en']!['restored_product']!;
+  String get editProduct =>
+      _localizedValues[localeCode]!['edit_product'] ??
+      _localizedValues['en']!['edit_product']!;
+  String get searchProduct =>
+      _localizedValues[localeCode]!['search_product'] ??
+      _localizedValues['en']!['search_product']!;
+  String get searchProducts =>
+      _localizedValues[localeCode]!['search_products'] ??
+      _localizedValues['en']!['search_products']!;
+
+  String get social =>
+      _localizedValues[localeCode]!['social'] ??
+      _localizedValues['en']!['social']!;
+  String get myEntities =>
+      _localizedValues[localeCode]!['myEntities'] ??
+      _localizedValues['en']!['myEntities']!;
+  String get socials =>
+      _localizedValues[localeCode]!['socials'] ??
+      _localizedValues['en']!['socials']!;
+  String get newSocial =>
+      _localizedValues[localeCode]!['new_social'] ??
+      _localizedValues['en']!['new_social']!;
+  String get createdSocial =>
+      _localizedValues[localeCode]!['created_social'] ??
+      _localizedValues['en']!['created_social']!;
+  String get updatedSocial =>
+      _localizedValues[localeCode]!['updated_social'] ??
+      _localizedValues['en']!['updated_social']!;
+  String get archivedSocial =>
+      _localizedValues[localeCode]!['archived_social'] ??
+      _localizedValues['en']!['archived_social']!;
+  String get deletedSocial =>
+      _localizedValues[localeCode]!['deleted_social'] ??
+      _localizedValues['en']!['deleted_social']!;
+  String get restoredSocial =>
+      _localizedValues[localeCode]!['restored_social'] ??
+      _localizedValues['en']!['restored_social']!;
+  String get editSocial =>
+      _localizedValues[localeCode]!['edit_social'] ??
+      _localizedValues['en']!['edit_social']!;
+  String get searchSocial =>
+      _localizedValues[localeCode]!['search_social'] ??
+      _localizedValues['en']!['search_social']!;
+  String get searchSocials =>
+      _localizedValues[localeCode]!['search_socials'] ??
+      _localizedValues['en']!['search_socials']!;
+
+  String get userDisplayName =>
+      _localizedValues[localeCode]!['userDisplayName'] ??
+      _localizedValues['en']!['userDisplayName']!;
+  String get userPhotoUrl =>
+      _localizedValues[localeCode]!['userPhotoUrl'] ??
+      _localizedValues['en']!['userPhotoUrl']!;
+  String get content =>
+      _localizedValues[localeCode]!['content'] ??
+      _localizedValues['en']!['content']!;
+  String get photos =>
+      _localizedValues[localeCode]!['photos'] ??
+      _localizedValues['en']!['photos']!;
+
+  String get marathonMap =>
+      _localizedValues[localeCode]!['marathonMap'] ??
+      _localizedValues['en']!['marathonMap']!;
+
+  String get likeCount =>
+      _localizedValues[localeCode]!['likeCount'] ??
+      _localizedValues['en']!['likeCount']!;
+  String get commentCount =>
+      _localizedValues[localeCode]!['commentCount'] ??
+      _localizedValues['en']!['commentCount']!;
+  String get tags =>
+      _localizedValues[localeCode]!['tags'] ?? _localizedValues['en']!['tags']!;
+  String get photo =>
+      _localizedValues[localeCode]!['photo'] ??
+      _localizedValues['en']!['photo']!;
+
+  String get newPhoto =>
+      _localizedValues[localeCode]!['new_photo'] ??
+      _localizedValues['en']!['new_photo']!;
+  String get createdPhoto =>
+      _localizedValues[localeCode]!['created_photo'] ??
+      _localizedValues['en']!['created_photo']!;
+  String get updatedPhoto =>
+      _localizedValues[localeCode]!['updated_photo'] ??
+      _localizedValues['en']!['updated_photo']!;
+  String get archivedPhoto =>
+      _localizedValues[localeCode]!['archived_photo'] ??
+      _localizedValues['en']!['archived_photo']!;
+  String get deletedPhoto =>
+      _localizedValues[localeCode]!['deleted_photo'] ??
+      _localizedValues['en']!['deleted_photo']!;
+  String get restoredPhoto =>
+      _localizedValues[localeCode]!['restored_photo'] ??
+      _localizedValues['en']!['restored_photo']!;
+  String get editPhoto =>
+      _localizedValues[localeCode]!['edit_photo'] ??
+      _localizedValues['en']!['edit_photo']!;
+  String get searchPhoto =>
+      _localizedValues[localeCode]!['search_photo'] ??
+      _localizedValues['en']!['search_photo']!;
+  String get searchPhotos =>
+      _localizedValues[localeCode]!['search_photos'] ??
+      _localizedValues['en']!['search_photos']!;
+
+  String get storageType =>
+      _localizedValues[localeCode]!['storageType'] ??
+      _localizedValues['en']!['storageType']!;
+
+  String get isProcessed =>
+      _localizedValues[localeCode]!['isProcessed'] ??
+      _localizedValues['en']!['isProcessed']!;
+
+  String get workout =>
+      _localizedValues[localeCode]!['workout'] ??
+      _localizedValues['en']!['workout']!;
+  String get workouts =>
+      _localizedValues[localeCode]!['workouts'] ??
+      _localizedValues['en']!['workouts']!;
+  String get newWorkout =>
+      _localizedValues[localeCode]!['new_workout'] ??
+      _localizedValues['en']!['new_workout']!;
+  String get createdWorkout =>
+      _localizedValues[localeCode]!['created_workout'] ??
+      _localizedValues['en']!['created_workout']!;
+  String get updatedWorkout =>
+      _localizedValues[localeCode]!['updated_workout'] ??
+      _localizedValues['en']!['updated_workout']!;
+  String get archivedWorkout =>
+      _localizedValues[localeCode]!['archived_workout'] ??
+      _localizedValues['en']!['archived_workout']!;
+  String get deletedWorkout =>
+      _localizedValues[localeCode]!['deleted_workout'] ??
+      _localizedValues['en']!['deleted_workout']!;
+  String get restoredWorkout =>
+      _localizedValues[localeCode]!['restored_workout'] ??
+      _localizedValues['en']!['restored_workout']!;
+  String get editWorkout =>
+      _localizedValues[localeCode]!['edit_workout'] ??
+      _localizedValues['en']!['edit_workout']!;
+  String get searchWorkout =>
+      _localizedValues[localeCode]!['search_workout'] ??
+      _localizedValues['en']!['search_workout']!;
+  String get searchWorkouts =>
+      _localizedValues[localeCode]!['search_workouts'] ??
+      _localizedValues['en']!['search_workouts']!;
+
+  String get type =>
+      _localizedValues[localeCode]!['type'] ?? _localizedValues['en']!['type']!;
+  String get startTime =>
+      _localizedValues[localeCode]!['startTime'] ??
+      _localizedValues['en']!['startTime']!;
+  String get endTime =>
+      _localizedValues[localeCode]!['endTime'] ??
+      _localizedValues['en']!['endTime']!;
+  String get duration =>
+      _localizedValues[localeCode]!['duration'] ??
+      _localizedValues['en']!['duration']!;
+  String get distance =>
+      _localizedValues[localeCode]!['distance'] ??
+      _localizedValues['en']!['distance']!;
+  String get averagePace =>
+      _localizedValues[localeCode]!['averagePace'] ??
+      _localizedValues['en']!['averagePace']!;
+  String get caloriesBurned =>
+      _localizedValues[localeCode]!['caloriesBurned'] ??
+      _localizedValues['en']!['caloriesBurned']!;
+  String get elevationGain =>
+      _localizedValues[localeCode]!['elevationGain'] ??
+      _localizedValues['en']!['elevationGain']!;
+  String get notification =>
+      _localizedValues[localeCode]!['notification'] ??
+      _localizedValues['en']!['notification']!;
+  String get newNotification =>
+      _localizedValues[localeCode]!['new_notification'] ??
+      _localizedValues['en']!['new_notification']!;
+  String get createdNotification =>
+      _localizedValues[localeCode]!['created_notification'] ??
+      _localizedValues['en']!['created_notification']!;
+  String get updatedNotification =>
+      _localizedValues[localeCode]!['updated_notification'] ??
+      _localizedValues['en']!['updated_notification']!;
+  String get archivedNotification =>
+      _localizedValues[localeCode]!['archived_notification'] ??
+      _localizedValues['en']!['archived_notification']!;
+  String get deletedNotification =>
+      _localizedValues[localeCode]!['deleted_notification'] ??
+      _localizedValues['en']!['deleted_notification']!;
+  String get restoredNotification =>
+      _localizedValues[localeCode]!['restored_notification'] ??
+      _localizedValues['en']!['restored_notification']!;
+  String get editNotification =>
+      _localizedValues[localeCode]!['edit_notification'] ??
+      _localizedValues['en']!['edit_notification']!;
+  String get searchNotification =>
+      _localizedValues[localeCode]!['search_notification'] ??
+      _localizedValues['en']!['search_notification']!;
+  String get searchNotifications =>
+      _localizedValues[localeCode]!['search_notifications'] ??
+      _localizedValues['en']!['search_notifications']!;
+
+  String get channel =>
+      _localizedValues[localeCode]!['channel'] ??
+      _localizedValues['en']!['channel']!;
+  String get actionUrl =>
+      _localizedValues[localeCode]!['actionUrl'] ??
+      _localizedValues['en']!['actionUrl']!;
+  String get payload =>
+      _localizedValues[localeCode]!['payload'] ??
+      _localizedValues['en']!['payload']!;
+  String get priority =>
+      _localizedValues[localeCode]!['priority'] ??
+      _localizedValues['en']!['priority']!;
+  String get profileOperation =>
+      _localizedValues[localeCode]!['profile_operation'] ??
+      _localizedValues['en']!['profile_operation']!;
+  String get profileOperations =>
+      _localizedValues[localeCode]!['profile_operations'] ??
+      _localizedValues['en']!['profile_operations']!;
+  String get newProfileOperation =>
+      _localizedValues[localeCode]!['new_profile_operation'] ??
+      _localizedValues['en']!['new_profile_operation']!;
+  String get createdProfileOperation =>
+      _localizedValues[localeCode]!['created_profile_operation'] ??
+      _localizedValues['en']!['created_profile_operation']!;
+  String get updatedProfileOperation =>
+      _localizedValues[localeCode]!['updated_profile_operation'] ??
+      _localizedValues['en']!['updated_profile_operation']!;
+  String get archivedProfileOperation =>
+      _localizedValues[localeCode]!['archived_profile_operation'] ??
+      _localizedValues['en']!['archived_profile_operation']!;
+  String get deletedProfileOperation =>
+      _localizedValues[localeCode]!['deleted_profile_operation'] ??
+      _localizedValues['en']!['deleted_profile_operation']!;
+  String get restoredProfileOperation =>
+      _localizedValues[localeCode]!['restored_profile_operation'] ??
+      _localizedValues['en']!['restored_profile_operation']!;
+  String get editProfileOperation =>
+      _localizedValues[localeCode]!['edit_profile_operation'] ??
+      _localizedValues['en']!['edit_profile_operation']!;
+  String get searchProfileOperation =>
+      _localizedValues[localeCode]!['search_profile_operation'] ??
+      _localizedValues['en']!['search_profile_operation']!;
+  String get searchProfileOperations =>
+      _localizedValues[localeCode]!['search_profile_operations'] ??
+      _localizedValues['en']!['search_profile_operations']!;
+
+  String get profile =>
+      _localizedValues[localeCode]!['profile'] ??
+      _localizedValues['en']!['profile']!;
+  String get profiles =>
+      _localizedValues[localeCode]!['profiles'] ??
+      _localizedValues['en']!['profiles']!;
+  String get newProfile =>
+      _localizedValues[localeCode]!['new_profile'] ??
+      _localizedValues['en']!['new_profile']!;
+  String get createdProfile =>
+      _localizedValues[localeCode]!['created_profile'] ??
+      _localizedValues['en']!['created_profile']!;
+  String get updatedProfile =>
+      _localizedValues[localeCode]!['updated_profile'] ??
+      _localizedValues['en']!['updated_profile']!;
+  String get archivedProfile =>
+      _localizedValues[localeCode]!['archived_profile'] ??
+      _localizedValues['en']!['archived_profile']!;
+  String get deletedProfile =>
+      _localizedValues[localeCode]!['deleted_profile'] ??
+      _localizedValues['en']!['deleted_profile']!;
+  String get deletedAccount =>
+      _localizedValues[localeCode]!['deleted_account'] ??
+      _localizedValues['en']!['deleted_account']!;
+  String get restoredProfile =>
+      _localizedValues[localeCode]!['restored_profile'] ??
+      _localizedValues['en']!['restored_profile']!;
+  String get editProfile =>
+      _localizedValues[localeCode]!['edit_profile'] ??
+      _localizedValues['en']!['edit_profile']!;
+  String get searchProfile =>
+      _localizedValues[localeCode]!['search_profile'] ??
+      _localizedValues['en']!['search_profile']!;
+  String get searchProfiles =>
+      _localizedValues[localeCode]!['search_profiles'] ??
+      _localizedValues['en']!['search_profiles']!;
+
+  String get event =>
+      _localizedValues[localeCode]!['event'] ??
+      _localizedValues['en']!['event']!;
+  String get events =>
+      _localizedValues[localeCode]!['events'] ??
+      _localizedValues['en']!['events']!;
+  String get newEvent =>
+      _localizedValues[localeCode]!['new_event'] ??
+      _localizedValues['en']!['new_event']!;
+  String get createdEvent =>
+      _localizedValues[localeCode]!['created_event'] ??
+      _localizedValues['en']!['created_event']!;
+  String get updatedEvent =>
+      _localizedValues[localeCode]!['updated_event'] ??
+      _localizedValues['en']!['updated_event']!;
+  String get archivedEvent =>
+      _localizedValues[localeCode]!['archived_event'] ??
+      _localizedValues['en']!['archived_event']!;
+  String get deletedEvent =>
+      _localizedValues[localeCode]!['deleted_event'] ??
+      _localizedValues['en']!['deleted_event']!;
+  String get restoredEvent =>
+      _localizedValues[localeCode]!['restored_event'] ??
+      _localizedValues['en']!['restored_event']!;
+  String get editEvent =>
+      _localizedValues[localeCode]!['edit_event'] ??
+      _localizedValues['en']!['edit_event']!;
+  String get searchEvent =>
+      _localizedValues[localeCode]!['search_event'] ??
+      _localizedValues['en']!['search_event']!;
+  String get searchEvents =>
+      _localizedValues[localeCode]!['search_events'] ??
+      _localizedValues['en']!['search_events']!;
+
+  String get accessCode =>
+      _localizedValues[localeCode]!['accessCode'] ??
+      _localizedValues['en']!['accessCode']!;
+  String get callToAction =>
+      _localizedValues[localeCode]!['callToAction'] ??
+      _localizedValues['en']!['callToAction']!;
+  String get chk =>
+      _localizedValues[localeCode]!['chk'] ?? _localizedValues['en']!['chk']!;
+
+  String get end =>
+      _localizedValues[localeCode]!['end'] ?? _localizedValues['en']!['end']!;
+
+  String get eventSeriesId =>
+      _localizedValues[localeCode]!['eventSeriesId'] ??
+      _localizedValues['en']!['eventSeriesId']!;
+  String get hidden =>
+      _localizedValues[localeCode]!['hidden'] ??
+      _localizedValues['en']!['hidden']!;
+  String get onlineEvent =>
+      _localizedValues[localeCode]!['onlineEvent'] ??
+      _localizedValues['en']!['onlineEvent']!;
+  String get privateEvent =>
+      _localizedValues[localeCode]!['privateEvent'] ??
+      _localizedValues['en']!['privateEvent']!;
+
+  String get ticketsAvailable =>
+      _localizedValues[localeCode]!['ticketsAvailable'] ??
+      _localizedValues['en']!['ticketsAvailable']!;
+  String get totalHolds =>
+      _localizedValues[localeCode]!['totalHolds'] ??
+      _localizedValues['en']!['totalHolds']!;
+  String get totalIssuedTickets =>
+      _localizedValues[localeCode]!['totalIssuedTickets'] ??
+      _localizedValues['en']!['totalIssuedTickets']!;
+  String get totalOrders =>
+      _localizedValues[localeCode]!['totalOrders'] ??
+      _localizedValues['en']!['totalOrders']!;
+  String get unavailable =>
+      _localizedValues[localeCode]!['unavailable'] ??
+      _localizedValues['en']!['unavailable']!;
+  String get unavailableStatus =>
+      _localizedValues[localeCode]!['unavailableStatus'] ??
+      _localizedValues['en']!['unavailableStatus']!;
+  String get chat =>
+      _localizedValues[localeCode]!['chat'] ?? _localizedValues['en']!['chat']!;
+  String get chats =>
+      _localizedValues[localeCode]!['chats'] ??
+      _localizedValues['en']!['chats']!;
+  String get newChat =>
+      _localizedValues[localeCode]!['new_chat'] ??
+      _localizedValues['en']!['new_chat']!;
+  String get createdChat =>
+      _localizedValues[localeCode]!['created_chat'] ??
+      _localizedValues['en']!['created_chat']!;
+  String get updatedChat =>
+      _localizedValues[localeCode]!['updated_chat'] ??
+      _localizedValues['en']!['updated_chat']!;
+  String get archivedChat =>
+      _localizedValues[localeCode]!['archived_chat'] ??
+      _localizedValues['en']!['archived_chat']!;
+  String get deletedChat =>
+      _localizedValues[localeCode]!['deleted_chat'] ??
+      _localizedValues['en']!['deleted_chat']!;
+  String get restoredChat =>
+      _localizedValues[localeCode]!['restored_chat'] ??
+      _localizedValues['en']!['restored_chat']!;
+  String get editChat =>
+      _localizedValues[localeCode]!['edit_chat'] ??
+      _localizedValues['en']!['edit_chat']!;
+  String get searchChat =>
+      _localizedValues[localeCode]!['search_chat'] ??
+      _localizedValues['en']!['search_chat']!;
+  String get searchChats =>
+      _localizedValues[localeCode]!['search_chats'] ??
+      _localizedValues['en']!['search_chats']!;
+
+  String lookup(String? key, {String? overrideLocaleCode}) {
+    final lookupKey = toSnakeCase(key);
+
+    if ((key ?? '').isEmpty) {
+      return '';
+    }
+
+    if (lookupKey.startsWith('_')) {
+      return key ?? '';
+    }
+
+    final value =
+        _localizedValues[overrideLocaleCode ?? localeCode]![lookupKey] ??
+            _localizedValues[localeCode]![lookupKey.replaceFirst('_id', '')] ??
+            '';
+
+    if (value.isEmpty) {
+      logError('localization key not found - $key');
+
+      final englishValue = _localizedValues['en']![lookupKey] ?? '';
+
+      return englishValue.isEmpty ? (key ?? '') : englishValue;
+    }
+
+    return value;
+  }
+}

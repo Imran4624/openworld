@@ -1,0 +1,157 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_boilerplate/data/models/models.dart';
+import 'package:flutter_boilerplate/redux/app/app_actions.dart';
+import 'package:flutter_boilerplate/redux/app/app_state.dart';
+import 'package:flutter_boilerplate/redux/workout/workout_actions.dart';
+import 'package:flutter_boilerplate/ui/app/app_bottom_bar.dart';
+import 'package:flutter_boilerplate/ui/app/list_scaffold.dart';
+import 'package:flutter_boilerplate/ui/app/list_filter.dart';
+import 'package:flutter_boilerplate/ui/workout/workout_list_vm.dart';
+import 'package:flutter_boilerplate/ui/workout/workout_presenter.dart';
+import 'package:flutter_boilerplate/utils/localization.dart';
+
+import 'workout_screen_vm.dart';
+
+class WorkoutScreen extends StatelessWidget {
+  const WorkoutScreen({
+    Key? key,
+    required this.viewModel,
+  }) : super(key: key);
+
+  static const String route = '/workout';
+
+  final WorkoutScreenVM viewModel;
+
+  @override
+  Widget build(BuildContext context) {
+    final store = StoreProvider.of<AppState>(context);
+    final state = store.state;
+    final userCompany = state.userCompany;
+    final localization = AppLocalization.of(context)!;
+
+    return ListScaffold(
+      entityType: EntityType.workout,
+      onHamburgerLongPress: () => store.dispatch(StartWorkoutMultiselect()),
+      appBarTitle: ListFilter(
+        key: ValueKey('__filter_${state.workoutListState.filterClearedAt}__'),
+        entityType: EntityType.workout,
+        entityIds: viewModel.workoutList,
+         filter: state.workoutState.filter.searchTerm,
+        onFilterChanged: (value) {
+          store.dispatch(FilterWorkouts(value!));
+          store.dispatch(UpdateWorkoutFilter(
+            state.workoutState.filter.rebuild((b) => b
+              ..searchTerm = value ?? ''
+            ),
+          ));
+        },
+        onSelectedState: (EntityState filterState, bool? value) {
+          
+          store.dispatch(FilterWorkoutsByState(filterState));
+          if (value ?? false) {
+            store.dispatch(UpdateWorkoutFilter(
+              state.workoutState.filter.rebuild((b) => b
+                ..stateFilter = filterState
+              ),
+            ));
+          }
+          // print('workoutFilter state ==> ${state.workoutState}');
+        },
+        selectedStateFilter: state.workoutState.filter.stateFilter,
+      ),
+      onCheckboxPressed: () {
+        if (store.state.workoutListState.isInMultiselect()) {
+          store.dispatch(ClearWorkoutMultiselect());
+        } else {
+          store.dispatch(StartWorkoutMultiselect());
+        }
+      },
+      body: WorkoutListBuilder(),
+      bottomNavigationBar: AppBottomBar(
+        entityType: EntityType.workout,
+        tableColumns: WorkoutPresenter.getAllTableFields(userCompany),
+        defaultTableColumns: WorkoutPresenter.getDefaultTableFields(userCompany),
+        onSelectedSortField: (field) {
+          final ascending = state.workoutState.filter.sortField == field 
+              ? !state.workoutState.filter.sortAscending 
+              : true;
+          store.dispatch(UpdateWorkoutFilter(
+            state.workoutState.filter.rebuild((b) => b
+              ..sortField = field
+              ..sortAscending = ascending
+            ),
+          ));
+        },
+        sortFields: [
+          // STARTER: constant fields - do not remove comment
+WorkoutFields.type,
+
+WorkoutFields.startTime,
+
+WorkoutFields.endTime,
+
+WorkoutFields.duration,
+
+WorkoutFields.distance,
+
+WorkoutFields.averagePace,
+
+WorkoutFields.caloriesBurned,
+
+WorkoutFields.elevationGain,
+
+        ],
+         onSelectedState: (EntityState filterState, bool? value) {
+          store.dispatch(FilterWorkoutsByState(filterState));
+          if (value ?? false) {
+            store.dispatch(UpdateWorkoutFilter(
+              state.workoutState.filter.rebuild((b) => b
+                ..stateFilter = filterState
+              ),
+            ));
+          }
+        },
+        onCheckboxPressed: () {
+          if (store.state.workoutListState.isInMultiselect()) {
+            store.dispatch(ClearWorkoutMultiselect());
+          } else {
+            store.dispatch(StartWorkoutMultiselect());
+          }
+        },
+        // // customValues1: userCompany.getCustomFieldValues(CustomFieldType.workout1,
+        // //     excludeBlank: true),
+        // // customValues2: userCompany.getCustomFieldValues(CustomFieldType.workout2,
+        // //     excludeBlank: true),
+        // // customValues3: userCompany.getCustomFieldValues(CustomFieldType.workout3,
+        // //     excludeBlank: true),
+        // // customValues4: userCompany.getCustomFieldValues(CustomFieldType.workout4,
+        //     excludeBlank: true),
+        // onSelectedCustom1: (value) =>
+        //     store.dispatch(FilterWorkoutsByCustom1(value)),
+        // onSelectedCustom2: (value) =>
+        //     store.dispatch(FilterWorkoutsByCustom2(value)),
+        // onSelectedCustom3: (value) =>
+        //     store.dispatch(FilterWorkoutsByCustom3(value)),
+        // onSelectedCustom4: (value) =>
+        //     store.dispatch(FilterWorkoutsByCustom4(value)),
+      ),
+      floatingActionButton: state.prefState.isMenuFloated &&
+              userCompany.canCreate(EntityType.workout)
+          ? FloatingActionButton(
+              heroTag: 'workout_fab',
+              backgroundColor: Theme.of(context).primaryColorDark,
+              onPressed: () {
+                createEntityByType(
+                    context: context, entityType: EntityType.workout);
+              },
+              child: Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+              tooltip: localization.newWorkout,
+            )
+          : null,
+    );
+  }
+}

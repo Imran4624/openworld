@@ -1,0 +1,259 @@
+import 'package:redux/redux.dart';
+import 'package:built_collection/built_collection.dart';
+import 'package:flutter_boilerplate/redux/app/app_actions.dart';
+import 'package:flutter_boilerplate/data/models/models.dart';
+import 'package:flutter_boilerplate/redux/company/company_actions.dart';
+import 'package:flutter_boilerplate/redux/ui/entity_ui_state.dart';
+import 'package:flutter_boilerplate/redux/payment/payment_actions.dart';
+import 'package:flutter_boilerplate/redux/ui/list_ui_state.dart';
+import 'package:flutter_boilerplate/redux/payment/payment_state.dart';
+
+EntityUIState paymentUIReducer(StubUIState state, dynamic action) {
+  return state.rebuild((b) => b
+    ..listUIState.replace(paymentListReducer(state.listUIState, action))
+    ..editing.replace(editingReducer(state.editing, action)!)
+    ..selectedId = selectedIdReducer(state.selectedId, action)
+    ..forceSelected = forceSelectedReducer(state.forceSelected, action)
+    ..tabIndex = tabIndexReducer(state.tabIndex, action)
+  );
+}
+
+final forceSelectedReducer = combineReducers<bool?>([
+  TypedReducer<bool?, ViewStub>((completer, action) => true),
+  TypedReducer<bool?, ViewStubList>((completer, action) => false),
+  TypedReducer<bool?, FilterStubsByState>((completer, action) => false),
+  TypedReducer<bool?, FilterStubs>((completer, action) => false),
+]);
+
+final tabIndexReducer = combineReducers<int?>([
+  TypedReducer<int?, UpdateStubTab>((completer, action) => action.tabIndex),
+  TypedReducer<int?, PreviewEntity>((completer, action) => 0),
+]);
+
+Reducer<String?> selectedIdReducer = combineReducers([
+  TypedReducer<String?, ArchiveStubsSuccess>((completer, action) => ''),
+  TypedReducer<String?, DeleteStubsSuccess>((completer, action) => ''),
+  TypedReducer<String?, PurgeStubsSuccess>((completer, action) => ''),
+  TypedReducer<String?, PreviewEntity>((selectedId, action) =>
+      action.entityType == EntityType.payment ? action.entityId : selectedId),
+  TypedReducer<String?, ViewStub>(
+      (String? selectedId, dynamic action) => action.paymentId),
+  TypedReducer<String?, AddStubSuccess>(
+      (String? selectedId, dynamic action) => action.payment.id),
+  TypedReducer<String?, SelectCompany>(
+      (selectedId, action) => action.clearSelection ? '' : selectedId),
+  TypedReducer<String?, ClearEntityFilter>((selectedId, action) => ''),
+  TypedReducer<String?, SortStubs>((selectedId, action) => ''),
+  TypedReducer<String?, FilterStubs>((selectedId, action) => ''),
+  TypedReducer<String?, FilterStubsByState>((selectedId, action) => ''),
+  TypedReducer<String?, FilterByEntity>((selectedId, action) =>
+      action.clearSelection
+          ? ''
+          : action.entityType == EntityType.payment ? action.entityId : selectedId),
+]);
+
+final editingReducer = combineReducers<StubEntity?>([
+  TypedReducer<StubEntity?, SaveStubSuccess>(_updateEditing),
+  TypedReducer<StubEntity?, AddStubSuccess>(_updateEditing),
+  TypedReducer<StubEntity?, RestoreStubsSuccess>((payments, action) {
+    return action.payments[0];
+  }),
+  TypedReducer<StubEntity?, ArchiveStubsSuccess>((payments, action) {
+    return action.payments[0];
+  }),
+  TypedReducer<StubEntity?, DeleteStubsSuccess>((payments, action) {
+    return action.payments[0];
+  }),
+  TypedReducer<StubEntity?, PurgeStubsSuccess>((payments, action) {
+    return action.payments[0];
+  }),
+  TypedReducer<StubEntity?, EditStub>(_updateEditing),
+  TypedReducer<StubEntity?, UpdateStub>((payment, action) {
+    return action.payment.rebuild((b) => b..isChanged = true);
+  }),
+  TypedReducer<StubEntity?, DiscardChanges>(_clearEditing),
+]);
+
+StubEntity _clearEditing(StubEntity? payment, dynamic action) {
+  return StubEntity();
+}
+
+StubEntity? _updateEditing(StubEntity? payment, dynamic action) {
+  return action.payment;
+}
+
+final paymentListReducer = combineReducers<ListUIState>([
+  TypedReducer<ListUIState, SortStubs>(_sortStubs),
+  TypedReducer<ListUIState, FilterStubsByState>(_filterStubsByState),
+  TypedReducer<ListUIState, FilterStubs>(_filterStubs),
+  TypedReducer<ListUIState, StartStubMultiselect>(_startListMultiselect),
+  TypedReducer<ListUIState, AddToStubMultiselect>(_addToListMultiselect),
+  TypedReducer<ListUIState, RemoveFromStubMultiselect>(_removeFromListMultiselect),
+  TypedReducer<ListUIState, ClearStubMultiselect>(_clearListMultiselect),
+  TypedReducer<ListUIState, ViewStubList>(_viewStubList),
+  TypedReducer<ListUIState, FilterByEntity>((state, action) => state.rebuild(
+        (b) => b
+          ..filter = null
+          ..filterClearedAt = DateTime.now().millisecondsSinceEpoch,
+      )),
+]);
+
+ListUIState _viewStubList(ListUIState paymentListState, ViewStubList action) {
+  return paymentListState.rebuild((b) => b
+    ..selectedIds = null
+    ..filter = null
+    ..filterClearedAt = DateTime.now().millisecondsSinceEpoch);
+}
+
+ListUIState _filterStubsByState(
+    ListUIState paymentListState, FilterStubsByState action) {
+  if (paymentListState.stateFilters.contains(action.state)) {
+    return paymentListState
+        .rebuild((b) => b
+          ..stateFilters.clear()
+          ..stateFilters.add(EntityState.active));
+  } else {
+    return paymentListState
+        .rebuild((b) => b
+          ..stateFilters.clear()
+          ..stateFilters.add(action.state));
+  }
+}
+
+ListUIState _filterStubs(ListUIState paymentListState, FilterStubs action) {
+  return paymentListState.rebuild((b) => b
+    ..filter = action.filter
+    ..filterClearedAt = action.filter == null
+        ? DateTime.now().millisecondsSinceEpoch
+        : paymentListState.filterClearedAt);
+}
+
+ListUIState _sortStubs(ListUIState paymentListState, SortStubs action) {
+  return paymentListState.rebuild((b) => b
+    ..sortAscending = b.sortField != action.field || !b.sortAscending!
+    ..sortField = action.field);
+}
+
+ListUIState _startListMultiselect(
+    ListUIState productListState, StartStubMultiselect action) {
+  return productListState.rebuild((b) => b..selectedIds = ListBuilder());
+}
+
+ListUIState _addToListMultiselect(
+    ListUIState productListState, AddToStubMultiselect action) {
+  return productListState.rebuild((b) => b..selectedIds.add(action.entity.id));
+}
+
+ListUIState _removeFromListMultiselect(
+    ListUIState productListState, RemoveFromStubMultiselect action) {
+  return productListState.rebuild((b) => b..selectedIds.remove(action.entity.id));
+}
+
+ListUIState _clearListMultiselect(
+    ListUIState productListState, ClearStubMultiselect action) {
+  return productListState.rebuild((b) => b..selectedIds = null);
+}
+
+final paymentsReducer = combineReducers<StubState>([
+  TypedReducer<StubState, SaveStubSuccess>(_updateStub),
+  TypedReducer<StubState, AddStubSuccess>(_addStub),
+  TypedReducer<StubState, LoadStubsSuccess>(_setLoadedStubs),
+  TypedReducer<StubState, LoadStubSuccess>(_setLoadedStub),
+  TypedReducer<StubState, UpdateLastDocumentAction>(_updateLastDocument),
+  TypedReducer<StubState, UpdateStubFilter>(_updateStubFilter),
+  // TypedReducer<StubState, LoadCompanySuccess>(_setLoadedCompany), //uncomment this if you its dependant on selected company
+  TypedReducer<StubState, ArchiveStubsSuccess>(_archiveStubSuccess),
+  TypedReducer<StubState, DeleteStubsSuccess>(_deleteStubSuccess),
+  TypedReducer<StubState, PurgeStubsSuccess>(_purgeStubSuccess),
+  TypedReducer<StubState, RestoreStubsSuccess>(_restoreStubSuccess),
+]);
+
+StubState _archiveStubSuccess(
+    StubState paymentState, ArchiveStubsSuccess action) {
+  final int currentTime = DateTime.now().millisecondsSinceEpoch;
+  return paymentState.rebuild((b) {
+    for (final payment in action.payments) {
+      b.map[payment.id] = paymentState.map[payment.id]!.rebuild((b) => b
+        ..archivedAt = currentTime);
+    }
+  });
+}
+
+StubState _updateStubFilter(
+    StubState paymentState, UpdateStubFilter action) {
+  return paymentState.rebuild((b) => b..filter = action.filter.toBuilder());
+}
+
+// StubState _deleteStubSuccess(StubState paymentState, DeleteStubsSuccess action) {
+//   return paymentState.rebuild((b) {
+//     for (final payment in action.payments) {
+//       b.map[payment.id] = payment;
+//     }
+//   });
+// } 
+
+StubState _deleteStubSuccess(
+    StubState paymentState, DeleteStubsSuccess action) {
+  return paymentState.rebuild((b) {
+    for (final payment in action.payments) {
+      b.map[payment.id] = paymentState.map[payment.id]!.rebuild((b) => b
+        ..isDeleted = true);
+    }
+  });
+}
+
+StubState _purgeStubSuccess(
+    StubState paymentState, PurgeStubsSuccess action) {
+  return paymentState.rebuild((b) {
+    for (final payment in action.payments) {
+      b.map.remove(payment.id);
+      b.list.remove(payment.id);
+    }
+  });
+}
+
+StubState _restoreStubSuccess(
+    StubState paymentState, RestoreStubsSuccess action) {
+  return paymentState.rebuild((b) {
+    for (final payment in action.payments) {
+      b.map[payment.id] = paymentState.map[payment.id]!.rebuild((b) => b
+        ..isDeleted = false
+        ..archivedAt = 0);
+    }
+  });
+}
+
+StubState _addStub(StubState paymentState, AddStubSuccess action) {
+  return paymentState.rebuild((b) => b
+    ..map[action.payment.id] = action.payment
+    ..list.add(action.payment.id));
+}
+
+StubState _updateStub(StubState paymentState, SaveStubSuccess action) {
+  return paymentState.rebuild((b) => b..map[action.payment.id] = action.payment);
+}
+StubState _updateLastDocument(
+    StubState paymentState, UpdateLastDocumentAction action) {
+  return paymentState.rebuild((b) => b..lastDocument = action.lastDocument);
+}
+
+StubState _setLoadedStub(StubState paymentState, LoadStubSuccess action) {
+  return paymentState.rebuild((b) => b..map[action.payment.id] = action.payment);
+}
+
+StubState _setLoadedStubs(
+    StubState paymentState, LoadStubsSuccess action) {
+  return paymentState.rebuild((b) {
+    action.payments.forEach((payment) {
+      b.map[payment.id] = payment;
+      if (!b.list.build().contains(payment.id)) {
+        b.list.add(payment.id);
+      }
+    });
+  });
+}
+
+// StubState _setLoadedCompany(StubState paymentState, LoadCompanySuccess action) {
+//   final company = action.userCompany.company;
+//   return paymentState.loadStubs(company.payments);
+// }

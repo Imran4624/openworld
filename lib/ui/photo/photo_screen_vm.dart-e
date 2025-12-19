@@ -1,0 +1,62 @@
+import 'package:built_collection/built_collection.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_boilerplate/data/models/models.dart';
+import 'package:flutter_boilerplate/redux/app/app_state.dart';
+import 'package:flutter_boilerplate/redux/photo/photo_actions.dart';
+import 'package:flutter_boilerplate/redux/photo/photo_selectors.dart';
+import 'package:redux/redux.dart';
+
+import 'photo_screen.dart';
+
+class StubScreenBuilder extends StatelessWidget {
+  const StubScreenBuilder({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StoreConnector<AppState, StubScreenVM>(
+      converter: StubScreenVM.fromStore,
+      builder: (context, vm) {
+        return StubScreen(
+          viewModel: vm,
+        );
+      },
+    );
+  }
+}
+
+class StubScreenVM {
+  StubScreenVM({
+    required this.isInMultiselect,
+    required this.photoList,
+    required this.userCompany,
+    required this.onEntityAction,
+    required this.photoMap,
+  });
+
+  final bool isInMultiselect;
+  final UserCompanyEntity userCompany;
+  final List<String> photoList;
+  final Function(BuildContext, List<BaseEntity>, EntityAction) onEntityAction;
+  final BuiltMap<String, StubEntity> photoMap;
+
+  static StubScreenVM fromStore(Store<AppState> store) {
+    final state = store.state;
+
+    return StubScreenVM(
+      photoMap: state.photoState.map,
+      photoList: memoizedFilteredStubList(
+        state.getUISelection(EntityType.photo),
+        state.photoState.map,
+        state.photoState.list,
+        state.photoListState,
+      ),
+      userCompany: state.userCompany,
+      isInMultiselect: state.photoListState.isInMultiselect(),
+      onEntityAction: (BuildContext context, List<BaseEntity> photos,
+              EntityAction action) =>
+          handleStubAction(context, photos, action),
+    );
+  }
+}

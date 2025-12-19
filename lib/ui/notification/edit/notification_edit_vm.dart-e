@@ -1,0 +1,113 @@
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_boilerplate/redux/app/app_actions.dart';
+import 'package:flutter_boilerplate/redux/ui/ui_actions.dart';
+import 'package:redux/redux.dart';
+import 'package:flutter_boilerplate/utils/completers.dart';
+import 'package:flutter_boilerplate/data/models/models.dart';
+import 'package:flutter_boilerplate/ui/app/dialogs/error_dialog.dart';
+import 'package:flutter_boilerplate/ui/notification/view/notification_view_vm.dart';
+import 'package:flutter_boilerplate/redux/notification/notification_actions.dart';
+import 'package:flutter_boilerplate/ui/notification/edit/notification_edit.dart';
+import 'package:flutter_boilerplate/redux/app/app_state.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:flutter_boilerplate/utils/localization.dart';
+
+class StubEditScreen extends StatelessWidget {
+  const StubEditScreen({Key? key}) : super(key: key);
+  static const String route = '/notification/edit';
+
+  @override
+  Widget build(BuildContext context) {
+    return StoreConnector<AppState, StubEditVM>(
+      converter: (Store<AppState> store) {
+        return StubEditVM.fromStore(store);
+      },
+      builder: (context, viewModel) {
+        return StubEdit(
+          viewModel: viewModel,
+          key: ValueKey(viewModel.notification.updatedAt),
+        );
+      },
+    );
+  }
+}
+
+class StubEditVM {
+  StubEditVM({
+    required this.state,
+    required this.notification,
+    this.company,
+    required this.onChanged,
+    required this.isSaving,
+    this.origStub,
+    required this.onSavePressed,
+    required this.onCancelPressed,
+    required this.isLoading,
+  });
+
+  factory StubEditVM.fromStore(Store<AppState> store) {
+    final state = store.state;
+    final notification = state.notificationUIState.editing;
+
+    return StubEditVM(
+      state: state,
+      isLoading: state.isLoading,
+      isSaving: state.isSaving,
+      origStub: state.notificationState.map[notification!.id],
+      notification: notification,
+      company: state.company,
+      onChanged: (StubEntity notification) {
+        store.dispatch(UpdateStub(notification));
+      },
+      onCancelPressed: (BuildContext context) {
+        createEntity(entity: StubEntity(), force: true);
+        if (state.notificationUIState.cancelCompleter != null) {
+          state.notificationUIState.cancelCompleter!.complete();
+        } else {
+          store.dispatch(UpdateCurrentRoute(state.uiState.previousRoute));
+        }
+      },
+      onSavePressed: (BuildContext context) {
+        Debouncer.runOnComplete(() {
+          final notification = store.state.notificationUIState.editing!;
+          final localization = AppLocalization.of(context)!;
+          final Completer<StubEntity> completer = Completer<StubEntity>();
+          store.dispatch(SaveStubRequest(completer: completer, notification: notification));
+          return completer.future.then((savedStub) {
+            showToast(notification.isNew
+                ? localization.createdStub
+                : localization.updatedStub);
+            if (state.prefState.isMobile) {
+              store.dispatch(UpdateCurrentRoute(StubViewScreen.route));
+              if (notification.isNew) {
+                Navigator.of(context).pushReplacementNamed(StubViewScreen.route);
+              } else {
+                Navigator.of(context).pop(savedStub);
+              }
+            } else {
+              viewEntity(entity: savedStub, force: true);
+            }
+          }).catchError((Object error) {
+            showDialog<ErrorDialog>(
+                context: context,
+                builder: (BuildContext context) {
+                  return ErrorDialog(error);
+                });
+          });
+        });
+      },
+    );
+  }
+
+  final StubEntity notification;
+  final CompanyEntity? company;
+  final Function(StubEntity) onChanged;
+  final Function(BuildContext) onSavePressed;
+  final Function(BuildContext) onCancelPressed;
+  final bool isLoading;
+  final bool isSaving;
+  final StubEntity? origStub;
+  final AppState state;
+}

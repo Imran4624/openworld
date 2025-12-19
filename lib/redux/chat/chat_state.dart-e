@@ -1,0 +1,82 @@
+import 'dart:async';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
+import 'package:built_collection/built_collection.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_boilerplate/redux/ui/entity_ui_state.dart';
+import 'package:flutter_boilerplate/redux/ui/list_ui_state.dart';
+import 'package:flutter_boilerplate/data/models/models.dart';
+import 'package:flutter_boilerplate/redux/ui/pref_state.dart';
+
+part 'chat_state.g.dart';
+
+abstract class ChatState implements Built<ChatState, ChatStateBuilder> {
+  factory ChatState() {
+    return _$ChatState._(
+      map: BuiltMap<String, ChatEntity>(),
+      list: BuiltList<String>(),
+      lastDocument: null,
+      filter: ChatFilter(),
+    );
+  }
+  ChatState._();
+
+  @override
+  @memoized
+  int get hashCode;
+
+  BuiltMap<String, ChatEntity> get map;
+  BuiltList<String> get list;
+
+  DocumentSnapshot? get lastDocument;
+  ChatFilter get filter;
+
+  ChatEntity get(String chatId) {
+    return map[chatId] ?? ChatEntity(id: chatId);
+  }
+
+  ChatState loadChats(BuiltList<ChatEntity> clients) {
+    final map = Map<String, ChatEntity>.fromIterable(
+      clients,
+      key: (dynamic item) => item.id,
+      value: (dynamic item) => item,
+    );
+
+    return rebuild((b) => b
+      ..map.addAll(map)
+      ..list.replace((map.keys.toList() + list.toList()).toSet().toList()));
+  }
+
+  static Serializer<ChatState> get serializer => _$chatStateSerializer;
+}
+
+abstract class ChatUIState extends Object
+    with EntityUIState
+    implements Built<ChatUIState, ChatUIStateBuilder> {
+  factory ChatUIState(PrefStateSortField? sortField) {
+    return _$ChatUIState._(
+      listUIState: ListUIState(
+        // STARTER: primary field - do not remove comment
+        sortAscending: sortField?.ascending,
+      ),
+      editing: ChatEntity(),
+      selectedId: '',
+      tabIndex: 0,
+    );
+  }
+  ChatUIState._();
+
+  @override
+  @memoized
+  int get hashCode;
+
+  ChatEntity? get editing;
+
+  @override
+  bool get isCreatingNew => editing?.isNew ?? false;
+
+  @override
+  String get editingId => editing?.id ?? '';
+
+  static Serializer<ChatUIState> get serializer => _$chatUIStateSerializer;
+}

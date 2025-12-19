@@ -1,0 +1,136 @@
+import 'dart:async';
+import 'package:flutter_boilerplate/constants.dart';
+import 'package:flutter_boilerplate/ui/app/tables/entity_list.dart';
+import 'package:flutter_boilerplate/ui/chat/chat_list_item.dart';
+import 'package:flutter_boilerplate/ui/chat/chat_presenter.dart';
+import 'package:redux/redux.dart';
+import 'package:flutter_boilerplate/redux/app/app_actions.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:built_collection/built_collection.dart';
+import 'package:flutter_boilerplate/redux/ui/list_ui_state.dart';
+import 'package:flutter_boilerplate/utils/completers.dart';
+import 'package:flutter_boilerplate/utils/localization.dart';
+import 'package:flutter_boilerplate/redux/chat/chat_selectors.dart';
+import 'package:flutter_boilerplate/data/models/models.dart';
+import 'package:flutter_boilerplate/redux/app/app_state.dart';
+import 'package:flutter_boilerplate/redux/chat/chat_actions.dart';
+
+class StubListBuilder extends StatelessWidget {
+  const StubListBuilder({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StoreConnector<AppState, StubListVM>(
+      converter: StubListVM.fromStore,
+      builder: (context, viewModel) {
+        return EntityList(
+          entityType: EntityType.chat,
+          presenter: StubPresenter(),
+          state: viewModel.state,
+          entityList: viewModel.chatList,
+          tableColumns: viewModel.tableColumns,
+          onRefreshed: viewModel.onRefreshed,
+          onSortColumn: viewModel.onSortColumn,
+          viewType: ViewType.list,
+          onClearMultiselect: viewModel.onClearMultiselect,
+          itemBuilder: (BuildContext context, index) {
+            final state = viewModel.state;
+            final chatId = viewModel.chatList[index];
+            final chat = viewModel.chatMap[chatId]!;
+            final listState = state.getListState(EntityType.chat);
+            final isInMultiselect = listState.isInMultiselect();
+
+            return StubListItem(
+              user: viewModel.state.user,
+              filter: viewModel.filter,
+              chat: chat,
+              isChecked: isInMultiselect && listState.isSelected(chat.id),
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+class StubListVM {
+  StubListVM({
+    required this.state,
+    required this.userCompany,
+    required this.chatList,
+    required this.chatMap,
+    required this.filter,
+    required this.isLoading,
+    required this.listState,
+    required this.onRefreshed,
+    required this.onEntityAction,
+    required this.tableColumns,
+    required this.onSortColumn,
+    required this.onClearMultiselect,
+  });
+
+  static StubListVM fromStore(Store<AppState> store) {
+    Future<void> _handleRefresh(BuildContext context) {
+     
+      if (store.state.isLoading) {
+        return Future<void>.value();
+      }
+      
+      final completer = Completer<void>();
+
+      store.dispatch(LoadStubs(
+        completer: completer,
+        filter: store.state.chatState.filter
+      ));
+
+      return completer.future;
+    }
+
+    final state = store.state;
+
+    return StubListVM(
+      state: state,
+      userCompany: state.userCompany,
+      listState: state.chatListState,
+      chatList: memoizedFilteredStubList(
+        state.getUISelection(EntityType.chat),
+        state.chatState.map,
+        state.chatState.list,
+        state.chatListState,
+      ),
+      chatMap: state.chatState.map,
+      isLoading: state.isLoading,
+      filter: state.chatState.filter.searchTerm,
+      onEntityAction: (BuildContext context, List<BaseEntity> chats,
+              EntityAction action) =>
+          handleStubAction(context, chats, action),
+      onRefreshed: (context) => _handleRefresh(context),
+      tableColumns: state.userCompany.settings?.getTableColumns(EntityType.chat) ??
+          StubPresenter.getDefaultTableFields(state.userCompany),
+      onSortColumn: (field) => store.dispatch(UpdateStubFilter(
+        state.chatState.filter.rebuild((b) => b
+          ..sortField = field
+          ..sortAscending = state.chatState.filter.sortField == field
+              ? !state.chatState.filter.sortAscending
+              : true
+        ),
+      )),
+      onClearMultiselect: () => store.dispatch(ClearStubMultiselect()),
+    );
+  }
+
+  final AppState state;
+  final UserCompanyEntity userCompany;
+  final List<String> chatList;
+  final BuiltMap<String, StubEntity> chatMap;
+  final ListUIState listState;
+  final String? filter;
+  final bool isLoading;
+  final Function(BuildContext) onRefreshed;
+  final Function(BuildContext, List<BaseEntity>, EntityAction) onEntityAction;
+  final List<String> tableColumns;
+  final Function(String) onSortColumn;
+  final Function onClearMultiselect;
+}

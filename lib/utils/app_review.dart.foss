@@ -1,0 +1,12 @@
+import 'package:flutter_boilerplate/main_app.dart';
+import 'package:flutter_boilerplate/utils/platforms.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+class AppReview {
+  static Future<bool> isAvailable() async => false;
+
+  static void requestReview() => null;
+
+  static void openStoreListing() => launchUrl(
+      Uri.dataFromString(getRateAppURL(navigatorKey.currentContext!)));
+}

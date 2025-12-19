@@ -1,0 +1,259 @@
+import 'package:redux/redux.dart';
+import 'package:built_collection/built_collection.dart';
+import 'package:flutter_boilerplate/redux/app/app_actions.dart';
+import 'package:flutter_boilerplate/data/models/models.dart';
+import 'package:flutter_boilerplate/redux/company/company_actions.dart';
+import 'package:flutter_boilerplate/redux/ui/entity_ui_state.dart';
+import 'package:flutter_boilerplate/redux/profile/profile_actions.dart';
+import 'package:flutter_boilerplate/redux/ui/list_ui_state.dart';
+import 'package:flutter_boilerplate/redux/profile/profile_state.dart';
+
+EntityUIState profileUIReducer(StubUIState state, dynamic action) {
+  return state.rebuild((b) => b
+    ..listUIState.replace(profileListReducer(state.listUIState, action))
+    ..editing.replace(editingReducer(state.editing, action)!)
+    ..selectedId = selectedIdReducer(state.selectedId, action)
+    ..forceSelected = forceSelectedReducer(state.forceSelected, action)
+    ..tabIndex = tabIndexReducer(state.tabIndex, action)
+  );
+}
+
+final forceSelectedReducer = combineReducers<bool?>([
+  TypedReducer<bool?, ViewStub>((completer, action) => true),
+  TypedReducer<bool?, ViewStubList>((completer, action) => false),
+  TypedReducer<bool?, FilterStubsByState>((completer, action) => false),
+  TypedReducer<bool?, FilterStubs>((completer, action) => false),
+]);
+
+final tabIndexReducer = combineReducers<int?>([
+  TypedReducer<int?, UpdateStubTab>((completer, action) => action.tabIndex),
+  TypedReducer<int?, PreviewEntity>((completer, action) => 0),
+]);
+
+Reducer<String?> selectedIdReducer = combineReducers([
+  TypedReducer<String?, ArchiveStubsSuccess>((completer, action) => ''),
+  TypedReducer<String?, DeleteStubsSuccess>((completer, action) => ''),
+  TypedReducer<String?, PurgeStubsSuccess>((completer, action) => ''),
+  TypedReducer<String?, PreviewEntity>((selectedId, action) =>
+      action.entityType == EntityType.profile ? action.entityId : selectedId),
+  TypedReducer<String?, ViewStub>(
+      (String? selectedId, dynamic action) => action.profileId),
+  TypedReducer<String?, AddStubSuccess>(
+      (String? selectedId, dynamic action) => action.profile.id),
+  TypedReducer<String?, SelectCompany>(
+      (selectedId, action) => action.clearSelection ? '' : selectedId),
+  TypedReducer<String?, ClearEntityFilter>((selectedId, action) => ''),
+  TypedReducer<String?, SortStubs>((selectedId, action) => ''),
+  TypedReducer<String?, FilterStubs>((selectedId, action) => ''),
+  TypedReducer<String?, FilterStubsByState>((selectedId, action) => ''),
+  TypedReducer<String?, FilterByEntity>((selectedId, action) =>
+      action.clearSelection
+          ? ''
+          : action.entityType == EntityType.profile ? action.entityId : selectedId),
+]);
+
+final editingReducer = combineReducers<StubEntity?>([
+  TypedReducer<StubEntity?, SaveStubSuccess>(_updateEditing),
+  TypedReducer<StubEntity?, AddStubSuccess>(_updateEditing),
+  TypedReducer<StubEntity?, RestoreStubsSuccess>((profiles, action) {
+    return action.profiles[0];
+  }),
+  TypedReducer<StubEntity?, ArchiveStubsSuccess>((profiles, action) {
+    return action.profiles[0];
+  }),
+  TypedReducer<StubEntity?, DeleteStubsSuccess>((profiles, action) {
+    return action.profiles[0];
+  }),
+  TypedReducer<StubEntity?, PurgeStubsSuccess>((profiles, action) {
+    return action.profiles[0];
+  }),
+  TypedReducer<StubEntity?, EditStub>(_updateEditing),
+  TypedReducer<StubEntity?, UpdateStub>((profile, action) {
+    return action.profile.rebuild((b) => b..isChanged = true);
+  }),
+  TypedReducer<StubEntity?, DiscardChanges>(_clearEditing),
+]);
+
+StubEntity _clearEditing(StubEntity? profile, dynamic action) {
+  return StubEntity();
+}
+
+StubEntity? _updateEditing(StubEntity? profile, dynamic action) {
+  return action.profile;
+}
+
+final profileListReducer = combineReducers<ListUIState>([
+  TypedReducer<ListUIState, SortStubs>(_sortStubs),
+  TypedReducer<ListUIState, FilterStubsByState>(_filterStubsByState),
+  TypedReducer<ListUIState, FilterStubs>(_filterStubs),
+  TypedReducer<ListUIState, StartStubMultiselect>(_startListMultiselect),
+  TypedReducer<ListUIState, AddToStubMultiselect>(_addToListMultiselect),
+  TypedReducer<ListUIState, RemoveFromStubMultiselect>(_removeFromListMultiselect),
+  TypedReducer<ListUIState, ClearStubMultiselect>(_clearListMultiselect),
+  TypedReducer<ListUIState, ViewStubList>(_viewStubList),
+  TypedReducer<ListUIState, FilterByEntity>((state, action) => state.rebuild(
+        (b) => b
+          ..filter = null
+          ..filterClearedAt = DateTime.now().millisecondsSinceEpoch,
+      )),
+]);
+
+ListUIState _viewStubList(ListUIState profileListState, ViewStubList action) {
+  return profileListState.rebuild((b) => b
+    ..selectedIds = null
+    ..filter = null
+    ..filterClearedAt = DateTime.now().millisecondsSinceEpoch);
+}
+
+ListUIState _filterStubsByState(
+    ListUIState profileListState, FilterStubsByState action) {
+  if (profileListState.stateFilters.contains(action.state)) {
+    return profileListState
+        .rebuild((b) => b
+          ..stateFilters.clear()
+          ..stateFilters.add(EntityState.active));
+  } else {
+    return profileListState
+        .rebuild((b) => b
+          ..stateFilters.clear()
+          ..stateFilters.add(action.state));
+  }
+}
+
+ListUIState _filterStubs(ListUIState profileListState, FilterStubs action) {
+  return profileListState.rebuild((b) => b
+    ..filter = action.filter
+    ..filterClearedAt = action.filter == null
+        ? DateTime.now().millisecondsSinceEpoch
+        : profileListState.filterClearedAt);
+}
+
+ListUIState _sortStubs(ListUIState profileListState, SortStubs action) {
+  return profileListState.rebuild((b) => b
+    ..sortAscending = b.sortField != action.field || !b.sortAscending!
+    ..sortField = action.field);
+}
+
+ListUIState _startListMultiselect(
+    ListUIState productListState, StartStubMultiselect action) {
+  return productListState.rebuild((b) => b..selectedIds = ListBuilder());
+}
+
+ListUIState _addToListMultiselect(
+    ListUIState productListState, AddToStubMultiselect action) {
+  return productListState.rebuild((b) => b..selectedIds.add(action.entity.id));
+}
+
+ListUIState _removeFromListMultiselect(
+    ListUIState productListState, RemoveFromStubMultiselect action) {
+  return productListState.rebuild((b) => b..selectedIds.remove(action.entity.id));
+}
+
+ListUIState _clearListMultiselect(
+    ListUIState productListState, ClearStubMultiselect action) {
+  return productListState.rebuild((b) => b..selectedIds = null);
+}
+
+final profilesReducer = combineReducers<StubState>([
+  TypedReducer<StubState, SaveStubSuccess>(_updateStub),
+  TypedReducer<StubState, AddStubSuccess>(_addStub),
+  TypedReducer<StubState, LoadStubsSuccess>(_setLoadedStubs),
+  TypedReducer<StubState, LoadStubSuccess>(_setLoadedStub),
+  TypedReducer<StubState, UpdateLastDocumentAction>(_updateLastDocument),
+  TypedReducer<StubState, UpdateStubFilter>(_updateStubFilter),
+  // TypedReducer<StubState, LoadCompanySuccess>(_setLoadedCompany), //uncomment this if you its dependant on selected company
+  TypedReducer<StubState, ArchiveStubsSuccess>(_archiveStubSuccess),
+  TypedReducer<StubState, DeleteStubsSuccess>(_deleteStubSuccess),
+  TypedReducer<StubState, PurgeStubsSuccess>(_purgeStubSuccess),
+  TypedReducer<StubState, RestoreStubsSuccess>(_restoreStubSuccess),
+]);
+
+StubState _archiveStubSuccess(
+    StubState profileState, ArchiveStubsSuccess action) {
+  final int currentTime = DateTime.now().millisecondsSinceEpoch;
+  return profileState.rebuild((b) {
+    for (final profile in action.profiles) {
+      b.map[profile.id] = profileState.map[profile.id]!.rebuild((b) => b
+        ..archivedAt = currentTime);
+    }
+  });
+}
+
+StubState _updateStubFilter(
+    StubState profileState, UpdateStubFilter action) {
+  return profileState.rebuild((b) => b..filter = action.filter.toBuilder());
+}
+
+// StubState _deleteStubSuccess(StubState profileState, DeleteStubsSuccess action) {
+//   return profileState.rebuild((b) {
+//     for (final profile in action.profiles) {
+//       b.map[profile.id] = profile;
+//     }
+//   });
+// } 
+
+StubState _deleteStubSuccess(
+    StubState profileState, DeleteStubsSuccess action) {
+  return profileState.rebuild((b) {
+    for (final profile in action.profiles) {
+      b.map[profile.id] = profileState.map[profile.id]!.rebuild((b) => b
+        ..isDeleted = true);
+    }
+  });
+}
+
+StubState _purgeStubSuccess(
+    StubState profileState, PurgeStubsSuccess action) {
+  return profileState.rebuild((b) {
+    for (final profile in action.profiles) {
+      b.map.remove(profile.id);
+      b.list.remove(profile.id);
+    }
+  });
+}
+
+StubState _restoreStubSuccess(
+    StubState profileState, RestoreStubsSuccess action) {
+  return profileState.rebuild((b) {
+    for (final profile in action.profiles) {
+      b.map[profile.id] = profileState.map[profile.id]!.rebuild((b) => b
+        ..isDeleted = false
+        ..archivedAt = 0);
+    }
+  });
+}
+
+StubState _addStub(StubState profileState, AddStubSuccess action) {
+  return profileState.rebuild((b) => b
+    ..map[action.profile.id] = action.profile
+    ..list.add(action.profile.id));
+}
+
+StubState _updateStub(StubState profileState, SaveStubSuccess action) {
+  return profileState.rebuild((b) => b..map[action.profile.id] = action.profile);
+}
+StubState _updateLastDocument(
+    StubState profileState, UpdateLastDocumentAction action) {
+  return profileState.rebuild((b) => b..lastDocument = action.lastDocument);
+}
+
+StubState _setLoadedStub(StubState profileState, LoadStubSuccess action) {
+  return profileState.rebuild((b) => b..map[action.profile.id] = action.profile);
+}
+
+StubState _setLoadedStubs(
+    StubState profileState, LoadStubsSuccess action) {
+  return profileState.rebuild((b) {
+    action.profiles.forEach((profile) {
+      b.map[profile.id] = profile;
+      if (!b.list.build().contains(profile.id)) {
+        b.list.add(profile.id);
+      }
+    });
+  });
+}
+
+// StubState _setLoadedCompany(StubState profileState, LoadCompanySuccess action) {
+//   final company = action.userCompany.company;
+//   return profileState.loadStubs(company.profiles);
+// }

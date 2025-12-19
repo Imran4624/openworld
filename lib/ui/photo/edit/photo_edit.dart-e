@@ -1,0 +1,121 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_boilerplate/ui/app/edit_scaffold.dart';
+import 'package:flutter_boilerplate/ui/app/form_card.dart';
+import 'package:flutter_boilerplate/ui/photo/edit/photo_edit_vm.dart';
+import 'package:flutter_boilerplate/utils/localization.dart';
+import 'package:flutter_boilerplate/utils/completers.dart';
+import 'package:flutter_boilerplate/ui/app/scrollable_listview.dart';
+
+class PhotoEdit extends StatefulWidget {
+  const PhotoEdit({
+    Key? key,
+    required this.viewModel,
+  }) : super(key: key);
+
+  final PhotoEditVM viewModel;
+
+  @override
+  _PhotoEditState createState() => _PhotoEditState();
+}
+
+class _PhotoEditState extends State<PhotoEdit> {
+  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>(debugLabel: '_photoEdit');
+  final _debouncer = Debouncer();
+
+  // STARTER: controllers - do not remove comment
+final _categoryController = TextEditingController();
+final _storageTypeController = TextEditingController();
+final _urlController = TextEditingController();
+bool _isProcessedValue = false; // Checkbox
+final _tagsController = TextEditingController();
+  List<TextEditingController> _controllers = [];
+
+  @override
+  void didChangeDependencies() {
+    _controllers = [
+      // STARTER: array - do not remove comment
+_categoryController,
+_storageTypeController,
+_urlController,
+_tagsController,
+    ];
+
+    _controllers.forEach((controller) => controller.removeListener(_onChanged));
+
+    final photo = widget.viewModel.photo;
+    // STARTER: read value - do not remove comment
+_categoryController.text = photo.category.toString();
+_storageTypeController.text = photo.storageType.toString();
+_urlController.text = photo.url.toString();
+_isProcessedValue = photo.isProcessed;
+_tagsController.text = photo.tags.toString();
+
+    _controllers.forEach((controller) => controller.addListener(_onChanged));
+
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    _controllers.forEach((controller) {
+      controller.removeListener(_onChanged);
+      controller.dispose();
+    });
+
+    super.dispose();
+  }
+
+  void _onChanged() {
+    _debouncer.run(() {
+      final photo = widget.viewModel.photo.rebuild((b) => b
+        // STARTER: set value - do not remove comment
+..category = _categoryController.text.trim()
+..storageType = int.tryParse(_storageTypeController.text.trim()) ?? 0
+..url = _urlController.text.trim()
+..isProcessed = _isProcessedValue
+..tags = _tagsController.text.trim()
+      );
+      if (photo != widget.viewModel.photo) {
+        widget.viewModel.onChanged(photo);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final viewModel = widget.viewModel;
+    final localization = AppLocalization.of(context)!;
+    final photo = viewModel.photo;
+
+    return EditScaffold(
+      title: photo.isNew ? localization.newPhoto : localization.editPhoto,
+      onCancelPressed: (context) => viewModel.onCancelPressed(context),
+      onSavePressed: (context) {
+        final bool isValid = _formKey.currentState!.validate();
+        if (!isValid) {
+          return;
+        }
+        viewModel.onSavePressed(context);
+      },
+      entity: photo,
+      body: Form(
+        key: _formKey,
+        child: Builder(builder: (BuildContext context) {
+          return ScrollableListView(
+            children: <Widget>[
+              FormCard(
+                children: <Widget>[
+                  // STARTER: widgets - do not remove comment
+TextFormField(controller: _storageTypeController,autocorrect: false,keyboardType: TextInputType.number,decoration: InputDecoration(labelText: 'StorageType',),),
+TextFormField(controller: _urlController,autocorrect: false,decoration: InputDecoration(labelText: 'Url',),),
+CheckboxListTile(title: Text('IsProcessed'),value: _isProcessedValue,onChanged: (value) => setState(() {_isProcessedValue = value ?? false;_onChanged();}),),
+TextFormField(controller: _tagsController,autocorrect: false,decoration: InputDecoration(labelText: 'Tags',),),
+                ],
+              ),
+            ],
+          );
+        }),
+      ),
+    );
+  }
+}

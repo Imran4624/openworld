@@ -1,0 +1,54 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_boilerplate/ui/app/scrollable_listview.dart';
+import 'package:flutter_boilerplate/ui/social/view/social_view_vm.dart';
+import 'package:flutter_boilerplate/ui/app/view_scaffold.dart';
+// STARTER: import - do not remove comment
+
+class SocialView extends StatefulWidget {
+
+  const SocialView({
+    Key? key,
+    required this.viewModel,
+    required this.isFilter,
+  }) : super(key: key);
+
+  final SocialViewVM viewModel;
+  final bool isFilter;
+
+  @override
+  _SocialViewState createState() => new _SocialViewState();
+}
+
+class _SocialViewState extends State<SocialView> {
+  @override
+  Widget build(BuildContext context) {
+    final viewModel = widget.viewModel;
+    final social = viewModel.social;
+
+    return ViewScaffold(
+      isFilter: widget.isFilter,
+      entity: social,
+      //STARTER: primary field - do not remove comment
+title: social.userDisplayName,
+      onBackPressed: () => viewModel.onBackPressed(),
+      body: ScrollableListView(
+        children: <Widget>[
+          const SizedBox(height: 16.0),
+          FieldGrid(
+            {
+             // STARTER: field grid - do not remove comment
+SocialFields.userDisplayName: social.userDisplayName,
+SocialFields.userPhotoUrl: social.userPhotoUrl,
+SocialFields.content: social.content,
+SocialFields.photos: social.photos,
+SocialFields.category: social.category,
+SocialFields.likeCount: social.likeCount.toString(),
+SocialFields.commentCount: social.commentCount.toString(),
+SocialFields.tags: social.tags,
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}

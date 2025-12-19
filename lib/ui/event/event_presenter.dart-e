@@ -1,0 +1,105 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_boilerplate/data/models/models.dart';
+import 'package:flutter_boilerplate/ui/app/presenters/entity_presenter.dart';
+
+class EventPresenter extends EntityPresenter {
+
+  static List<String> getDefaultTableFields(UserCompanyEntity userCompany) {
+    return [
+       // STARTER: constant fields - do not remove comment
+EventFields.name,
+
+EventFields.accessCode,
+
+EventFields.callToAction,
+
+EventFields.chk,
+
+EventFields.currency,
+
+EventFields.description,
+
+EventFields.end,
+
+EventFields.start,
+
+EventFields.eventSeriesId,
+
+EventFields.hidden,
+
+EventFields.onlineEvent,
+
+EventFields.privateEvent,
+
+EventFields.status,
+
+EventFields.ticketsAvailable,
+
+EventFields.totalHolds,
+
+EventFields.totalIssuedTickets,
+
+EventFields.totalOrders,
+
+EventFields.unavailable,
+
+EventFields.unavailableStatus,
+
+    ];
+  }
+
+  static List<String> getAllTableFields(UserCompanyEntity userCompany) {
+    return [
+      ...getDefaultTableFields(userCompany),
+      ...EntityPresenter.getBaseFields(),
+    ];
+  }
+
+  @override
+  Widget getField({String? field, required BuildContext context}) {
+    // final state = StoreProvider.of<AppState>(context).state;
+    final event = entity as EventEntity;
+
+    switch (field) {
+      // STARTER: switch case - do not remove comment
+case EventFields.accessCode:
+return Text(event.accessCode);
+case EventFields.callToAction:
+return Text(event.callToAction);
+case EventFields.chk:
+return Text(event.chk);
+case EventFields.currency:
+return Text(event.currency);
+case EventFields.description:
+return Text(event.description);
+case EventFields.end:
+return Text(event.end.toString());
+case EventFields.start:
+return Text(event.start.toString());
+case EventFields.eventSeriesId:
+return Text(event.eventSeriesId);
+case EventFields.hidden:
+return Text(event.hidden.toString());
+case EventFields.onlineEvent:
+return Text(event.onlineEvent.toString());
+case EventFields.privateEvent:
+return Text(event.privateEvent.toString());
+case EventFields.status:
+return Text(event.status);
+case EventFields.ticketsAvailable:
+return Text(event.ticketsAvailable.toString());
+case EventFields.totalHolds:
+return Text(event.totalHolds.toString());
+case EventFields.totalIssuedTickets:
+return Text(event.totalIssuedTickets.toString());
+case EventFields.totalOrders:
+return Text(event.totalOrders.toString());
+case EventFields.unavailable:
+return Text(event.unavailable.toString());
+case EventFields.unavailableStatus:
+return Text(event.unavailableStatus);
+    }
+
+    return super.getField(field: field, context: context);
+  }
+}

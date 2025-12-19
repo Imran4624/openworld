@@ -1,0 +1,47 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_boilerplate/ui/app/scrollable_listview.dart';
+import 'package:flutter_boilerplate/ui/profile/view/profile_view_vm.dart';
+import 'package:flutter_boilerplate/ui/app/view_scaffold.dart';
+// STARTER: import - do not remove comment
+
+class ProfileView extends StatefulWidget {
+
+  const ProfileView({
+    Key? key,
+    required this.viewModel,
+    required this.isFilter,
+  }) : super(key: key);
+
+  final ProfileViewVM viewModel;
+  final bool isFilter;
+
+  @override
+  _ProfileViewState createState() => new _ProfileViewState();
+}
+
+class _ProfileViewState extends State<ProfileView> {
+  @override
+  Widget build(BuildContext context) {
+    final viewModel = widget.viewModel;
+    final profile = viewModel.profile;
+
+    return ViewScaffold(
+      isFilter: widget.isFilter,
+      entity: profile,
+      //STARTER: primary field - do not remove comment
+title: profile.name,
+      onBackPressed: () => viewModel.onBackPressed(),
+      body: ScrollableListView(
+        children: <Widget>[
+          const SizedBox(height: 16.0),
+          FieldGrid(
+            {
+             // STARTER: field grid - do not remove comment
+ProfileFields.name: profile.name,
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}

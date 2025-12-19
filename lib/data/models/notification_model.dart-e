@@ -1,0 +1,269 @@
+import 'package:built_value/built_value.dart';
+import 'package:built_collection/built_collection.dart';
+import 'package:built_value/serializer.dart';
+import 'package:flutter_boilerplate/redux/app/app_state.dart';
+import 'package:flutter_boilerplate/data/models/models.dart';
+import 'package:flutter_boilerplate/utils/formatting.dart';
+import 'package:flutter_boilerplate/utils/strings.dart';
+
+part 'notification_model.g.dart';
+
+abstract class NotificationFilter implements Built<NotificationFilter, NotificationFilterBuilder> {
+  factory NotificationFilter() {
+    return _$NotificationFilter._(
+      searchTerm: '',
+      stateFilter: EntityState.active,
+      sortField: NotificationFields.name,
+      sortAscending: true,
+      limit: 10, 
+    );
+  }
+
+  NotificationFilter._();
+
+  @override
+  @memoized
+  int get hashCode;
+
+  String get searchTerm;
+  EntityState get stateFilter;
+  String get sortField;
+  bool get sortAscending;
+  int get limit; 
+
+  Map<String, dynamic> toFirebaseQuery() {
+    final Map<String, dynamic> filters = {};
+    
+    // Handle search term
+    if (searchTerm.isNotEmpty) {
+      filters['title'] = searchTerm.toLowerCase();
+    }
+
+    // Handle state filter
+    switch (stateFilter) {
+      case EntityState.active:
+        filters['archived_at'] = 0;
+        filters['is_deleted'] = false;
+        break;
+      case EntityState.archived:
+        filters['archived_at_gt'] = 0;
+        filters['is_deleted'] = false;
+        break;
+      case EntityState.deleted:
+        filters['is_deleted'] = true;
+        break;
+    }
+
+    return {
+      'filters': filters,
+      'sort_field': sortField,
+      'sort_ascending': sortAscending,
+      'limit': limit
+    };
+  }
+
+  static Serializer<NotificationFilter> get serializer => _$notificationFilterSerializer;
+}
+
+abstract class NotificationListResponse
+    implements Built<NotificationListResponse, NotificationListResponseBuilder> {
+  factory NotificationListResponse([void Function(NotificationListResponseBuilder) updates]) =
+      _$NotificationListResponse;
+
+  NotificationListResponse._();
+
+  @override
+  @memoized
+  int get hashCode;
+
+  BuiltList<NotificationEntity> get data;
+
+  static Serializer<NotificationListResponse> get serializer =>
+      _$notificationListResponseSerializer;
+}
+
+abstract class NotificationItemResponse
+    implements Built<NotificationItemResponse, NotificationItemResponseBuilder> {
+  factory NotificationItemResponse([void Function(NotificationItemResponseBuilder) updates]) =
+      _$NotificationItemResponse;
+
+  NotificationItemResponse._();
+
+  @override
+  @memoized
+  int get hashCode;
+
+  NotificationEntity get data;
+
+  static Serializer<NotificationItemResponse> get serializer =>
+      _$notificationItemResponseSerializer;
+}
+
+class NotificationFields {
+  // STARTER: fields - do not remove comment
+static const String title = 'title';
+static const String body = 'body';
+static const String type = 'type';
+static const String channel = 'channel';
+static const String actionUrl = 'actionUrl';
+static const String payload = 'payload';
+static const String priority = 'priority';
+}
+
+abstract class NotificationEntity extends Object
+    with BaseEntity
+    implements Built<NotificationEntity, NotificationEntityBuilder> {
+  factory NotificationEntity({String? id, AppState? state}) {
+    return _$NotificationEntity._(
+      id: id ?? BaseEntity.nextId,
+      isChanged: false,
+      isDeleted: false,
+      createdAt: 0,
+      updatedAt: 0,
+      createdUserId: '',
+      assignedUserId: '',
+      archivedAt: 0,
+      // STARTER: constructor - do not remove comment
+title: '',
+body: '',
+type: '',
+channel: '',
+actionUrl: '',
+payload: '',
+priority: '',
+    );
+  }
+
+  NotificationEntity._();
+
+  @override
+  @memoized
+  int get hashCode;
+
+  // STARTER: properties - do not remove comment
+String get title;
+String get body;
+String get type;
+String get channel;
+String get actionUrl;
+String get payload;
+String get priority;
+
+  @override
+  EntityType get entityType => EntityType.notification;
+
+  @override
+  List<EntityAction?> getActions({
+    UserCompanyEntity? userCompany,
+    bool includeEdit = false,
+    bool multiselect = false,
+  }) {
+    final actions = <EntityAction?>[];
+
+    if (!isDeleted! && !multiselect && includeEdit && userCompany?.canEditEntity(this) == true) {
+      actions.add(EntityAction.edit);
+    }
+
+    if (!multiselect && userCompany?.canEditEntity(this) == true) {
+      actions.add(EntityAction.purge);
+    }
+
+    if (actions.isNotEmpty) {
+      actions.add(null);
+    }
+
+    return actions..addAll(super.getActions(userCompany: userCompany));
+  }
+
+  int compareTo(NotificationEntity notification, String sortField, bool sortAscending) {
+    int response = 0;
+    final notificationA = sortAscending ? this : notification;
+    final notificationB = sortAscending ? notification : this;
+
+    switch (sortField) {
+      // STARTER: sort switch - do not remove comment
+case NotificationFields.title:
+response = notificationA.title.compareTo(notificationB.title);
+break;
+
+case NotificationFields.body:
+response = notificationA.body.compareTo(notificationB.body);
+break;
+
+case NotificationFields.type:
+response = notificationA.type.compareTo(notificationB.type);
+break;
+
+case NotificationFields.channel:
+response = notificationA.channel.compareTo(notificationB.channel);
+break;
+
+case NotificationFields.actionUrl:
+response = notificationA.actionUrl.compareTo(notificationB.actionUrl);
+break;
+
+case NotificationFields.payload:
+response = notificationA.payload.compareTo(notificationB.payload);
+break;
+
+case NotificationFields.priority:
+response = notificationA.priority.compareTo(notificationB.priority);
+break;
+
+      default:
+        logError('sort by notification.$sortField is not implemented');
+        break;
+    }
+
+    if (response == 0) {
+      // STARTER: sort default - do not remove comment
+    } else {
+      return response;
+    }
+  }
+
+  @override
+  bool matchesFilter(String? filter) {
+    return matchesStrings(
+      haystacks: [
+      // STARTER: field names - do not remove comment
+title,
+body,
+type,
+channel,
+actionUrl,
+payload,
+priority,
+      ],
+      needle: filter,
+    );
+  }
+
+  @override
+  String? matchesFilterValue(String? filter) {
+    return matchesStringsValue(
+      haystacks: [
+      // STARTER: field names - do not remove comment
+title,
+body,
+type,
+channel,
+actionUrl,
+payload,
+priority,
+      ],
+      needle: filter,
+    )!;
+  }
+
+  @override
+  String get listDisplayName => '';
+
+  @override
+  double get listDisplayAmount => 0;
+
+  @override
+  FormatNumberType get listDisplayAmountType => FormatNumberType.int;
+
+  static Serializer<NotificationEntity> get serializer => _$notificationEntitySerializer;
+}

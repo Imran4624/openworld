@@ -1,0 +1,406 @@
+// Package imports:
+import 'package:built_collection/built_collection.dart';
+import 'package:built_value/serializer.dart';
+import 'package:built_value/standard_json_plugin.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_boilerplate/constants.dart';
+import 'package:flutter_boilerplate/data/models/dynamic_fields/dynamic_fields_modal.dart';
+import 'package:flutter_boilerplate/data/models/account_model.dart';
+import 'package:flutter_boilerplate/data/models/app_version_model.dart';
+import 'package:flutter_boilerplate/data/models/chat/last_message_modal.dart';
+
+// Project imports:
+import 'package:flutter_boilerplate/data/models/dashboard_model.dart';
+import 'package:flutter_boilerplate/data/models/event_model_helper.dart';
+import 'package:flutter_boilerplate/data/models/models.dart';
+import 'package:flutter_boilerplate/redux/app/app_state.dart';
+import 'package:flutter_boilerplate/redux/auth/auth_state.dart';
+import 'package:flutter_boilerplate/redux/company/company_state.dart';
+import 'package:flutter_boilerplate/redux/dashboard/dashboard_state.dart';
+import 'package:flutter_boilerplate/redux/design/design_state.dart';
+import 'package:flutter_boilerplate/redux/dynamicField/dynamic_field_state.dart';
+import 'package:flutter_boilerplate/redux/settings/settings_state.dart';
+import 'package:flutter_boilerplate/redux/static/static_state.dart';
+import 'package:flutter_boilerplate/redux/ui/list_ui_state.dart';
+import 'package:flutter_boilerplate/redux/ui/pref_state.dart';
+import 'package:flutter_boilerplate/redux/ui/ui_state.dart';
+import 'package:flutter_boilerplate/redux/user/user_state.dart';
+// STARTER: import - do not remove comment
+import 'package:flutter_boilerplate/redux/payment/payment_state.dart';
+
+import 'package:flutter_boilerplate/redux/product/product_state.dart';
+
+import 'package:flutter_boilerplate/redux/social/social_state.dart';
+
+import 'package:flutter_boilerplate/redux/photo/photo_state.dart';
+
+import 'package:flutter_boilerplate/redux/workout/workout_state.dart';
+
+import 'package:flutter_boilerplate/redux/notification/notification_state.dart';
+
+import 'package:flutter_boilerplate/redux/profile_operation/profile_operation_state.dart';
+
+import 'package:flutter_boilerplate/redux/profile/profile_state.dart';
+
+import 'package:flutter_boilerplate/redux/event/event_state.dart';
+
+import 'package:flutter_boilerplate/redux/chat/chat_state.dart';
+
+part 'serializers.g.dart';
+
+@SerializersFor(const [
+  AppState,
+  AppVersionEntity,
+  LoginResponse,
+  UserItemResponse,
+  CompanyItemResponse,
+  StaticDataItemResponse,
+  CountryItemResponse,
+  CountryListResponse,
+  CurrencyItemResponse,
+  CurrencyListResponse,
+  DateFormatItemResponse,
+  DateFormatListResponse,
+  DatetimeFormatItemResponse,
+  DatetimeFormatListResponse,
+  IndustryItemResponse,
+  IndustryListResponse,
+  LanguageItemResponse,
+  LanguageListResponse,
+  SizeItemResponse,
+  SizeListResponse,
+  TimezoneItemResponse,
+  TimezoneListResponse,
+  // STARTER: serializers - do not remove comment
+  ProductEntity,
+  ProductListResponse,
+  ProductItemResponse,
+
+  SocialEntity,
+  SocialListResponse,
+  SocialItemResponse,
+
+  PhotoEntity,
+  PhotoListResponse,
+  PhotoItemResponse,
+
+  WorkoutEntity,
+  WorkoutListResponse,
+  WorkoutItemResponse,
+  PlanInfo,
+  Weather,
+  LocationPoint,
+
+  NotificationEntity,
+  NotificationListResponse,
+  NotificationItemResponse,
+
+  ProfileOperationEntity,
+  ProfileOperationListResponse,
+  ProfileOperationItemResponse,
+
+  ProfileEntity,
+  ProfileListResponse,
+  ProfileItemResponse,
+
+  EventEntity,
+  EventListResponse,
+  EventItemResponse,
+  EventInteraction,
+  JoinRequest,
+  EventLocationData,
+  TicketType,
+  TicketGroup,
+  Venue,
+  Images,
+  OrderEntity,
+  BuyerDetails,
+  IssuedTicket,
+  LineItem,
+
+  ChatEntity,
+  ChatParticipantEntity,
+  ChatListResponse,
+  ChatItemResponse,
+  ChatStatus,
+  CEntityType,
+  MessageStatus,
+  ParticipantRole,
+
+  DesignEntity,
+  DesignListResponse,
+  DesignItemResponse,
+  UserEntity,
+  UserListResponse,
+  UserItemResponse,
+  UserCompanyItemResponse,
+  DesignPreviewRequest,
+  UserTwoFactorResponse,
+  PdfPreviewRequest,
+])
+final Serializers serializers = (_$serializers.toBuilder()
+      // Add support for various list types
+      ..addBuilderFactory(
+        const FullType(BuiltList, [FullType(String)]),
+        () => ListBuilder<String>(),
+      )
+      ..addBuilderFactory(
+        const FullType(BuiltList, [FullType(int)]),
+        () => ListBuilder<int>(),
+      )
+      ..addBuilderFactory(
+        const FullType(BuiltList, [FullType.object]),
+        () => ListBuilder<Object>(),
+      )
+      // Add support for maps
+      ..addBuilderFactory(
+        const FullType(BuiltMap, [FullType(String), FullType.object]),
+        () => MapBuilder<String, dynamic>(),
+      )
+      // Add custom serializers
+      ..add(const DynamicListSerializer())
+      ..add(const DynamicMapSerializer())
+      ..add(const DynamicValueSerializer())
+      ..addPlugin(StandardJsonPlugin())
+
+      // Add enum serializers
+      ..add(const ChatStatusSerializer())
+      ..add(const CEntityTypeSerializer())
+      ..add(const MessageStatusSerializer())
+      ..add(const ParticipantRoleSerializer()))
+    .build();
+
+class DynamicListSerializer implements PrimitiveSerializer<List<dynamic>> {
+  const DynamicListSerializer();
+
+  @override
+  List<dynamic> deserialize(
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) {
+    if (serialized is List) {
+      return serialized.map((item) {
+        if (item is int || item is double) {
+          return item;
+        }
+        return item.toString();
+      }).toList();
+    }
+    return [];
+  }
+
+  @override
+  Object serialize(
+    Serializers serializers,
+    List<dynamic> list, {
+    FullType specifiedType = FullType.unspecified,
+  }) {
+    return list.map((item) {
+      if (item is int || item is double) {
+        return item;
+      }
+      return item.toString();
+    }).toList();
+  }
+
+  @override
+  Iterable<Type> get types => [List<dynamic>];
+
+  @override
+  String get wireName => 'List<dynamic>';
+}
+
+class DynamicMapSerializer
+    implements PrimitiveSerializer<Map<String, dynamic>> {
+  const DynamicMapSerializer();
+
+  @override
+  Map<String, dynamic> deserialize(
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) {
+    if (serialized is Map) {
+      return _convertMap(serialized);
+    }
+    return {};
+  }
+
+  Map<String, dynamic> _convertMap(Map map) {
+    final result = <String, dynamic>{};
+    map.forEach((key, value) {
+      if (value is Map) {
+        result[key] = _convertMap(value);
+      } else if (value is List) {
+        result[key] = _convertList(value);
+      } else {
+        result[key] = value;
+      }
+    });
+    return result;
+  }
+
+  List<dynamic> _convertList(List list) {
+    return list.map((item) {
+      if (item is Map) {
+        return _convertMap(item);
+      } else if (item is List) {
+        return _convertList(item);
+      } else {
+        return item;
+      }
+    }).toList();
+  }
+
+  @override
+  Object serialize(
+    Serializers serializers,
+    Map<String, dynamic> map, {
+    FullType specifiedType = FullType.unspecified,
+  }) {
+    final result = <String, dynamic>{};
+    map.forEach((key, value) {
+      if (value is Map) {
+        result[key] = _convertMap(value);
+      } else if (value is List) {
+        result[key] = _convertList(value);
+      } else {
+        result[key] = value;
+      }
+    });
+    return result;
+  }
+
+  @override
+  Iterable<Type> get types => [Map<String, dynamic>];
+
+  @override
+  String get wireName => 'Map<String, dynamic>';
+}
+
+class DynamicValueSerializer implements PrimitiveSerializer<dynamic> {
+  const DynamicValueSerializer();
+
+  @override
+  dynamic deserialize(
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) {
+    return serialized;
+  }
+
+  @override
+  Object serialize(
+    Serializers serializers,
+    dynamic value, {
+    FullType specifiedType = FullType.unspecified,
+  }) {
+    if (value is Map) {
+      return Map<String, dynamic>.from(value).map((key, value) {
+        if (value is Map) {
+          return MapEntry(key, Map<String, dynamic>.from(value));
+        } else if (value is List) {
+          return MapEntry(key, List.from(value));
+        }
+        return MapEntry(key, value);
+      });
+    } else if (value is List) {
+      return List.from(value);
+    }
+    return value;
+  }
+
+  @override
+  Iterable<Type> get types => [Map, List, int, double, String, bool];
+
+  @override
+  String get wireName => 'dynamic';
+}
+
+// Enum Serializers
+class ChatStatusSerializer implements PrimitiveSerializer<ChatStatus> {
+  const ChatStatusSerializer();
+
+  @override
+  ChatStatus deserialize(Serializers serializers, Object serialized,
+          {FullType specifiedType = FullType.unspecified}) =>
+      ChatStatus.values.firstWhere(
+          (e) => e.toString().split('.').last == serialized as String);
+
+  @override
+  Object serialize(Serializers serializers, ChatStatus status,
+          {FullType specifiedType = FullType.unspecified}) =>
+      status.toString().split('.').last;
+
+  @override
+  Iterable<Type> get types => [ChatStatus];
+
+  @override
+  String get wireName => 'ChatStatus';
+}
+
+class CEntityTypeSerializer implements PrimitiveSerializer<CEntityType> {
+  const CEntityTypeSerializer();
+
+  @override
+  CEntityType deserialize(Serializers serializers, Object serialized,
+          {FullType specifiedType = FullType.unspecified}) =>
+      CEntityType.values.firstWhere(
+          (e) => e.toString().split('.').last == serialized as String);
+
+  @override
+  Object serialize(Serializers serializers, CEntityType type,
+          {FullType specifiedType = FullType.unspecified}) =>
+      type.toString().split('.').last;
+
+  @override
+  Iterable<Type> get types => [CEntityType];
+
+  @override
+  String get wireName => 'CEntityType';
+}
+
+class MessageStatusSerializer implements PrimitiveSerializer<MessageStatus> {
+  const MessageStatusSerializer();
+
+  @override
+  MessageStatus deserialize(Serializers serializers, Object serialized,
+          {FullType specifiedType = FullType.unspecified}) =>
+      MessageStatus.values.firstWhere(
+          (e) => e.toString().split('.').last == serialized as String);
+
+  @override
+  Object serialize(Serializers serializers, MessageStatus status,
+          {FullType specifiedType = FullType.unspecified}) =>
+      status.toString().split('.').last;
+
+  @override
+  Iterable<Type> get types => [MessageStatus];
+
+  @override
+  String get wireName => 'MessageStatus';
+}
+
+class ParticipantRoleSerializer
+    implements PrimitiveSerializer<ParticipantRole> {
+  const ParticipantRoleSerializer();
+
+  @override
+  ParticipantRole deserialize(Serializers serializers, Object serialized,
+          {FullType specifiedType = FullType.unspecified}) =>
+      ParticipantRole.values.firstWhere(
+          (e) => e.toString().split('.').last == serialized as String);
+
+  @override
+  Object serialize(Serializers serializers, ParticipantRole role,
+          {FullType specifiedType = FullType.unspecified}) =>
+      role.toString().split('.').last;
+
+  @override
+  Iterable<Type> get types => [ParticipantRole];
+
+  @override
+  String get wireName => 'ParticipantRole';
+}

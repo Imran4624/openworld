@@ -267,7 +267,9 @@ class _EntityListOpwState extends State<EntityListOpw>
   }
 
   Future<void> _getCurrentUserLocation() async {
-    if (_isLoadingLocation || _locationInitialized) return;
+    if (_isLoadingLocation || _locationInitialized) {
+      return;
+    }
 
     setState(() {
       _isLoadingLocation = true;
@@ -275,23 +277,43 @@ class _EntityListOpwState extends State<EntityListOpw>
 
     try {
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      
       if (!serviceEnabled) {
+        logError('_getCurrentUserLocation: Location services are disabled');
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Location services are disabled. Enable them in your device settings.'),
+              duration: Duration(seconds: 3),
+            ),
+          );
+        }
         _setDefaultLocationAsCurrentLocation();
         return;
       }
 
-      final permissionStatus = await Permission.location.status;
-      if (permissionStatus.isDenied) {
+      LocationPermission permission = await Geolocator.checkPermission();
+      
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
         
-        final newPermissionStatus = await Permission.location.request();
-        if (newPermissionStatus.isDenied) {
+        if (permission == LocationPermission.denied) {
+          logError('_getCurrentUserLocation: Permission denied after request');
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Location permission denied. Using default location.'),
+                duration: Duration(seconds: 3),
+              ),
+            );
+          }
           _setDefaultLocationAsCurrentLocation();
           return;
         }
       }
 
-      if (permissionStatus.isPermanentlyDenied) {
-        _setDefaultLocationAsCurrentLocation();
+      if (permission == LocationPermission.deniedForever) {
+        logError('_getCurrentUserLocation: Permission permanently denied');
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -306,10 +328,24 @@ class _EntityListOpwState extends State<EntityListOpw>
             ),
           );
         }
+        _setDefaultLocationAsCurrentLocation();
         return;
       }
 
+      final permissionStatus = await Permission.location.status;
+      
+      if (permissionStatus.isDenied) {
+        final newPermissionStatus = await Permission.location.request();
+        
+        if (newPermissionStatus.isDenied) {
+          logError('_getCurrentUserLocation: Permission handler denied after request');
+          _setDefaultLocationAsCurrentLocation();
+          return;
+        }
+      }
+
       final location = await LocationService.getCurrentLocation();
+      
       if (location != null && mounted) {
         final currentLocation = LatLng(
           location['latitude']!,
@@ -336,6 +372,14 @@ class _EntityListOpwState extends State<EntityListOpw>
             _isLoadingLocation = false;
             _locationInitialized = true;
           });
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Location found: ${locationName ?? 'Current Location'}'),
+              duration: const Duration(seconds: 2),
+              backgroundColor: Colors.green,
+            ),
+          );
 
           _locationTimer?.cancel();
           _locationTimer = Timer(const Duration(milliseconds: 300), () {

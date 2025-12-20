@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "531251110143-gk9884v6jgpba576uqi2ftroisov4b66.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "getopenworld.com",
+            "certificate_hash": "cdbfb47dc91a4dafc5c39554b7bf7a8148b5ccfa"
+          }
+        },
+        {
           "client_id": "531251110143-ldo802l3r1vm2egc6dcp2m4og82sm12v.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

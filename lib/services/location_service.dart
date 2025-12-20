@@ -14,31 +14,34 @@ class LocationService {
         return null;
       }
 
-      PermissionStatus permissionStatus = await Permission.location.status;
+      LocationPermission permission = await Geolocator.checkPermission();
       
-      if (permissionStatus.isDenied) {
-        permissionStatus = await Permission.location.request();
-        if (permissionStatus.isDenied) {
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        
+        if (permission == LocationPermission.denied) {
           logError('LocationService: Location permission denied');
           return null;
         }
       }
 
-      if (permissionStatus.isPermanentlyDenied) {
+      if (permission == LocationPermission.deniedForever) {
         logError('LocationService: Location permission permanently denied');
         return null;
       }
 
-      LocationPermission geoPermission = await Geolocator.checkPermission();
-      if (geoPermission == LocationPermission.denied) {
-        geoPermission = await Geolocator.requestPermission();
-        if (geoPermission == LocationPermission.denied) {
+      PermissionStatus permissionHandlerStatus = await Permission.location.status;
+      if (permissionHandlerStatus.isDenied || permissionHandlerStatus.isPermanentlyDenied) {
+        if (permissionHandlerStatus.isDenied) {
+          final newStatus = await Permission.location.request();
+          if (newStatus.isDenied) {
+            logError('LocationService: Permission handler - Location permission denied');
+            return null;
+          }
+        } else {
+          logError('LocationService: Permission handler - Location permission permanently denied');
           return null;
         }
-      }
-
-      if (geoPermission == LocationPermission.deniedForever) {
-        return null;
       }
 
       Position position = await Geolocator.getCurrentPosition(

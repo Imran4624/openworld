@@ -56,14 +56,11 @@ class Config {
 
   static const String TICKET_TAILOR_API_KEY = '';
 
-  static const String STRIPE_SECRET_KEY = 'sk_test_51SORA1IPMSTLVcCTgI1vf3kpp2jMhyuo2H6tB1RWXzp4s4SbZnuRDcsudwNKp9IkXh0tytu8CAnZ5bIQ9A6s94fp00Eka7RONR';
   static const String STRIPE_PUBLISHABLE_KEY = 'pk_test_51SORA1IPMSTLVcCTyaqU57MmFGTifiGysXg9ZztiksSgZvnjb1CYMR0tJJZbZUTw8yxABgP8f6UbD1qvtRWGcPut00TBk3hQwU';
   static const bool PAYMENT_ENABLED = false; 
   static const String PAYMENT_PROVIDER = 'stripe'; 
   static const String TEST_PAYMENT_METHOD = 'pm_card_visa'; 
   static const String PRODUCTION_PAYMENT_METHOD = 'pm_production_opw_default';
-  static const String STRIPE_TEST_SECRET_KEY = 'sk_test_51SORA1IPMSTLVcCTgI1vf3kpp2jMhyuo2H6tB1RWXzp4s4SbZnuRDcsudwNKp9IkXh0tytu8CAnZ5bIQ9A6s94fp00Eka7RONR';
-  static const String STRIPE_LIVE_SECRET_KEY = 'pk_test_51SORA1IPMSTLVcCTyaqU57MmFGTifiGysXg9ZztiksSgZvnjb1CYMR0tJJZbZUTw8yxABgP8f6UbD1qvtRWGcPut00TBk3hQwU';
 
   static const String SMTP_HOST = 'smtp.office365.com';
   static const String SMTP_PORT = '587';

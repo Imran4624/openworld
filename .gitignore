@@ -60,9 +60,6 @@ assets/**/service_account.json
 .env.*.local
 
 # Keys and certificates
-*.keystore
-*.jks
-key.properties
 *.p8
 *.p12
 *.pem

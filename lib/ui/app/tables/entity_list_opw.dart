@@ -373,14 +373,6 @@ class _EntityListOpwState extends State<EntityListOpw>
             _locationInitialized = true;
           });
 
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Location found: ${locationName ?? 'Current Location'}'),
-              duration: const Duration(seconds: 2),
-              backgroundColor: Colors.green,
-            ),
-          );
-
           _locationTimer?.cancel();
           _locationTimer = Timer(const Duration(milliseconds: 300), () {
             if (mounted && _currentViewMode == ViewMode.map) {

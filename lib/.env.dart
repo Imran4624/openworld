@@ -57,7 +57,7 @@ class Config {
   static const String TICKET_TAILOR_API_KEY = '';
 
   static const String STRIPE_PUBLISHABLE_KEY = 'pk_live_51Rv0gGIVRY55KtDBjyS3i0ic80zQX5jzUn3U2Y3GEOhOh97jLx811quNrXD4A42G501NL6kApQuEpAuWLY43LVKw008jsAcf2Y';
-  static const bool PAYMENT_ENABLED = false; 
+  static const bool PAYMENT_ENABLED = true; 
   static const String PAYMENT_PROVIDER = 'stripe'; 
   static const String TEST_PAYMENT_METHOD = 'pm_card_visa'; 
   static const String PRODUCTION_PAYMENT_METHOD = 'pm_production_opw_default';

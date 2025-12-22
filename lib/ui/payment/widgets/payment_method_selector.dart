@@ -77,7 +77,7 @@ class _PaymentMethodSelectorState extends State<PaymentMethodSelector> {
                     ),
                     title: Text('•••• •••• •••• ${method['last4'] ?? ''}'),
                     subtitle: Text(
-                        '${method['brand']?.toString().toUpperCase() ?? 'Card'} • Expires ${method['expMonth']}/${method['expYear']}'),
+                        '${method['brand']?.toString().toUpperCase() ?? ''} • Expires ${method['expMonth']}/${method['expYear']}'),
                     trailing: widget.selectedPaymentMethod?['paymentMethodId'] ==
                             method['paymentMethodId']
                         ? Icon(

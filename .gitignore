@@ -47,7 +47,6 @@ functions/node_modules/*
 
 # FVM Version Cache
 .fvm/
-functions/.env
 
 # Service Account Files (Sensitive)
 **/service_account.json
@@ -55,7 +54,7 @@ env/**/service_account.json
 assets/**/service_account.json
 
 # Environment files
-.env
+# .env
 .env.local
 .env.*.local
 

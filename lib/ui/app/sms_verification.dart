@@ -1,12 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_boilerplate/redux/auth/auth_actions.dart';
 import 'package:flutter_boilerplate/ui/app/forms/phone_input_field.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:flutter_boilerplate/constants.dart';
 import 'package:flutter_boilerplate/redux/app/app_actions.dart';
 import 'package:flutter_boilerplate/redux/app/app_state.dart';
@@ -125,7 +123,6 @@ class _AccountSmsVerificationState extends State<AccountSmsVerification> {
     if ((countryId ?? '').isEmpty) {
       countryId = kCountryUnitedStates;
     }
-    final country = state.staticState.countryMap[countryId];
 
     return AlertDialog(
       title: Text(localization.verifyPhoneNumber),

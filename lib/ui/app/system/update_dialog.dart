@@ -3,7 +3,6 @@
 // Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 // Package imports:
 import 'package:flutter_redux/flutter_redux.dart';
@@ -11,7 +10,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 // Project imports:
 import 'package:flutter_boilerplate/redux/app/app_state.dart';
-import 'package:flutter_boilerplate/utils/localization.dart';
 
 import 'package:flutter_boilerplate/utils/web_stub.dart'
     if (dart.library.html) 'package:flutter_boilerplate/utils/web.dart';
@@ -24,7 +22,6 @@ class UpdateDialog extends StatefulWidget {
 class _UpdateDialogState extends State<UpdateDialog> {
   @override
   Widget build(BuildContext context) {
-    final localization = AppLocalization.of(context);
     final store = StoreProvider.of<AppState>(context);
     final state = store.state;
     final appVersionEntity = state.appVersion;
@@ -47,8 +44,8 @@ class _UpdateDialogState extends State<UpdateDialog> {
             if (kIsWeb) {
               WebUtils.reloadBrowser();
             } else {
-              if (appVersionEntity?.updateUrl.isNotEmpty == true) {
-                final Uri url = Uri.parse(appVersionEntity!.updateUrl);
+              if (appVersionEntity.updateUrl.isNotEmpty) {
+                final Uri url = Uri.parse(appVersionEntity.updateUrl);
                 if (await canLaunchUrl(url)) {
                   await launchUrl(url, mode: LaunchMode.externalApplication);
                 }

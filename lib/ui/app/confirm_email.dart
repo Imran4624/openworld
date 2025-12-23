@@ -7,7 +7,6 @@ import 'package:flutter_boilerplate/project_config.dart';
 import 'package:flutter_boilerplate/ui/app/confirm_email_vm.dart';
 import 'package:flutter_boilerplate/ui/app/help_text.dart';
 import 'package:flutter_boilerplate/ui/app/loading_indicator.dart';
-import 'package:flutter_boilerplate/utils/dialogs.dart';
 import 'package:flutter_boilerplate/utils/localization.dart';
 
 class ConfirmEmail extends StatefulWidget {

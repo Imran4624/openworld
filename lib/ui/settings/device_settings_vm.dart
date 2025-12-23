@@ -4,8 +4,7 @@ import 'package:flutter/widgets.dart';
 
 // Package imports:
 import 'package:built_collection/built_collection.dart';
-import 'package:flutter_boilerplate/project_config.dart';
-import 'package:flutter_boilerplate/redux/event/event_actions.dart';
+// Removed unused imports
 import 'package:flutter_boilerplate/ui/app/routing_rules.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:local_auth/local_auth.dart';
@@ -16,7 +15,7 @@ import 'package:flutter_boilerplate/constants.dart';
 import 'package:flutter_boilerplate/redux/app/app_actions.dart';
 import 'package:flutter_boilerplate/redux/app/app_state.dart';
 import 'package:flutter_boilerplate/redux/auth/auth_actions.dart';
-import 'package:flutter_boilerplate/redux/dashboard/dashboard_actions.dart';
+// Removed unused import
 import 'package:flutter_boilerplate/redux/settings/settings_actions.dart';
 import 'package:flutter_boilerplate/redux/ui/pref_state.dart';
 import 'package:flutter_boilerplate/ui/app/app_builder.dart';

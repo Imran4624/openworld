@@ -41,7 +41,7 @@ class NotificationScreen extends StatelessWidget {
         entityIds: viewModel.notificationList,
         filter: state.notificationState.filter.searchTerm,
         onFilterChanged: (value) {
-          store.dispatch(FilterNotifications(value!));
+          store.dispatch(FilterNotifications(value ?? ''));
           store.dispatch(UpdateNotificationFilter(
             state.notificationState.filter
                 .rebuild((b) => b..searchTerm = value ?? ''),

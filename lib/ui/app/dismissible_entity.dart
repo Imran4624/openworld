@@ -1,7 +1,7 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/config/entity_state_config.dart';
-import 'package:flutter_boilerplate/project_config.dart';
+// Removed unused project_config import
 
 // Package imports:
 import 'package:flutter_redux/flutter_redux.dart';
@@ -12,7 +12,7 @@ import 'package:flutter_boilerplate/data/models/models.dart';
 import 'package:flutter_boilerplate/data/models/static/app_theme.dart';
 import 'package:flutter_boilerplate/redux/app/app_actions.dart';
 import 'package:flutter_boilerplate/redux/app/app_state.dart';
-import 'package:flutter_boilerplate/services/session_managment_service.dart';
+// Removed unused session management import
 import 'package:flutter_boilerplate/ui/app/lists/selected_indicator.dart';
 import 'package:flutter_boilerplate/utils/localization.dart';
 import 'package:flutter_boilerplate/utils/platforms.dart';
@@ -37,7 +37,7 @@ class DismissibleEntity extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final store = StoreProvider.of<AppState>(context);
-    final state = store.state;
+    // Removed unused 'state'
 
     if (!userCompany.canEditEntity(entity)) {
       return child;

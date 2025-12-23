@@ -16,7 +16,6 @@ import 'package:flutter_boilerplate/ui/dynamic_fields/dynamic_fields_create.dart
 import 'package:flutter_boilerplate/ui/dynamic_fields/dynamic_fields_search_overview_screen.dart';
 import 'package:flutter_boilerplate/ui/dynamic_fields/dynamic_fields_view_edit.dart';
 import 'package:flutter_boilerplate/ui/profile/view/profile_view_vm.dart';
-import 'package:flutter_boilerplate/utils/dynamic_fields/maps_listing_view.dart';
 import 'package:redux/redux.dart';
 
 List<Middleware<AppState>> createDynamicFieldMiddleware([
@@ -45,14 +44,6 @@ Middleware<AppState> _viewDynamicFields() {
 
     next(action);
 
-    if (action.questionType == QuestionType.mapList) {
-      store.dispatch(UpdateCurrentRoute((MapListingScreen.route)));
-
-      if (store.state.prefState.isMobile) {
-        navigatorKey.currentState!.pushNamed((MapListingScreen.route));
-      }
-      return;
-    }
 
     String route;
 

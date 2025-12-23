@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_boilerplate/redux/app/app_state.dart';
 import 'package:flutter_boilerplate/ui/auth/login_vm.dart';
 import 'package:flutter_boilerplate/ui/app/shared.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 
 class GoogleLoginButton extends StatelessWidget {
   final BuildContext parentContext;
@@ -25,7 +23,6 @@ class GoogleLoginButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final store = StoreProvider.of<AppState>(context);
     return SizedBox(
       width: double.infinity,
       child: OutlinedButton.icon(

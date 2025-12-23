@@ -72,7 +72,6 @@ class ProfileList extends StatefulWidget {
 class _ProfileListState extends State<ProfileList> {
   late EntityDataTableSource dataTableSource;
 
-  int _firstRowIndex = 0;
 
   late ScrollController _scrollController;
   @override
@@ -96,24 +95,7 @@ class _ProfileListState extends State<ProfileList> {
     );
 
     // make sure the initial page shows the selected record
-    final entityUIState = state.getUIState(entityType);
-    final rowsPerPage = state.prefState.rowsPerPage;
 
-    if (widget.entityList.isNotEmpty) {
-      if ((entityUIState!.selectedId ?? '').isNotEmpty) {
-        final selectedIndex =
-            widget.entityList.indexOf(entityUIState.selectedId);
-
-        if (selectedIndex >= 0) {
-          _firstRowIndex = (selectedIndex / rowsPerPage).floor() * rowsPerPage;
-        }
-      } else if (state.historyList.isNotEmpty) {
-        final history = state.historyList.first;
-        if (history.page != null) {
-          _firstRowIndex = history.page! * rowsPerPage;
-        }
-      }
-    }
 
     _scrollController = ScrollController();
     _scrollController.addListener(_onScroll);
@@ -145,7 +127,6 @@ class _ProfileListState extends State<ProfileList> {
     dataTableSource.entityMap = state.getEntityMap(widget.entityType)
         as BuiltMap<String?, BaseEntity?>?;
 
-    dataTableSource.notifyListeners();
   }
 
   @override

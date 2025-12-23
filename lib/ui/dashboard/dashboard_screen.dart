@@ -16,7 +16,6 @@ import 'package:flutter_boilerplate/redux/ui/pref_state.dart';
 import 'package:flutter_boilerplate/ui/app/history_drawer_vm.dart';
 import 'package:flutter_boilerplate/ui/app/menu_drawer_vm.dart';
 import 'package:flutter_boilerplate/ui/dashboard/dashboard_screen_vm.dart';
-import 'package:flutter_boilerplate/ui/settings/settings_wizard.dart';
 import 'package:flutter_boilerplate/utils/localization.dart';
 import 'package:flutter_boilerplate/utils/platforms.dart';
 import 'package:redux/src/store.dart';
@@ -159,44 +158,10 @@ class _DashboardScreenState extends State<DashboardScreen>
 
     final List<DemoTab> demos = [
       DemoTab(
-        icon: Icons.person_add,
-        title: 'Customer Onboarding',
-        description:
-            'First impression matters - Configure essential sign-up questions',
-        type: QuestionType.onboarding,
-      ),
-      DemoTab(
-        icon: Icons.favorite,
-        title: 'Dating Profile',
-        description: 'Configure profile questions with simple JSON',
-        type: QuestionType.profile,
-      ),
-      DemoTab(
-        icon: Icons.image,
-        title: 'Image Upload',
-        description: 'Handle image uploads dynamically',
-        type: QuestionType.documentDemo,
-      ),
-      DemoTab(
-        icon: Icons.calendar_today,
-        title: 'Tour Planner',
-        description:
-            ' • Demos incrementable numbers input\n • Grid view with multi-select option\n • Input type with data being fetched from google API and it also saves location coordinates',
-        type: QuestionType.tour,
-      ),
-      DemoTab(
-        icon: Icons.timeline,
-        title: 'Timeline',
-        description:
-            '- Nicely show details of tour in timeline view. \n- Paste Google & Apple maps links and it will nicely display maps in view mode',
-        type: QuestionType.planner,
-      ),
-      DemoTab(
-        icon: Icons.map,
-        title: 'Map List',
-        description:
-            '- Nicely show details of Map view. \n- Paste Google & Apple maps links and it will nicely display maps in view mode',
-        type: QuestionType.mapList,
+        icon: Icons.description,
+        title: 'Dynamic Fields',
+        description: 'Demo the OPW dynamic fields configuration',
+        type: QuestionType.opw,
       ),
     ];
 
@@ -248,45 +213,19 @@ class _DashboardScreenState extends State<DashboardScreen>
           const SizedBox(height: 24),
           Row(
             children: [
-              if (demo.showCreateEditButtons) ...[
-                ElevatedButton.icon(
-                  onPressed: () => store
-                      .dispatch(ViewDynamicFields(demo.type, isEdit: false)),
-                  icon: const Icon(Icons.add),
-                  label: const Text('Create New'),
-                ),
-                const SizedBox(width: 16),
-                OutlinedButton.icon(
-                  onPressed: () => store
-                      .dispatch(ViewDynamicFields(demo.type, isEdit: true)),
-                  icon: const Icon(Icons.edit),
-                  label: const Text('Edit Existing'),
-                ),
-                // if (demo.type == QuestionType.profile) ...[
-                //   const SizedBox(width: 16),
-                //   OutlinedButton.icon(
-                //     onPressed: () =>
-                //         store.dispatch(ViewSearchScreen(demo.type)),
-                //     icon: const Icon(Icons.search),
-                //     label: const Text('Search'),
-                //   ),
-                // ],
-              ] else ...[
-                if (demo.type == QuestionType.planner)
-                  ElevatedButton.icon(
-                    onPressed: () => store
-                        .dispatch(ViewDynamicFields(demo.type, isEdit: false)),
-                    icon: const Icon(Icons.timeline),
-                    label: const Text('Show Timeline View'),
-                  ),
-                if (demo.type == QuestionType.mapList)
-                  ElevatedButton.icon(
-                    onPressed: () => store
-                        .dispatch(ViewDynamicFields(demo.type, isEdit: false)),
-                    icon: const Icon(Icons.map),
-                    label: const Text('Show Map List'),
-                  ),
-              ],
+              ElevatedButton.icon(
+                onPressed: () => store
+                    .dispatch(ViewDynamicFields(demo.type, isEdit: false)),
+                icon: const Icon(Icons.add),
+                label: const Text('Create New'),
+              ),
+              const SizedBox(width: 16),
+              OutlinedButton.icon(
+                onPressed: () => store
+                    .dispatch(ViewDynamicFields(demo.type, isEdit: true)),
+                icon: const Icon(Icons.edit),
+                label: const Text('Edit Existing'),
+              ),
             ],
           ),
           const SizedBox(height: 24),
@@ -373,6 +312,5 @@ class DemoTab {
     required this.type,
   });
 
-  bool get showCreateEditButtons =>
-      type != QuestionType.planner && type != QuestionType.mapList;
+  bool get showCreateEditButtons => true;
 }

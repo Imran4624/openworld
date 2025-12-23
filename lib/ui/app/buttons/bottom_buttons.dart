@@ -10,10 +10,8 @@ import 'package:flutter_boilerplate/constants.dart';
 import 'package:flutter_boilerplate/data/models/models.dart';
 import 'package:flutter_boilerplate/redux/app/app_actions.dart';
 import 'package:flutter_boilerplate/redux/app/app_state.dart';
-import 'package:flutter_boilerplate/services/session_managment_service.dart';
 import 'package:flutter_boilerplate/ui/app/app_border.dart';
 import 'package:flutter_boilerplate/utils/icons.dart';
-import 'package:flutter_boilerplate/utils/localization.dart';
 
 class BottomButtons extends StatelessWidget {
   const BottomButtons({
@@ -32,7 +30,6 @@ class BottomButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localization = AppLocalization.of(context)!;
     final store = StoreProvider.of<AppState>(context);
     final state = store.state;
 

@@ -13,13 +13,11 @@ import 'package:redux/redux.dart';
 // Project imports:
 import 'package:flutter_boilerplate/data/models/models.dart';
 import 'package:flutter_boilerplate/main_app.dart';
-import 'package:flutter_boilerplate/project_config.dart';
 import 'package:flutter_boilerplate/redux/app/app_actions.dart';
 import 'package:flutter_boilerplate/redux/app/app_state.dart';
 import 'package:flutter_boilerplate/redux/auth/auth_actions.dart';
 // import 'package:flutter_boilerplate/redux/client/client_actions.dart';
 import 'package:flutter_boilerplate/redux/company/company_actions.dart';
-import 'package:flutter_boilerplate/redux/profile/profile_actions.dart';
 import 'package:flutter_boilerplate/redux/settings/settings_actions.dart';
 import 'package:flutter_boilerplate/redux/ui/ui_actions.dart';
 import 'package:flutter_boilerplate/ui/app/app_builder.dart';

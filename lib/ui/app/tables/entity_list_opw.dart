@@ -541,20 +541,6 @@ class _EntityListOpwState extends State<EntityListOpw>
     }
   }
 
-  void _toggleUIVisibility() {
-    setState(() {
-      _showSavedEventView = !_showSavedEventView;
-    });
-
-    if (_showSavedEventView) {
-      final store = StoreProvider.of<AppState>(context);
-      store.dispatch(LoadEvents(isRefresh: true));
-    } else {
-      if (!_isAiSearching) {
-        _performInitialAiSearch();
-      }
-    }
-  }
 
   void _addUserMessage(String content) {
     final message = ChatMessage(

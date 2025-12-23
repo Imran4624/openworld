@@ -7,7 +7,6 @@ import 'package:flutter_boilerplate/ui/app/about_us.dart';
 import 'package:flutter_boilerplate/ui/app/pending_approval_screen.dart';
 import 'package:flutter_boilerplate/ui/app/routing_rules.dart';
 import 'package:flutter_boilerplate/ui/auth/login_vm.dart';
-import 'package:flutter_boilerplate/ui/auth/welcome_event_screen.dart';
 import 'package:flutter_boilerplate/ui/chat/message_view/message_screen.dart';
 import 'package:flutter_boilerplate/ui/dynamic_fields/dynamic_fields_create.dart';
 import 'package:flutter_boilerplate/ui/dynamic_fields/dynamic_fields_search_overview_screen.dart';
@@ -200,9 +199,6 @@ class MainScreen extends StatelessWidget {
           break;
         case AboutUs.route:
           screen = const AboutUs();
-          break;
-        case WelcomeEventScreen.route:
-          screen = const WelcomeEventScreen();
           break;
 
         case AdminScreen.route:

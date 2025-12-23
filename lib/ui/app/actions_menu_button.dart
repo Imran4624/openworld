@@ -6,9 +6,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 // Project imports:
 import 'package:flutter_boilerplate/data/models/models.dart';
 import 'package:flutter_boilerplate/redux/app/app_state.dart';
-import 'package:flutter_boilerplate/services/session_managment_service.dart';
 import 'package:flutter_boilerplate/utils/icons.dart';
-import 'package:flutter_boilerplate/utils/localization.dart';
 
 class ActionMenuButton extends StatelessWidget {
   const ActionMenuButton({
@@ -33,7 +31,6 @@ class ActionMenuButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<PopupMenuEntry<EntityAction>> actions = [];
     final store = StoreProvider.of<AppState>(context);
-    final state = store.state;
 
     if (isSaving) {
       return IconButton(

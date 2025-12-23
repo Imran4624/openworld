@@ -8,7 +8,6 @@ import 'package:flutter_boilerplate/services/session_managment_service.dart';
 import 'package:flutter_boilerplate/ui/app/routing_rules.dart';
 import 'package:flutter_boilerplate/ui/app/shared.dart';
 import 'package:flutter_boilerplate/ui/auth/login_dialog_view.dart';
-import 'package:flutter_boilerplate/ui/auth/welcome_event_screen.dart';
 import 'package:flutter_boilerplate/utils/platforms.dart';
 import 'package:intl/intl.dart';
 
@@ -22,7 +21,6 @@ import 'package:flutter_boilerplate/redux/app/app_state.dart';
 import 'package:flutter_boilerplate/data/models/static/app_theme.dart';
 import 'package:flutter_boilerplate/constants.dart';
 import 'package:flutter_boilerplate/redux/auth/auth_actions.dart';
-import 'package:flutter_boilerplate/redux/ui/ui_actions.dart';
 import 'package:flutter_boilerplate/utils/font_utils.dart';
 
 class StaticTopBar extends StatelessWidget {
@@ -34,7 +32,6 @@ class StaticTopBar extends StatelessWidget {
       distinct: true,
       converter: (store) => store.state,
       builder: (context, state) {
-        final store = StoreProvider.of<AppState>(context);
         final themeColors =
             AppTheme.getThemeColors(state.prefState.enableDarkMode);
 
@@ -69,12 +66,20 @@ class StaticTopBar extends StatelessWidget {
                               if (isAuthenticated(state) == true) {
                                 RoutingRules.defaultEntityLoadingRouting();
                               } else {
-                                store.dispatch(UpdateCurrentRoute(
-                                    WelcomeEventScreen.route));
-                                navigatorKey.currentState!
-                                    .pushNamedAndRemoveUntil(
-                                        WelcomeEventScreen.route,
-                                        (Route<dynamic> route) => false);
+                                showDialog(
+                                  context: navigatorKey.currentContext!,
+                                  builder: (BuildContext context) {
+                                    return LoginDialogView(
+                                      onClose: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      onLoginSuccess: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      isDialogLogin: false,
+                                    );
+                                  },
+                                );
                               }
                             },
                             child: Image.asset(
@@ -165,12 +170,20 @@ class StaticTopBar extends StatelessWidget {
                             if (isAuthenticated(state) == true) {
                               RoutingRules.defaultEntityLoadingRouting();
                             } else {
-                              store.dispatch(
-                                  UpdateCurrentRoute(WelcomeEventScreen.route));
-                              navigatorKey.currentState!
-                                  .pushNamedAndRemoveUntil(
-                                      WelcomeEventScreen.route,
-                                      (Route<dynamic> route) => false);
+                              showDialog(
+                                context: navigatorKey.currentContext!,
+                                builder: (BuildContext context) {
+                                  return LoginDialogView(
+                                    onClose: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    onLoginSuccess: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    isDialogLogin: false,
+                                  );
+                                },
+                              );
                             }
                           },
                           child: Image.asset(

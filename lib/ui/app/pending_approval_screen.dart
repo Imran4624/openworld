@@ -12,7 +12,6 @@ class ApprovalPendingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final store = StoreProvider.of<AppState>(context);
-    final state = store.state;
     final localization = AppLocalization.of(context)!;
 
     return Scaffold(

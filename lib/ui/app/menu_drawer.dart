@@ -1198,7 +1198,6 @@ class _DrawerTileState extends State<DrawerTile> {
     final String currentRoute = '/${toSnakeCase(route)}';
     final bool isDashboardTab = widget.title == localization.dashboard;
     final bool isSettingsTab = widget.title == localization.settings;
-    final bool isMarathonMapTab = widget.title == localization.marathonMap;
 
     bool isSelected = false;
 

@@ -457,7 +457,7 @@ class _EntityListState extends State<EntityList> {
                 multiselect: true,
                 userCompany: state.userCompany,
                 isGuest: isGuest,
-                isAuthor: firstEntity?.createdUserId == getLoggedInUserId(store),
+                isAuthor: firstEntity.createdUserId == getLoggedInUserId(store),
               ) ??
             <EntityAction>[])
         .whereNotNull();

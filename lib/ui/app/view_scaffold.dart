@@ -5,8 +5,6 @@ import 'package:flutter_boilerplate/redux/profile_operation/profile_operation_ac
 import 'package:flutter_boilerplate/services/session_managment_service.dart';
 import 'package:flutter_boilerplate/ui/chat/view/chat_header.dart';
 import 'package:flutter_boilerplate/ui/event/view/event_view_vm.dart';
-import 'package:flutter_boilerplate/ui/profile/profile_screen.dart';
-import 'package:flutter_boilerplate/ui/profile/view/profile_view_vm.dart';
 
 // Package imports:
 import 'package:flutter_redux/flutter_redux.dart';
@@ -263,8 +261,7 @@ class ViewScaffold extends StatelessWidget {
                                                       decoration:
                                                           InputDecoration(
                                                         labelText: localization
-                                                                .comment ??
-                                                            'Comment',
+                                                            .comment,
                                                         border:
                                                             OutlineInputBorder(),
                                                       ),
@@ -301,9 +298,8 @@ class ViewScaffold extends StatelessWidget {
                                                 onPressed: () =>
                                                     Navigator.of(dialogContext)
                                                         .pop(),
-                                                child: Text(
-                                                    localization.cancel ??
-                                                        'Cancel'),
+                                                child:
+                                                    Text(localization.cancel),
                                               ),
                                               ElevatedButton(
                                                 onPressed: () {

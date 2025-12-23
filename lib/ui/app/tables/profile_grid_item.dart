@@ -31,7 +31,7 @@ class ProfileGridItem extends StatelessWidget {
     final questionGroups = state.dynamicFieldState.questionGroups;
     List<String> imageUrls =
         profile.dynamicFields.getImages(DynamicFieldsConstants.images);
-    String? ageValue = profile.dynamicFields.getAge(DynamicFieldsConstants.dob);
+    String ageValue = profile.dynamicFields.getAge(DynamicFieldsConstants.dob);
     String? fullName =
         profile.dynamicFields.getValue(DynamicFieldsConstants.name);
     final questionMap = <String, QuestionModel>{};
@@ -44,8 +44,8 @@ class ProfileGridItem extends StatelessWidget {
     Map<String, String> displayFields = profile.dynamicFields
         .getDisplayFields(ProjectConfig.displayFieldIds, questionMap);
 
-    displayFields = Map.fromEntries(displayFields.entries
-        .where((entry) => entry.value != null && entry.value.isNotEmpty));
+    displayFields = Map.fromEntries(
+      displayFields.entries.where((entry) => entry.value.isNotEmpty));
 
     return Card(
       elevation: isChecked ? 6 : 4,
@@ -192,7 +192,7 @@ class ProfileGridItem extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          if (ageValue != null && ageValue.isNotEmpty) ...[
+                          if (ageValue.isNotEmpty) ...[
                             const SizedBox(width: 8),
                             Container(
                               padding: const EdgeInsets.symmetric(

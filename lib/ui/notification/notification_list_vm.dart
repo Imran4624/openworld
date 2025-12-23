@@ -4,14 +4,11 @@ import 'package:flutter_boilerplate/ui/app/tables/entity_list.dart';
 import 'package:flutter_boilerplate/ui/notification/notification_list_item.dart';
 import 'package:flutter_boilerplate/ui/notification/notification_presenter.dart';
 import 'package:redux/redux.dart';
-import 'package:flutter_boilerplate/redux/app/app_actions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter_boilerplate/redux/ui/list_ui_state.dart';
-import 'package:flutter_boilerplate/utils/completers.dart';
-import 'package:flutter_boilerplate/utils/localization.dart';
 import 'package:flutter_boilerplate/redux/notification/notification_selectors.dart';
 import 'package:flutter_boilerplate/data/models/models.dart';
 import 'package:flutter_boilerplate/redux/app/app_state.dart';
@@ -105,8 +102,8 @@ class NotificationListVM {
               EntityAction action) =>
           handleNotificationAction(context, notifications, action),
       onRefreshed: (context) => _handleRefresh(context),
-      tableColumns: state.userCompany.settings
-              ?.getTableColumns(EntityType.notification) ??
+            tableColumns: state.userCompany.settings
+              .getTableColumns(EntityType.notification) ??
           NotificationPresenter.getDefaultTableFields(state.userCompany),
       onSortColumn: (field) => store.dispatch(UpdateNotificationFilter(
         state.notificationState.filter.rebuild((b) => b

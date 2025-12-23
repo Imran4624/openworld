@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_boilerplate/data/mock/cac.dart';
+import 'package:flutter_boilerplate/data/mock/opw.dart';
 import 'package:flutter_boilerplate/data/models/dynamic_fields/dynamic_fields_modal.dart';
 import 'package:flutter_boilerplate/ui/dynamic_fields/dynamic_fields_builder.dart';
 import 'package:flutter_boilerplate/ui/app/shared.dart';
@@ -23,7 +23,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void initState() {
     super.initState();
-    _questionGroups = (cacQuestions['groups'] as List)
+    _questionGroups = (opwQuestions['groups'] as List)
         .map((group) => QuestionGroupModel.fromJson(group))
         .toList();
 

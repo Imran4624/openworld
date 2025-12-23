@@ -57,4 +57,3 @@ To add a new cloud function to the project:
 3. **Export function**: Add the function export to `src/index.ts`
    - Import your function at the top
    - Add it to the appropriate export section with the dynamic naming pattern
-   - The function will automatically get the app type suffix (e.g., `_events121`)

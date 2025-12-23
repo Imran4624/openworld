@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>531251110143-lnf5ujf2t3p8tg40temennsscq1su508.apps.googleusercontent.com</string>
+	<string>531251110143-lgg8i7c7p4hgsgrelfctgegjofv15hi8.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.531251110143-lnf5ujf2t3p8tg40temennsscq1su508</string>
+	<string>com.googleusercontent.apps.531251110143-lgg8i7c7p4hgsgrelfctgegjofv15hi8</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>531251110143-2a317mckte5keme152vus9iukja01n41.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>app.openworldapp.co</string>
+	<string>getopenworld.com</string>
 	<key>PROJECT_ID</key>
 	<string>openworld-app</string>
 	<key>STORAGE_BUCKET</key>
@@ -30,42 +30,7 @@
 	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
-
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleURLName</key>
-			<string>google.signin</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>com.googleusercontent.apps.531251110143-lnf5ujf2t3p8tg40temennsscq1su508</string>
-			</array>
-		</dict>
-		<dict>
-			<key>CFBundleURLName</key>
-			<string>app.links</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>https</string>
-				<string>http</string>
-			</array>
-		</dict>
-		<dict>
-			<key>CFBundleURLName</key>
-			<string>opwapp</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>opwapp</string>
-			</array>
-		</dict>
-	</array>
-
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>googlechromes</string>
-		<string>googlechrome</string>
-	</array>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:531251110143:ios:551f70d1b0b363a436acca</string>
+	<string>1:531251110143:ios:e2abbe7a015fd16636acca</string>
 </dict>
 </plist>

@@ -18,12 +18,12 @@ import 'package:flutter_boilerplate/utils/platforms.dart';
 class ProjectConfig {
   static AppType appType = AppType.opw;
   static double? getContainerPadding(double deviceWidth) {
-    if(appType == AppType.opw) {
+    if (appType == AppType.opw) {
       if (deviceWidth > 1440) {
-      return 140.0;
-    }else if (deviceWidth > 1024) {
-      return 100.0;
-    }
+        return 140.0;
+      } else if (deviceWidth > 1024) {
+        return 100.0;
+      }
       return null;
     }
     if (deviceWidth > 1440) {
@@ -45,6 +45,7 @@ class ProjectConfig {
         return false;
     }
   }
+
   static bool get isSidePaddingEnabled {
     switch (appType) {
       default:
@@ -73,6 +74,7 @@ class ProjectConfig {
         return true;
     }
   }
+
   static bool get showBarcodeSubtitle {
     switch (appType) {
       default:
@@ -228,21 +230,21 @@ class ProjectConfig {
 
   static String defaultImage = 'images/defaultUserThumbnail.jpg';
   static String defaultUserIcon = 'assets/loopjam/images/defaultUserIcon.png';
-  
+
   static String get defaultUserLocation {
     switch (appType) {
       default:
         return 'San Francisco';
     }
   }
-  
+
   static Map<String, double> get defaultLocationCoordinates {
     switch (appType) {
       default:
-        return {'latitude': 37.7749, 'longitude': -122.4194}; 
+        return {'latitude': 37.7749, 'longitude': -122.4194};
     }
   }
-  
+
   static AppType get currentAppType => appType;
   //#endregion
 
@@ -264,7 +266,6 @@ class ProjectConfig {
 
   static String defaultSettingsToOpenInDesktopView() {
     switch (appType) {
-   
       default:
         return kSettingsDeviceSettings;
     }
@@ -272,7 +273,6 @@ class ProjectConfig {
 
   static String defaultNewPhotoStatus() {
     switch (appType) {
-      
       default:
         return kEntityStateActive;
     }
@@ -328,6 +328,7 @@ class ProjectConfig {
         return Icons.favorite_border;
     }
   }
+
   static IconData get profileEntityDrawerIcon {
     switch (appType) {
       default:
@@ -531,7 +532,7 @@ class ProjectConfig {
           EntityState.archived,
           EntityState.deleted,
         ]);
-      }  else {
+      } else {
         return EntityState.values;
       }
     }
@@ -576,18 +577,21 @@ class ProjectConfig {
         return true;
     }
   }
+
   static bool get excludeLikedMatchedProfiles {
     switch (appType) {
       default:
         return false;
     }
   }
+
   static bool get showProfileOperationsButtons {
     switch (appType) {
       default:
         return false;
     }
   }
+
   static bool get showProfileChatOperationButtons {
     switch (appType) {
       default:
@@ -608,7 +612,7 @@ class ProjectConfig {
   static bool showActionButtonByEntityType(EntityType entityType) {
     switch (entityType) {
       case EntityType.profile:
-            return false;
+        return false;
       case EntityType.social:
         return false;
       default:
@@ -632,7 +636,6 @@ class ProjectConfig {
 
   static bool showUpdateVersionDialog() {
     switch (appType) {
-     
       default:
         return false;
     }
@@ -730,11 +733,11 @@ class ProjectConfig {
   static bool showEntityDrawerTabByEntityType(EntityType entityType) {
     switch (entityType) {
       case EntityType.profile:
-            return false;
+        return false;
       case EntityType.photo:
         return true;
       case EntityType.event:
-            return true;
+        return true;
       case EntityType.payment:
         switch (appType) {
           default:
@@ -880,7 +883,7 @@ class ProjectConfig {
   static bool showPlusCreateButton(EntityType entityType) {
     switch (entityType) {
       case EntityType.event:
-      return appType == AppType.opw;
+        return appType == AppType.opw;
       case EntityType.chat:
       case EntityType.profile:
       case EntityType.profileOperation:
@@ -936,7 +939,6 @@ class ProjectConfig {
       case EntityType.profileOperation:
       case EntityType.event:
         return false;
-      // return appType == AppType.loopjam;
       case EntityType.photo:
         return state.photoState.filter.stateFilter == EntityState.myEntities;
       default:
@@ -1041,16 +1043,16 @@ class ProjectConfig {
   }
 
   static String _getBaseEntityUrl(EntityType entityType, String entityId) {
-        switch (entityType) {
-          case EntityType.event:
-            return '/event/view?id=$entityId';
-          case EntityType.photo:
-            return '/photo/view?id=$entityId';
-          case EntityType.profile:
-            return '/profile/view?id=$entityId';
-          default:
-            return '';
-        }
+    switch (entityType) {
+      case EntityType.event:
+        return '/event/view?id=$entityId';
+      case EntityType.photo:
+        return '/photo/view?id=$entityId';
+      case EntityType.profile:
+        return '/profile/view?id=$entityId';
+      default:
+        return '';
+    }
   }
 
   static List<EntityType> enabledEntitiesToUpdateUrl() {
@@ -1085,6 +1087,7 @@ class ProjectConfig {
         return false;
     }
   }
+
   static bool isLimitRemoved() {
     switch (appType) {
       default:
@@ -1205,7 +1208,8 @@ class ProjectConfig {
     }
   }
 
-  static bool showEntityTopBar(String route, bool isMobile, {EntityType? entityType}) {
+  static bool showEntityTopBar(String route, bool isMobile,
+      {EntityType? entityType}) {
     switch (appType) {
       default:
         return false;
@@ -1219,7 +1223,7 @@ class ProjectConfig {
     }
   }
 
-  static bool swipingProfilesEnabled( bool isAdmin) {
+  static bool swipingProfilesEnabled(bool isAdmin) {
     switch (appType) {
       default:
         return false;
@@ -1303,11 +1307,10 @@ class ProjectConfig {
 
   static String get stripeGuestLandingPagePriceId =>
       "price_1SYNF6PlYE40TDcBdMZa88bM";
-  static double get guestLandingPagePrice => 59.0; 
+  static double get guestLandingPagePrice => 59.0;
 }
 
 enum AppType {
-  cac,
   opw,
 }
 

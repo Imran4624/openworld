@@ -10,8 +10,7 @@ final Map<String, Object> opwQuestions = {
     {
       'id': 'personal_details',
       'group': 'Set up your details?',
-      'description':
-          "",
+      'description': "",
       'icon': Icons.person,
       'show_all_questions': true,
       'questions': [
@@ -131,8 +130,7 @@ final Map<String, Object> opwQuestions = {
     {
       'id': 'personal_preferences',
       'group': 'Set up your preferences',
-      'description':
-          "",
+      'description': "",
       'icon': Icons.person,
       'questions': [
         {

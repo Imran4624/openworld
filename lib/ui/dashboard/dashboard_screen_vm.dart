@@ -25,7 +25,6 @@ import 'package:flutter_boilerplate/ui/app/confirm_email_vm.dart';
 import 'package:flutter_boilerplate/ui/dashboard/dashboard_screen.dart';
 import 'package:flutter_boilerplate/utils/completers.dart';
 import 'package:flutter_boilerplate/utils/localization.dart';
-import 'package:flutter_boilerplate/ui/life_progress/life_goal_main.dart';
 
 class DashboardScreenBuilder extends StatelessWidget {
   const DashboardScreenBuilder({Key? key}) : super(key: key);

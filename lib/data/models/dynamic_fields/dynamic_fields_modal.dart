@@ -35,21 +35,7 @@ enum InputType {
 }
 
 enum QuestionType {
-  profile,
-  tour,
-  planner,
-  document,
-  onboarding,
-  documentDemo,
-  mapList,
-  myIslamicSpouse,
-  cac,
-  events121,
-  boilerplate,
   opw,
-  lvc,
-  lm,
-  loopjam,
 }
 
 class DrivesViewField {
@@ -241,7 +227,6 @@ class QuestionGroupModel {
 
   static List<QuestionGroupModel> fromQuestionList(QuestionType type) {
     switch (type) {
-      
       case QuestionType.opw:
         return (opwQuestions['groups'] as List)
             .map((group) => QuestionGroupModel.fromJson(group))

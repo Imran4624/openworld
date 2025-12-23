@@ -15,8 +15,6 @@ class AboutUs extends StatelessWidget {
 
   String _getAppTitle() {
     switch (ProjectConfig.appType) {
-      case AppType.cac:
-        return 'About Cocktails & Conversation';
       default:
         return 'About Us';
     }
@@ -24,8 +22,6 @@ class AboutUs extends StatelessWidget {
 
   String _getAppDescription() {
     switch (ProjectConfig.appType) {
-      case AppType.cac:
-        return 'Cocktails & Conversation is a curated event and social connection platform for singles who value real-world chemistry.';
       default:
         return 'Welcome to our platform designed to connect people and build meaningful relationships.';
     }
@@ -33,16 +29,14 @@ class AboutUs extends StatelessWidget {
 
   String _getAppDetails() {
     switch (ProjectConfig.appType) {
-      case AppType.cac:
-        return 'We\'re not a dating app — we believe true connections begin in person. That\'s why we host elegant, thoughtfully curated events where you can meet new people face-to-face. After the event, the app allows you to reconnect with guests you met, continue conversations, and explore meaningful connections in a relaxed, organic way.';
       default:
         return 'Our platform is designed to help you connect with like-minded individuals and build meaningful relationships in a safe and respectful environment.';
     }
   }
 
   Widget _buildPolicyLinks(BuildContext context) {
-    
-    if (ProjectConfig.getTermsAndConditionsUrl().isEmpty && ProjectConfig.getPrivacyPolicyUrl().isEmpty) {
+    if (ProjectConfig.getTermsAndConditionsUrl().isEmpty &&
+        ProjectConfig.getPrivacyPolicyUrl().isEmpty) {
       return const SizedBox.shrink();
     }
 
@@ -62,57 +56,64 @@ class AboutUs extends StatelessWidget {
           Text(
             'Legal Information',
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-            ),
+                  fontWeight: FontWeight.w600,
+                ),
           ),
           const SizedBox(height: 12),
-          if(ProjectConfig.getTermsAndConditionsUrl().isNotEmpty)
-          Text.rich(
-            TextSpan(
-              text: 'By using our services, you agree to our ',
-              style: Theme.of(context).textTheme.bodyMedium,
-              children: [
-                if (ProjectConfig.getTermsAndConditionsUrl().isNotEmpty) ...[
-                  TextSpan(
-                    text: 'Terms of Service',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                      decoration: TextDecoration.underline,
-                      fontWeight: FontWeight.w500,
+          if (ProjectConfig.getTermsAndConditionsUrl().isNotEmpty)
+            Text.rich(
+              TextSpan(
+                text: 'By using our services, you agree to our ',
+                style: Theme.of(context).textTheme.bodyMedium,
+                children: [
+                  if (ProjectConfig.getTermsAndConditionsUrl().isNotEmpty) ...[
+                    TextSpan(
+                      text: 'Terms of Service',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                            decoration: TextDecoration.underline,
+                            fontWeight: FontWeight.w500,
+                          ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => launchUrl(
+                            Uri.parse(ProjectConfig.getTermsAndConditionsUrl()),
+                            mode: LaunchMode.externalApplication),
                     ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () => launchUrl(Uri.parse(ProjectConfig.getTermsAndConditionsUrl()), mode: LaunchMode.externalApplication),
-                  ),
-                  if (ProjectConfig.getPrivacyPolicyUrl().isNotEmpty) ...[
-                    const TextSpan(text: ' and '),
+                    if (ProjectConfig.getPrivacyPolicyUrl().isNotEmpty) ...[
+                      const TextSpan(text: ' and '),
+                      TextSpan(
+                        text: 'Privacy Policy',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Theme.of(context).colorScheme.primary,
+                              decoration: TextDecoration.underline,
+                              fontWeight: FontWeight.w500,
+                            ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () => launchUrl(
+                              Uri.parse(ProjectConfig.getPrivacyPolicyUrl()),
+                              mode: LaunchMode.externalApplication),
+                      ),
+                    ],
+                    const TextSpan(text: '.'),
+                  ] else if (ProjectConfig.getPrivacyPolicyUrl()
+                      .isNotEmpty) ...[
                     TextSpan(
                       text: 'Privacy Policy',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
-                        decoration: TextDecoration.underline,
-                        fontWeight: FontWeight.w500,
-                      ),
+                            color: Theme.of(context).colorScheme.primary,
+                            decoration: TextDecoration.underline,
+                            fontWeight: FontWeight.w500,
+                          ),
                       recognizer: TapGestureRecognizer()
-                        ..onTap = () => launchUrl(Uri.parse(ProjectConfig.getPrivacyPolicyUrl()), mode: LaunchMode.externalApplication),
+                        ..onTap = () => launchUrl(
+                            Uri.parse(ProjectConfig.getPrivacyPolicyUrl()),
+                            mode: LaunchMode.externalApplication),
                     ),
+                    const TextSpan(text: '.'),
                   ],
-                  const TextSpan(text: '.'),
-                ] else if (ProjectConfig.getPrivacyPolicyUrl().isNotEmpty) ...[
-                  TextSpan(
-                    text: 'Privacy Policy',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                      decoration: TextDecoration.underline,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () => launchUrl(Uri.parse(ProjectConfig.getPrivacyPolicyUrl()), mode: LaunchMode.externalApplication),
-                  ),
-                  const TextSpan(text: '.'),
                 ],
-              ],
+              ),
             ),
-          ),
         ],
       ),
     );
@@ -133,13 +134,13 @@ class AboutUs extends StatelessWidget {
 
         final textStyle = Theme.of(context).textTheme.bodySmall;
         return CopyToClipboard(
-          value: version,
-          child:Text(
-          'Version $version',
-          style: textStyle?.copyWith(
-            color: textStyle.color?.withOpacity(0.7),
-          ),
-        ));
+            value: version,
+            child: Text(
+              'Version $version',
+              style: textStyle?.copyWith(
+                color: textStyle.color?.withOpacity(0.7),
+              ),
+            ));
       },
     );
   }

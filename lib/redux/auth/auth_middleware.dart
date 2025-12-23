@@ -102,11 +102,12 @@ void _saveAuthLocal(String url) async {
 }
 
 Middleware<AppState> _createUserLogout(AuthRepository repository) {
-  return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) async {
+  return (Store<AppState> store, dynamic dynamicAction,
+      NextDispatcher next) async {
     final action = dynamicAction as UserLogout?;
 
     next(action);
-      await repository.logout();
+    await repository.logout();
     store.dispatch(UnRegisterDeviceRequest());
 
     navigatorKey.currentState!.pushNamedAndRemoveUntil(
@@ -215,9 +216,7 @@ Middleware<AppState> _createSendEmailLinkRequest(AuthRepository repository) {
   return (Store<AppState> store, dynamic dynamicAction, NextDispatcher next) {
     final action = dynamicAction as SendEmailLinkRequest;
 
-    repository
-        .sendEmailLink(email: action.email)
-        .then((_) {
+    repository.sendEmailLink(email: action.email).then((_) {
       showToast('Email sent! Check your inbox and click the link to continue.');
       action.completer.complete();
     }).catchError((Object error) {
@@ -262,9 +261,11 @@ Middleware<AppState> _createEmailLinkLoginRequest(AuthRepository repository) {
             isArchived: loggedInUserProfile.isArchived,
             isAdmin: loggedInUserProfile.isAdmin,
             setProfileCompleted: loggedInUserProfile.isProfileCompleted,
-            isEmailVerified: ProjectConfig.appType == AppType.opw ? true : isEmailConfirmed);
-        
-        if ((ProjectConfig.appType == AppType.opw && store.state.authState.isEmailLinkAuth) || 
+            isEmailVerified:
+                ProjectConfig.appType == AppType.opw ? true : isEmailConfirmed);
+
+        if ((ProjectConfig.appType == AppType.opw &&
+                store.state.authState.isEmailLinkAuth) ||
             (ProjectConfig.emailConfirmationEnabled && !isEmailVerified)) {
           store.dispatch(ViewMainScreen());
           store.dispatch(UserLoginSuccess());
@@ -284,7 +285,7 @@ Middleware<AppState> _createEmailLinkLoginRequest(AuthRepository repository) {
         }
 
         store.dispatch(UserVerifiedPassword());
-        
+
         if (ProjectConfig.appType == AppType.opw) {
           store.dispatch(RefreshData(
               completer: Completer<Null>()
@@ -293,7 +294,7 @@ Middleware<AppState> _createEmailLinkLoginRequest(AuthRepository repository) {
                   store.dispatch(UpdatedSetting());
                 })));
         }
-        
+
         Future.delayed(const Duration(seconds: 2), () {
           if (store.state.authState.isAuthenticated) {
             store.dispatch(SetEmailLinkAuthenticationEmail(email: ''));
@@ -574,10 +575,12 @@ Middleware<AppState> _createRefreshRequest(AuthRepository repository) {
     store.dispatch(UserLoadUrl(url: url));
     try {
       final userId = getLoggedInUserId(store);
-      final loggedInUserProfile = await repository.getCurrentUserProfile(userId.isNotEmpty ? userId : null);
+      final loggedInUserProfile = await repository
+          .getCurrentUserProfile(userId.isNotEmpty ? userId : null);
 
       if (loggedInUserProfile == null) {
-        if (!(ProjectConfig.appType == AppType.opw && store.state.authState.isEmailLinkAuth)) {
+        if (!(ProjectConfig.appType == AppType.opw &&
+            store.state.authState.isEmailLinkAuth)) {
           store.dispatch(UserLogout());
         }
         return;
@@ -629,7 +632,8 @@ Middleware<AppState> _createRefreshRequest(AuthRepository repository) {
         AppBuilder.of(navigatorKey.currentContext!)!.rebuild();
       }).catchError((Object error) {
         if ('$error'.startsWith('403') || '$error'.startsWith('429')) {
-          if (!(ProjectConfig.appType == AppType.opw && store.state.authState.isEmailLinkAuth)) {
+          if (!(ProjectConfig.appType == AppType.opw &&
+              store.state.authState.isEmailLinkAuth)) {
             store.dispatch(UserLogout());
           }
         } else {
@@ -647,7 +651,8 @@ Middleware<AppState> _createRefreshRequest(AuthRepository repository) {
       });
     } catch (e) {
       logError('Error fetching current user data: $e');
-      if (!(ProjectConfig.appType == AppType.opw && store.state.authState.isEmailLinkAuth)) {
+      if (!(ProjectConfig.appType == AppType.opw &&
+          store.state.authState.isEmailLinkAuth)) {
         store.dispatch(UserLogout());
       }
     }
@@ -719,10 +724,10 @@ Middleware<AppState> _checkExistingProfileByEmail(AuthRepository repository) {
   return (Store<AppState> store, dynamic dynamicAction,
       NextDispatcher next) async {
     final action = dynamicAction as CheckExistingProfileByEmailRequest;
-    
+
     try {
       final result = await repository.checkExistingProfileByEmail(action.email);
-      
+
       if (result.error != null) {
         store.dispatch(CheckExistingProfileByEmailFailure(result.error!));
         action.completer?.completeError(result.error!);
@@ -730,17 +735,19 @@ Middleware<AppState> _checkExistingProfileByEmail(AuthRepository repository) {
         final hasProfile = result.hasProfile;
         final user = result.userData;
         final profile = result.profile;
-        
+
         store.dispatch(CheckExistingProfileByEmailSuccess(
           hasProfile: hasProfile,
           user: user,
           profile: profile,
         ));
-        
+
         if (hasProfile && profile != null) {
           store.dispatch(SetLoggedInUserProfile(profile));
           store.dispatch(UpdateAuthStateAction(
-            currentUserName: profile.name.isNotEmpty ? profile.name : user?['userName'] ?? '',
+            currentUserName: profile.name.isNotEmpty
+                ? profile.name
+                : user?['userName'] ?? '',
             currentUserId: profile.id,
             email: action.email,
             isArchived: profile.isArchived,
@@ -748,7 +755,7 @@ Middleware<AppState> _checkExistingProfileByEmail(AuthRepository repository) {
             setProfileCompleted: profile.isProfileCompleted,
             isEmailVerified: true,
           ));
-          
+
           if (profile.isProfileCompleted) {
             if (ProjectConfig.appType == AppType.opw) {
               store.dispatch(LoadEvents());
@@ -768,7 +775,7 @@ Middleware<AppState> _checkExistingProfileByEmail(AuthRepository repository) {
             ),
           );
         }
-        
+
         action.completer?.complete();
       }
     } catch (error) {
@@ -787,7 +794,7 @@ Middleware<AppState> _updateProfileCompletionStatus(AuthRepository repository) {
     final action = dynamicAction as UpdateProfileCompletionStatus;
     try {
       final userId = getLoggedInUserId(store);
-      
+
       await repository.markProfileComplete(userId);
 
       store.dispatch(UpdateProfileCompletionStatusSuccess());
@@ -993,11 +1000,6 @@ Middleware<AppState> _createPhoneAuthRequest(AuthRepository repository) {
                   isAdmin: userProfile.isAdmin,
                   setProfileCompleted: isProfileCompleted,
                   isEmailVerified: isEmailVerified);
-
-              // if (action.isDialogLogin && ProjectConfig.appType == AppType.loopjam) {
-              //   action.completer.complete();
-              //   return smsCode;
-              // }
 
               store.dispatch(LoadAccountSuccess(
                 completer: action.completer,

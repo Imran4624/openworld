@@ -84,7 +84,6 @@ import 'package:flutter_boilerplate/ui/photo/edit/photo_edit_vm.dart';
 import 'package:flutter_boilerplate/ui/photo/view/photo_view_vm.dart';
 import 'package:flutter_boilerplate/ui/photo/photo_screen_vm.dart';
 
-
 import 'package:flutter_boilerplate/ui/notification/notification_screen.dart';
 import 'package:flutter_boilerplate/ui/notification/edit/notification_edit_vm.dart';
 import 'package:flutter_boilerplate/ui/notification/view/notification_view_vm.dart';
@@ -112,8 +111,6 @@ import 'package:flutter_boilerplate/utils/web_stub.dart'
 import 'package:flutter_boilerplate/services/push_notifications/firebase_messaging_service.dart';
 
 import 'package:flutter_boilerplate/data/models/models.dart';
-
-import 'package:flutter_boilerplate/ui/auth/welcome_event_screen.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -200,7 +197,7 @@ class FlutterBoilerplateAppState extends State<FlutterBoilerplateApp> {
 
     final path = WebUtils.browserRoute;
     final id = WebUtils.getUrlParameter('id');
-    
+
     if (id == null || id.isEmpty || path == null || path.isEmpty) return;
 
     String routePath = path;
@@ -312,9 +309,11 @@ class FlutterBoilerplateAppState extends State<FlutterBoilerplateApp> {
       case '/login':
         return MaterialPageRoute<dynamic>(builder: (_) => const LoginScreen());
       case '/stripe_connect':
-        return MaterialPageRoute<dynamic>(builder: (_) => const StripeConnectScreen());
+        return MaterialPageRoute<dynamic>(
+            builder: (_) => const StripeConnectScreen());
       case '/stripe_payment':
-        return MaterialPageRoute<dynamic>(builder: (_) => const StripePaymentScreen());
+        return MaterialPageRoute<dynamic>(
+            builder: (_) => const StripePaymentScreen());
       case '/payment_method_manager':
         return MaterialPageRoute<dynamic>(
             builder: (_) => const PaymentMethodManagerScreen());
@@ -497,7 +496,8 @@ class FlutterBoilerplateAppState extends State<FlutterBoilerplateApp> {
                   //showPerformanceOverlay: true,
                   navigatorObservers: [
                     if (ProjectConfig.enableGoogleAnalytics)
-                      FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
+                      FirebaseAnalyticsObserver(
+                          analytics: FirebaseAnalytics.instance),
                     // SentryNavigatorObserver(),
                   ],
                   localizationsDelegates: [
@@ -637,8 +637,7 @@ class FlutterBoilerplateAppState extends State<FlutterBoilerplateApp> {
                               const DeviceSettingsScreen(),
                           AccountManagementScreen.route: (context) =>
                               const AccountManagementScreen(),
-                          WelcomeEventScreen.route: (context) =>
-                              const WelcomeEventScreen(),
+
                           // Stripe routes
                           StripeConnectScreen.route: (context) =>
                               const StripeConnectScreen(),

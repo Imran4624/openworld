@@ -132,26 +132,6 @@ class _MenuDrawerState extends State<MenuDrawer> {
     return null;
   }
 
-  String? _getValidDropdownValueForEvents121(List<CompanyEntity> userCompanies,
-      bool isUserAdmin, String selectedCompanyId) {
-    if (selectedCompanyId.isNotEmpty) {
-      final hasSelectedCompany =
-          userCompanies.any((c) => c.id == selectedCompanyId);
-      if (hasSelectedCompany) {
-        return selectedCompanyId;
-      }
-    }
-
-    if (userCompanies.isNotEmpty) {
-      return userCompanies.first.id;
-    }
-
-    if (isUserAdmin) {
-      return 'add_company';
-    }
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
     final Store<AppState> store = StoreProvider.of<AppState>(context);

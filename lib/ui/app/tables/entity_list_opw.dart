@@ -986,7 +986,7 @@ class _EntityListOpwState extends State<EntityListOpw>
             ? (thumbnailUrl!.startsWith('http')
                 ? NetworkImage(thumbnailUrl)
                 : AssetImage(thumbnailUrl)) as ImageProvider
-            : const AssetImage('assets/images/defaultUserThumbnail.jpg'),
+            : const AssetImage('assets/opw/images/defaultUserThumbnail.jpg'),
       ),
     );
   }

@@ -130,7 +130,7 @@ flutter:
   generate: true
 
   assets:
-    - assets/images/defaultUserThumbnail.jpg
+    - assets/opw/images/defaultUserThumbnail.jpg
     - assets/images/google_logo.png
     - assets/boilerplate/images/icon.png
     - assets/boilerplate/images/defaultEventPhoto.webp

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter_boilerplate/project_config.dart';
 import 'package:flutter_boilerplate/redux/app/app_actions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/services/session_managment_service.dart';
@@ -7,8 +6,6 @@ import 'package:flutter_boilerplate/ui/app/routing_rules.dart';
 import 'package:flutter_boilerplate/utils/completers.dart';
 import 'package:flutter_boilerplate/utils/localization.dart';
 import 'package:redux/redux.dart';
-import 'package:flutter_boilerplate/redux/ui/ui_actions.dart';
-import 'package:flutter_boilerplate/ui/profile/profile_screen.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_boilerplate/redux/profile/profile_actions.dart';
 import 'package:flutter_boilerplate/data/models/models.dart';

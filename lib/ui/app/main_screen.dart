@@ -452,7 +452,7 @@ class EntityScreens extends StatelessWidget {
         case EntityType.photo:
           child = const PhotoEditScreen();
           break;
-  
+
         case EntityType.notification:
           child = const NotificationEditScreen();
           break;
@@ -501,7 +501,7 @@ class EntityScreens extends StatelessWidget {
           case EntityType.photo:
             child = const PhotoViewScreen();
             break;
-       
+
           case EntityType.notification:
             child = const NotificationViewScreen();
             break;

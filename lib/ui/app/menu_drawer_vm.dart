@@ -125,7 +125,7 @@ class MenuDrawerVM {
               store.dispatch(ClearEntityFilter());
               store.dispatch(DiscardChanges());
               store.dispatch(SelectCompany(companyIndex: index));
-              
+
               if (store.state.company.isLarge && !store.state.isLoaded) {
                 // store.dispatch(LoadClients());
                 store.dispatch(RefreshData());

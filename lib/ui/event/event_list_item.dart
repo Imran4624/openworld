@@ -6,7 +6,6 @@ import 'package:flutter_boilerplate/ui/app/entity_state_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/data/models/models.dart';
 import 'package:flutter_boilerplate/ui/app/dismissible_entity.dart';
-import 'package:flutter_boilerplate/project_config.dart';
 
 class EventListItem extends StatelessWidget {
   const EventListItem({
@@ -111,7 +110,7 @@ class EventListItem extends StatelessWidget {
                   if (event.images?.header != null)
                     SizedBox.expand(
                       child: Image.network(
-                        event.images!.header!,
+                        event.images!.header,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
                           return Image.asset(

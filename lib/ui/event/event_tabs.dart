@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_boilerplate/project_config.dart';
 
 class EventTabs extends StatefulWidget {
   const EventTabs({

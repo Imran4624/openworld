@@ -6,7 +6,6 @@ import 'package:flutter_boilerplate/data/models/models.dart';
 import 'package:flutter_boilerplate/redux/app/app_state.dart';
 import 'package:flutter_boilerplate/redux/event/event_actions.dart';
 import 'package:flutter_boilerplate/redux/event/event_selectors.dart';
-import 'package:flutter_boilerplate/project_config.dart';
 import 'package:redux/redux.dart';
 
 import 'event_screen.dart';

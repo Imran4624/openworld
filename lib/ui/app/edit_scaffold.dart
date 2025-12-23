@@ -18,7 +18,6 @@ import 'package:flutter_boilerplate/constants.dart';
 import 'package:flutter_boilerplate/data/models/models.dart';
 import 'package:flutter_boilerplate/redux/app/app_state.dart';
 import 'package:flutter_boilerplate/redux/settings/settings_actions.dart';
-import 'package:flutter_boilerplate/services/session_managment_service.dart';
 import 'package:flutter_boilerplate/ui/app/entities/entity_status_chip.dart';
 import 'package:flutter_boilerplate/ui/app/icon_message.dart';
 import 'package:flutter_boilerplate/ui/app/menu_drawer_vm.dart';

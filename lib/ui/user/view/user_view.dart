@@ -7,7 +7,6 @@ import 'package:flutter_boilerplate/ui/app/entities/entity_list_tile.dart';
 
 // Project imports:
 import 'package:flutter_boilerplate/ui/app/entity_header.dart';
-import 'package:flutter_boilerplate/ui/app/icon_message.dart';
 import 'package:flutter_boilerplate/ui/app/lists/list_divider.dart';
 import 'package:flutter_boilerplate/ui/app/scrollable_listview.dart';
 import 'package:flutter_boilerplate/ui/app/view_scaffold.dart';

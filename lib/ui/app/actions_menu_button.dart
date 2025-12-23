@@ -58,7 +58,8 @@ class ActionMenuButton extends StatelessWidget {
               SizedBox(width: 16.0),
               Expanded(
                 child: Text(ProjectConfig.getEntityActionText(
-                    entity!.entityType, action, entity: entity!)),
+                    entity!.entityType, action,
+                    entity: entity!)),
               ),
             ],
           ),

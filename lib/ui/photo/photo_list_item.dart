@@ -2,7 +2,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_boilerplate/redux/app/app_actions.dart';
 import 'package:flutter_boilerplate/redux/app/app_state.dart';
 import 'package:flutter_boilerplate/ui/app/entity_state_label.dart';
-import 'package:flutter_boilerplate/utils/formatting.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/data/models/models.dart';
 import 'package:flutter_boilerplate/ui/app/dismissible_entity.dart';

@@ -96,7 +96,8 @@ class DismissibleEntity extends StatelessWidget {
               children: [
                 if (entity.isActive)
                   SlidableAction(
-                    label: EntityStateManager.getArchiveActionText(entity.entityType!, entity),
+                    label: EntityStateManager.getArchiveActionText(
+                        entity.entityType!, entity),
                     backgroundColor: AppTheme.dark.warning,
                     foregroundColor: AppTheme.dark.text,
                     icon: Icons.archive,
@@ -105,7 +106,8 @@ class DismissibleEntity extends StatelessWidget {
                   )
                 else if (entity.isRestorable)
                   SlidableAction(
-                    label: EntityStateManager.getRestoreActionText(entity.entityType!, entity),
+                    label: EntityStateManager.getRestoreActionText(
+                        entity.entityType!, entity),
                     backgroundColor: AppTheme.dark.primary,
                     foregroundColor: AppTheme.dark.text,
                     icon: Icons.restore,
@@ -114,7 +116,8 @@ class DismissibleEntity extends StatelessWidget {
                   ),
                 if (!entity.isDeleted!)
                   SlidableAction(
-                    label: EntityStateManager.getDeleteActionText(entity.entityType!, entity),
+                    label: EntityStateManager.getDeleteActionText(
+                        entity.entityType!, entity),
                     backgroundColor: AppTheme.dark.danger,
                     foregroundColor: AppTheme.dark.text,
                     icon: Icons.delete,

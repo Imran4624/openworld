@@ -59,7 +59,9 @@ class BottomButtons extends StatelessWidget {
                     Icon(getEntityActionIcon(action1)),
                     SizedBox(width: 12),
                     Text(
-                      ProjectConfig.getEntityActionText(entity.entityType!, action1, entity: entity),
+                      ProjectConfig.getEntityActionText(
+                          entity.entityType!, action1,
+                          entity: entity),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           color: textColor.withOpacity(
@@ -84,7 +86,9 @@ class BottomButtons extends StatelessWidget {
                       Icon(getEntityActionIcon(action2)),
                       SizedBox(width: 12),
                       Text(
-                        ProjectConfig.getEntityActionText(entity.entityType!, action2, entity: entity),
+                        ProjectConfig.getEntityActionText(
+                            entity.entityType!, action2,
+                            entity: entity),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: textColor.withOpacity(

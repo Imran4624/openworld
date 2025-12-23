@@ -14,7 +14,6 @@ import 'package:redux/redux.dart';
 
 // Project imports:
 import 'package:flutter_boilerplate/data/models/models.dart';
-import 'package:flutter_boilerplate/redux/app/app_actions.dart';
 import 'package:flutter_boilerplate/redux/app/app_state.dart';
 import 'package:flutter_boilerplate/redux/ui/list_ui_state.dart';
 import 'package:flutter_boilerplate/redux/user/user_actions.dart';
@@ -22,8 +21,6 @@ import 'package:flutter_boilerplate/redux/user/user_selectors.dart';
 import 'package:flutter_boilerplate/ui/app/entities/entity_actions_dialog.dart';
 import 'package:flutter_boilerplate/ui/app/tables/entity_list.dart';
 import 'package:flutter_boilerplate/ui/user/user_list_item.dart';
-import 'package:flutter_boilerplate/utils/completers.dart';
-import 'package:flutter_boilerplate/utils/localization.dart';
 
 class UserListBuilder extends StatelessWidget {
   const UserListBuilder({Key? key}) : super(key: key);
@@ -101,8 +98,8 @@ class UserListVM {
       isLoading: state.isLoading,
       filter: state.userUIState.listUIState.filter,
       onRefreshed: (context) => _handleRefresh(context),
-      tableColumns:
-          state.userCompany.settings?.getTableColumns(EntityType.profile) ??
+        tableColumns:
+          state.userCompany.settings.getTableColumns(EntityType.profile) ??
               ProfilePresenter.getDefaultTableFields(state.userCompany),
       onSortColumn: (field) => store.dispatch(SortUsers(field)),
       onClearMultielsect: () => store.dispatch(ClearUserMultiselect()),

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/utils/completers.dart';
 import 'package:flutter_boilerplate/utils/localization.dart';
-import 'package:flutter_boilerplate/utils/company_assignment_utils.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_boilerplate/redux/ui/ui_actions.dart';
 import 'package:flutter_boilerplate/ui/event/event_screen.dart';

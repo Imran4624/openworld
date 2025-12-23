@@ -44,7 +44,6 @@ Middleware<AppState> _viewDynamicFields() {
 
     next(action);
 
-
     String route;
 
     route =
@@ -191,7 +190,7 @@ Middleware<AppState> _getAnswers(DynamicFieldRepository repository) {
         logInfo('No user profile found for userId: $currentUserId');
       }
     } catch (e) {
-              logError('Error fetching user profile: $e');
+      logError('Error fetching user profile: $e');
     }
   };
 }

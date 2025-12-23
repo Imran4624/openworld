@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/constants.dart';
-import 'package:flutter_boilerplate/project_config.dart';
 import 'package:flutter_boilerplate/ui/app/profile_operations/empty_state_widget.dart';
 import 'package:flutter_boilerplate/ui/app/profile_operations/profile_operation_tabs.dart';
 import 'package:flutter_boilerplate/ui/app/tables/profile_list.dart';

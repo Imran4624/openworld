@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/data/models/event_model_helper.dart';
-import 'package:flutter_boilerplate/main_app.dart';
 import 'package:flutter_boilerplate/redux/profile/profile_actions.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_boilerplate/constants.dart';
@@ -237,7 +236,7 @@ class AttendeeGridItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String fullName = '${attendee.firstName} ${attendee.lastName}';
+    
 
     return Card(
       elevation: 4,

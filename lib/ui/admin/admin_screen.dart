@@ -7,8 +7,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_boilerplate/data/models/static/app_theme.dart';
-import 'package:flutter_boilerplate/.env.dart';
-import 'package:flutter_boilerplate/project_config.dart';
 
 class AdminScreen extends StatefulWidget {
   static const String route = '/admin';
@@ -182,57 +180,7 @@ class _AdminScreenState extends State<AdminScreen> {
     );
   }
 
-  Widget _buildLegacyUI(BuildContext context, Store<AppState> store) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            store.dispatch(UpdateCurrentRoute(DashboardScreenBuilder.route));
-            if (isMobile(context)) {
-              Navigator.of(context).pop();
-            }
-          },
-        ),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: isLoading
-                  ? null
-                  : () => {},
-              style: ElevatedButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                textStyle: const TextStyle(fontSize: 18),
-              ),
-              child: const Text('Fetch Events'),
-            ),
-            const SizedBox(height: 20),
-            if (isLoading) const CircularProgressIndicator(),
-            const SizedBox(height: 20),
-            Container(
-              padding: const EdgeInsets.all(16),
-              margin: const EdgeInsets.symmetric(horizontal: 24),
-              decoration: BoxDecoration(
-                color: Colors.grey[100],
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.grey[300]!),
-              ),
-              child: Text(
-                statusMessage,
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: Colors.black87),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  
 
   Widget _buildEvents121UI(BuildContext context, Store<AppState> store) {
     final state = store.state;

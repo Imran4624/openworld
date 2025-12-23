@@ -45,7 +45,7 @@ class ProfileGridItem extends StatelessWidget {
         .getDisplayFields(ProjectConfig.displayFieldIds, questionMap);
 
     displayFields = Map.fromEntries(
-      displayFields.entries.where((entry) => entry.value.isNotEmpty));
+        displayFields.entries.where((entry) => entry.value.isNotEmpty));
 
     return Card(
       elevation: isChecked ? 6 : 4,

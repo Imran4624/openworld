@@ -214,31 +214,19 @@ class _DashboardScreenState extends State<DashboardScreen>
           Row(
             children: [
               ElevatedButton.icon(
-                onPressed: () => store
-                    .dispatch(ViewDynamicFields(demo.type, isEdit: false)),
+                onPressed: () =>
+                    store.dispatch(ViewDynamicFields(demo.type, isEdit: false)),
                 icon: const Icon(Icons.add),
                 label: const Text('Create New'),
               ),
               const SizedBox(width: 16),
               OutlinedButton.icon(
-                onPressed: () => store
-                    .dispatch(ViewDynamicFields(demo.type, isEdit: true)),
+                onPressed: () =>
+                    store.dispatch(ViewDynamicFields(demo.type, isEdit: true)),
                 icon: const Icon(Icons.edit),
                 label: const Text('Edit Existing'),
               ),
             ],
-          ),
-          const SizedBox(height: 24),
-          InkWell(
-            onTap: () => launchUrl(Uri.parse(
-                'https://bestflutterboilerplate.com/guides/dynamic-input-fields/overview')),
-            child: Text(
-              'Understand how dynamic fields are rendered',
-              style: TextStyle(
-                  // color: Colors.blue,
-                  // decoration: TextDecoration.underline,
-                  ),
-            ),
           ),
           const SizedBox(height: 24),
         ],

@@ -102,9 +102,9 @@ class NotificationListVM {
               EntityAction action) =>
           handleNotificationAction(context, notifications, action),
       onRefreshed: (context) => _handleRefresh(context),
-            tableColumns: state.userCompany.settings
-              .getTableColumns(EntityType.notification) ??
-          NotificationPresenter.getDefaultTableFields(state.userCompany),
+      tableColumns:
+          state.userCompany.settings.getTableColumns(EntityType.notification) ??
+              NotificationPresenter.getDefaultTableFields(state.userCompany),
       onSortColumn: (field) => store.dispatch(UpdateNotificationFilter(
         state.notificationState.filter.rebuild((b) => b
           ..sortField = field

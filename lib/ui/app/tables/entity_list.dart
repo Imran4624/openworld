@@ -127,32 +127,31 @@ class _EntityListState extends State<EntityList> {
 
   void _onScroll() {
     if (_isLoadingMore) return;
-    
+
     if (_scrollController.position.pixels >=
             _scrollController.position.maxScrollExtent - 200 &&
         _scrollController.position.userScrollDirection ==
             ScrollDirection.reverse) {
-      
       if (widget.entityType == EntityType.event) {
         final state = widget.state;
         if (state.eventState.lastDocument == null) {
-          return; 
+          return;
         }
       }
-      
+
       _loadMoreData();
     }
   }
 
   void _loadMoreData() {
     if (_isLoadingMore) return;
-    
+
     setState(() {
       _isLoadingMore = true;
     });
 
     final loadFunction = widget.onLoadMore ?? widget.onRefreshed;
-    
+
     loadFunction(context).then((_) {
       if (mounted) {
         setState(() {
@@ -232,10 +231,12 @@ class _EntityListState extends State<EntityList> {
     }
 
     listOrTable() {
-      if (entityList.isEmpty && ProjectConfig.defaultBackgroundImageForNoRecords(entityType)) {
+      if (entityList.isEmpty &&
+          ProjectConfig.defaultBackgroundImageForNoRecords(entityType)) {
         return _EmptyEntityListStateWidget(entityType: entityType);
       }
-      if (entityList.isNotEmpty && ProjectConfig.listViewType(entityType) == ViewType.gridImproved) {
+      if (entityList.isNotEmpty &&
+          ProjectConfig.listViewType(entityType) == ViewType.gridImproved) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: EventGridView(
@@ -280,14 +281,16 @@ class _EntityListState extends State<EntityList> {
                             (index == 0 || index == entityList.length)
                                 ? SizedBox()
                                 : ListDivider(),
-                        itemCount: entityList.length + 2 + (_isLoadingMore ? 1 : 0),
+                        itemCount:
+                            entityList.length + 2 + (_isLoadingMore ? 1 : 0),
                         itemBuilder: (BuildContext context, index) {
                           if (index == 0 || index == entityList.length + 1) {
                             return Container(
                               color: Theme.of(context).cardColor,
                               height: 25,
                             );
-                          } else if (index == entityList.length + 2 && _isLoadingMore) {
+                          } else if (index == entityList.length + 2 &&
+                              _isLoadingMore) {
                             return Container(
                               padding: const EdgeInsets.all(16.0),
                               child: const Center(
@@ -297,7 +300,8 @@ class _EntityListState extends State<EntityList> {
                                     SizedBox(
                                       width: 20,
                                       height: 20,
-                                      child: CircularProgressIndicator(strokeWidth: 2),
+                                      child: CircularProgressIndicator(
+                                          strokeWidth: 2),
                                     ),
                                     SizedBox(width: 16),
                                     Text('Loading more data...'),
@@ -453,12 +457,12 @@ class _EntityListState extends State<EntityList> {
     final firstEntity = entities.isEmpty ? null : entities.first;
     final isGuest = isGuestUser(state);
     final actions = (firstEntity?.getActions(
-                includeEdit: false,
-                multiselect: true,
-                userCompany: state.userCompany,
-                isGuest: isGuest,
-                isAuthor: firstEntity.createdUserId == getLoggedInUserId(store),
-              ) ??
+              includeEdit: false,
+              multiselect: true,
+              userCompany: state.userCompany,
+              isGuest: isGuest,
+              isAuthor: firstEntity.createdUserId == getLoggedInUserId(store),
+            ) ??
             <EntityAction>[])
         .whereNotNull();
 
@@ -514,7 +518,9 @@ class _EntityListState extends State<EntityList> {
                                     (action) => OutlinedButton(
                                       child: IconText(
                                         icon: getEntityActionIcon(action),
-                                        text: ProjectConfig.getEntityActionText(entityType, action, entity: entities.first),
+                                        text: ProjectConfig.getEntityActionText(
+                                            entityType, action,
+                                            entity: entities.first),
                                       ),
                                       onPressed: () {
                                         handleEntitiesActions(entities, action);
@@ -565,7 +571,10 @@ class _EntityListState extends State<EntityList> {
                                                     .colorScheme
                                                     .secondary),
                                             SizedBox(width: 16.0),
-                                            Text(ProjectConfig.getEntityActionText(entityType, action, entity: entities.first)),
+                                            Text(ProjectConfig
+                                                .getEntityActionText(
+                                                    entityType, action,
+                                                    entity: entities.first)),
                                           ],
                                         ),
                                       );
@@ -635,7 +644,8 @@ class _EmptyEntityListStateWidget extends StatelessWidget {
     final store = StoreProvider.of<AppState>(context);
     final canCreate = store.state.userCompany.canCreate(entityType);
     final entityName = entityType.readableValue;
-    final emptyBgColor = isDark ? AppTheme.dark.background : AppTheme.light.background;
+    final emptyBgColor =
+        isDark ? AppTheme.dark.background : AppTheme.light.background;
     return Container(
       color: emptyBgColor,
       width: double.infinity,
@@ -659,7 +669,7 @@ class _EmptyEntityListStateWidget extends StatelessWidget {
               ),
               const SizedBox(height: 5),
               Text(
-                  ProjectConfig.defaultHelperTextForNoRecords(),
+                ProjectConfig.defaultHelperTextForNoRecords(),
                 textAlign: TextAlign.center,
                 style: theme.textTheme.titleMedium?.copyWith(
                   color: isDark ? Colors.white70 : Colors.black87,
@@ -679,7 +689,8 @@ class _EmptyEntityListStateWidget extends StatelessWidget {
                       elevation: 0,
                       // No border
                     ),
-                    icon: Icon(Icons.add_box_rounded, color: theme.primaryColorDark),
+                    icon: Icon(Icons.add_box_rounded,
+                        color: theme.primaryColorDark),
                     label: Text(
                       'Create an $entityName',
                       style: theme.textTheme.titleMedium?.copyWith(
@@ -688,7 +699,8 @@ class _EmptyEntityListStateWidget extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      createEntityByType(context: context, entityType: entityType);
+                      createEntityByType(
+                          context: context, entityType: entityType);
                     },
                   ),
                 ),

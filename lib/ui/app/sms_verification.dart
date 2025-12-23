@@ -145,9 +145,10 @@ class _AccountSmsVerificationState extends State<AccountSmsVerification> {
                     PhoneInputField(
                       autofocus: true,
                       onChanged: (phone) => _phone = phone.completeNumber,
-                      validator: (value) => value == null || value.number.isEmpty
-                          ? localization.pleaseEnterAValue
-                          : null,
+                      validator: (value) =>
+                          value == null || value.number.isEmpty
+                              ? localization.pleaseEnterAValue
+                              : null,
                     ),
                 ],
               ),
@@ -381,7 +382,8 @@ class PhoneVerificationDialog extends StatefulWidget {
   final Future<String> Function(String smsCode) onVerificationComplete;
 
   @override
-  State<PhoneVerificationDialog> createState() => _PhoneVerificationDialogState();
+  State<PhoneVerificationDialog> createState() =>
+      _PhoneVerificationDialogState();
 }
 
 class _PhoneVerificationDialogState extends State<PhoneVerificationDialog> {
@@ -478,8 +480,8 @@ class _PhoneVerificationDialogState extends State<PhoneVerificationDialog> {
     final localization = AppLocalization.of(context)!;
 
     return AlertDialog(
-      title: Text(widget.isSignUp 
-          ? localization.verifyPhoneNumber 
+      title: Text(widget.isSignUp
+          ? localization.verifyPhoneNumber
           : localization.verifyPhoneNumber),
       content: _isLoading
           ? LoadingIndicator(height: 80)
@@ -507,7 +509,8 @@ class _PhoneVerificationDialogState extends State<PhoneVerificationDialog> {
                       ),
                       child: Row(
                         children: [
-                          Icon(Icons.error_outline, color: Colors.red, size: 20),
+                          Icon(Icons.error_outline,
+                              color: Colors.red, size: 20),
                           SizedBox(width: 8),
                           Expanded(
                             child: Text(

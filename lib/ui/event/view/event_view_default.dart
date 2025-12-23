@@ -1,42 +1,26 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_boilerplate/constants.dart';
 import 'package:flutter_boilerplate/data/models/event_model_helper.dart';
 import 'package:flutter_boilerplate/data/models/models.dart';
 import 'package:flutter_boilerplate/data/models/static/app_theme.dart';
 import 'package:flutter_boilerplate/main_app.dart';
 import 'package:flutter_boilerplate/project_config.dart';
-import 'package:flutter_boilerplate/redux/app/app_actions.dart';
 import 'package:flutter_boilerplate/redux/app/app_state.dart';
 import 'package:flutter_boilerplate/redux/ui/ui_actions.dart';
-import 'package:flutter_boilerplate/redux/event/event_actions.dart';
 
 import 'package:flutter_boilerplate/services/session_managment_service.dart';
-import 'package:flutter_boilerplate/services/user_service.dart';
-import 'package:flutter_boilerplate/ui/app/buttons/floating_action_buttons.dart';
-import 'package:flutter_boilerplate/ui/app/entity_top_filter.dart';
 import 'package:flutter_boilerplate/ui/app/scrollable_listview.dart';
 import 'package:flutter_boilerplate/ui/app/shared.dart';
 import 'package:flutter_boilerplate/ui/auth/login_vm.dart';
-import 'package:flutter_boilerplate/ui/auth/welcome_event_screen.dart';
-import 'package:flutter_boilerplate/ui/event/event_screen.dart';
 import 'package:flutter_boilerplate/ui/event/view/attendee_grid_view.dart';
-import 'package:flutter_boilerplate/ui/event/view/event_overview.dart';
-import 'package:flutter_boilerplate/ui/event/view/event_view_fullwidth.dart';
-import 'package:flutter_boilerplate/ui/event/view/event_view_main_banner.dart';
 import 'package:flutter_boilerplate/ui/event/view/event_view_vm.dart';
 import 'package:flutter_boilerplate/ui/app/view_scaffold.dart';
-import 'package:flutter_boilerplate/ui/app/buttons/bottom_buttons.dart';
-import 'package:flutter_boilerplate/ui/photo/edit/photo_edit_vm.dart';
-import 'package:flutter_boilerplate/ui/photo/photo_edit_dialog.dart';
-import 'package:flutter_boilerplate/services/payment_handler.dart';
 import 'package:flutter_boilerplate/utils/platforms.dart';
 import 'package:flutter_boilerplate/utils/localization.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_boilerplate/ui/app/app_webview_url.dart' as appView;
 import 'package:flutter_boilerplate/ui/app/dialogs/barcode_dialog.dart';
-import 'package:flutter_boilerplate/ui/event/dialogs/attendees_dialog.dart';
 // STARTER: import - do not remove comment
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_boilerplate/services/analytics_manager.dart';
@@ -76,11 +60,12 @@ class EventViewDefaultState extends State<EventViewDefault>
             defaultTargetPlatform == TargetPlatform.iOS)) {
       controller = WebViewController()
         ..setJavaScriptMode(JavaScriptMode.unrestricted);
-      
+
       final eventUrl = widget.viewModel.event.url;
       if (eventUrl.isNotEmpty) {
         String validUrl = eventUrl;
-        if (!eventUrl.startsWith('http://') && !eventUrl.startsWith('https://')) {
+        if (!eventUrl.startsWith('http://') &&
+            !eventUrl.startsWith('https://')) {
           validUrl = 'https://$eventUrl';
         }
         try {
@@ -211,7 +196,8 @@ class EventViewDefaultState extends State<EventViewDefault>
                                     leading: const Icon(Icons.calendar_today),
                                     title: Text(
                                       '${formatDateTime(event.start)} - ${formatDateTime(event.end)}',
-                                      style: Theme.of(context).textTheme.bodyLarge,
+                                      style:
+                                          Theme.of(context).textTheme.bodyLarge,
                                     ),
                                     contentPadding: EdgeInsets.zero,
                                   ),
@@ -220,7 +206,9 @@ class EventViewDefaultState extends State<EventViewDefault>
                                       leading: const Icon(Icons.location_on),
                                       title: Text(
                                         '${event.venue!.name}\n${event.venue!.postalCode}',
-                                        style: Theme.of(context).textTheme.bodyLarge,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge,
                                       ),
                                       contentPadding: EdgeInsets.zero,
                                     ),
@@ -258,18 +246,22 @@ class EventViewDefaultState extends State<EventViewDefault>
                                 ...event.ticketTypes!.map((ticket) => Card(
                                       child: ListTile(
                                         title: Text(ticket.name),
-                                        subtitle: Text(ticket.description ?? ''),
+                                        subtitle:
+                                            Text(ticket.description ?? ''),
                                         trailing: Text(
                                           '£${(ticket.price / 100).toStringAsFixed(2)}',
-                                          style:
-                                              Theme.of(context).textTheme.titleMedium,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium,
                                         ),
                                       ),
                                     )),
                               ],
                             ),
                           ),
-                        if (!hasUserBoughtTicket && !isEventPassed && isAuthenticated(store.state))
+                        if (!hasUserBoughtTicket &&
+                            !isEventPassed &&
+                            isAuthenticated(store.state))
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: SizedBox(
@@ -322,21 +314,29 @@ class EventViewDefaultState extends State<EventViewDefault>
                             height: 40,
                             child: FloatingActionButton.extended(
                               heroTag: 'loginBtn',
-                              label: Text('Login', style: TextStyle(color: AppTheme.dark.text,)),
-                              backgroundColor: event.themeObject?.accentColor ?? AppTheme.light.primary,
+                              label: Text('Login',
+                                  style: TextStyle(
+                                    color: AppTheme.dark.text,
+                                  )),
+                              backgroundColor: event.themeObject?.accentColor ??
+                                  AppTheme.light.primary,
                               onPressed: () {
-                                store.dispatch(UpdateCurrentRoute(LoginScreen.route));
+                                store.dispatch(
+                                    UpdateCurrentRoute(LoginScreen.route));
                                 if (store.state.prefState.isMobile) {
-                                  navigatorKey.currentState!.pushNamedAndRemoveUntil(
-                                      LoginScreen.route,
-                                      (Route<dynamic> route) => false);
+                                  navigatorKey.currentState!
+                                      .pushNamedAndRemoveUntil(
+                                          LoginScreen.route,
+                                          (Route<dynamic> route) => false);
                                 }
                               },
                             ),
                           ),
                         ),
                       ),
-                    if (now >= fiveHoursBefore && now <= fourHoursAfter && qrCodeUrl != null)
+                    if (now >= fiveHoursBefore &&
+                        now <= fourHoursAfter &&
+                        qrCodeUrl != null)
                       Positioned(
                         left: 0,
                         right: 0,
@@ -349,7 +349,8 @@ class EventViewDefaultState extends State<EventViewDefault>
                               heroTag: 'barcodeBtn',
                               icon: const Icon(Icons.qr_code),
                               label: const Text('Show barcode'),
-                              backgroundColor: event.themeObject?.accentColor ?? AppTheme.light.primary,
+                              backgroundColor: event.themeObject?.accentColor ??
+                                  AppTheme.light.primary,
                               onPressed: () {
                                 BarcodeDialog.show(
                                   context,
@@ -402,7 +403,10 @@ class EventViewDefaultState extends State<EventViewDefault>
                                           (Route<dynamic> route) => false);
                                 }
                               },
-                              child: Text('Login' , style: TextStyle(color: AppTheme.dark.text,)),
+                              child: Text('Login',
+                                  style: TextStyle(
+                                    color: AppTheme.dark.text,
+                                  )),
                             ),
                           ),
                         ),
@@ -446,8 +450,7 @@ class EventViewDefaultState extends State<EventViewDefault>
                       ],
                     ),
                   );
-                }
-                else {
+                } else {
                   // This LayoutBuilder will provide constraints to fix the sizing issue
                   return LayoutBuilder(builder: (context, constraints) {
                     // We create a container with explicit dimensions based on the constraints

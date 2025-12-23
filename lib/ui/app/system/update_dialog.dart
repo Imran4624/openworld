@@ -31,10 +31,10 @@ class _UpdateDialogState extends State<UpdateDialog> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-            Text(
-              appVersionEntity!.releaseNotes,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
+          Text(
+            appVersionEntity!.releaseNotes,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
         ],
       ),
       actions: [

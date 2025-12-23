@@ -277,13 +277,14 @@ class _EntityListOpwState extends State<EntityListOpw>
 
     try {
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      
+
       if (!serviceEnabled) {
         logError('_getCurrentUserLocation: Location services are disabled');
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Location services are disabled. Enable them in your device settings.'),
+              content: Text(
+                  'Location services are disabled. Enable them in your device settings.'),
               duration: Duration(seconds: 3),
             ),
           );
@@ -293,16 +294,17 @@ class _EntityListOpwState extends State<EntityListOpw>
       }
 
       LocationPermission permission = await Geolocator.checkPermission();
-      
+
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
-        
+
         if (permission == LocationPermission.denied) {
           logError('_getCurrentUserLocation: Permission denied after request');
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text('Location permission denied. Using default location.'),
+                content:
+                    Text('Location permission denied. Using default location.'),
                 duration: Duration(seconds: 3),
               ),
             );
@@ -317,7 +319,8 @@ class _EntityListOpwState extends State<EntityListOpw>
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: const Text('Location permission is permanently denied. Enable it in app settings to use current location.'),
+              content: const Text(
+                  'Location permission is permanently denied. Enable it in app settings to use current location.'),
               duration: const Duration(seconds: 4),
               action: SnackBarAction(
                 label: 'Settings',
@@ -333,19 +336,20 @@ class _EntityListOpwState extends State<EntityListOpw>
       }
 
       final permissionStatus = await Permission.location.status;
-      
+
       if (permissionStatus.isDenied) {
         final newPermissionStatus = await Permission.location.request();
-        
+
         if (newPermissionStatus.isDenied) {
-          logError('_getCurrentUserLocation: Permission handler denied after request');
+          logError(
+              '_getCurrentUserLocation: Permission handler denied after request');
           _setDefaultLocationAsCurrentLocation();
           return;
         }
       }
 
       final location = await LocationService.getCurrentLocation();
-      
+
       if (location != null && mounted) {
         final currentLocation = LatLng(
           location['latitude']!,
@@ -540,7 +544,6 @@ class _EntityListOpwState extends State<EntityListOpw>
       logError('Error saving view mode: $e');
     }
   }
-
 
   void _addUserMessage(String content) {
     final message = ChatMessage(

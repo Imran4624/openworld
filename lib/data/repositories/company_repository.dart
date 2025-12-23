@@ -5,7 +5,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_boilerplate/data/models/models.dart';
 import 'package:flutter_boilerplate/data/repositories/profile_repository.dart';
 import 'package:flutter_boilerplate/ui/app/shared.dart';
-import 'package:flutter_boilerplate/utils/completers.dart';
 
 class CompanyRepository {
   const CompanyRepository();

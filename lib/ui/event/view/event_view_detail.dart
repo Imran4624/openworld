@@ -34,7 +34,7 @@ class _EventViewDetailsState extends State<EventViewDetails> {
 
         const SizedBox(height: 16.0),
 
-        if (event.description != null && event.description!.isNotEmpty)
+        if (event.description.isNotEmpty)
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -45,7 +45,7 @@ class _EventViewDetailsState extends State<EventViewDetails> {
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const SizedBox(height: 8.0),
-                Html(data: event.description!),
+                Html(data: event.description),
               ],
             ),
           ),

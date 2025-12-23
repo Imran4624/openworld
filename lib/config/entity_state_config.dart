@@ -1,7 +1,6 @@
 import 'package:flutter_boilerplate/project_config.dart';
 import 'package:flutter_boilerplate/data/models/entities.dart';
 import 'package:flutter_boilerplate/data/models/models.dart';
-import 'package:flutter_boilerplate/ui/app/shared.dart';
 
 class EntityStateConfig {
   final String activeLabel;

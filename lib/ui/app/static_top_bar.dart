@@ -313,7 +313,13 @@ class _LoopjamUserSelectorState extends State<_LoopjamUserSelector> {
               CompositedTransformFollower(
                 link: _layerLink,
                 showWhenUnlinked: false,
-                offset: Offset(isMobile(context) ? -220 : isDesktop(context)?-180: -120, 28),
+                offset: Offset(
+                    isMobile(context)
+                        ? -220
+                        : isDesktop(context)
+                            ? -180
+                            : -120,
+                    28),
                 child: Container(
                   width: 250,
                   margin: const EdgeInsets.all(8),
@@ -339,7 +345,6 @@ class _LoopjamUserSelectorState extends State<_LoopjamUserSelector> {
                             const SizedBox(height: 16),
                             const _UserAvatar(size: 40),
                             const SizedBox(height: 16),
-
                             Container(
                               width: double.infinity,
                               padding: const EdgeInsets.symmetric(
@@ -359,7 +364,6 @@ class _LoopjamUserSelectorState extends State<_LoopjamUserSelector> {
                               ),
                             ),
                             const SizedBox(height: 12),
-
                             if (isAuth) ...[
                               GestureDetector(
                                 onTap: () {
@@ -400,7 +404,6 @@ class _LoopjamUserSelectorState extends State<_LoopjamUserSelector> {
                               ),
                             ],
                             const SizedBox(height: 12),
-
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
@@ -432,15 +435,16 @@ class _LoopjamUserSelectorState extends State<_LoopjamUserSelector> {
                                     child: ElevatedButton(
                                       onPressed: () {
                                         _hidePopup();
-                                        _onMenuSelected(
-                                            context, DrawerActions.connectAccount);
+                                        _onMenuSelected(context,
+                                            DrawerActions.connectAccount);
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: themeColors.secondary,
                                         foregroundColor: themeColors.primary,
                                         elevation: 0,
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
                                           side: BorderSide(
                                             color: themeColors.primary,
                                             width: 1,
@@ -450,7 +454,8 @@ class _LoopjamUserSelectorState extends State<_LoopjamUserSelector> {
                                             horizontal: 16),
                                       ),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           Icon(
                                             Icons.account_balance,

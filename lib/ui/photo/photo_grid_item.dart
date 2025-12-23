@@ -9,7 +9,6 @@ import 'package:flutter_boilerplate/redux/app/app_state.dart';
 import 'package:flutter_boilerplate/ui/photo/photo_preview_dialog.dart';
 import 'package:flutter_boilerplate/services/session_managment_service.dart';
 import 'package:flutter_boilerplate/project_config.dart';
-import 'package:flutter_boilerplate/constants.dart';
 import 'dart:ui';
 
 class PhotoGridItem extends StatefulWidget {

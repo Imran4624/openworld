@@ -72,7 +72,6 @@ class ProfileList extends StatefulWidget {
 class _ProfileListState extends State<ProfileList> {
   late EntityDataTableSource dataTableSource;
 
-
   late ScrollController _scrollController;
   @override
   void initState() {
@@ -95,7 +94,6 @@ class _ProfileListState extends State<ProfileList> {
     );
 
     // make sure the initial page shows the selected record
-
 
     _scrollController = ScrollController();
     _scrollController.addListener(_onScroll);
@@ -126,7 +124,6 @@ class _ProfileListState extends State<ProfileList> {
     dataTableSource.entityList = widget.entityList;
     dataTableSource.entityMap = state.getEntityMap(widget.entityType)
         as BuiltMap<String?, BaseEntity?>?;
-
   }
 
   @override
@@ -149,10 +146,11 @@ class _ProfileListState extends State<ProfileList> {
 
     final shouldSelectEntity = state.shouldSelectEntity(
         entityType: entityType, entityList: entityList);
-    if (shouldSelectEntity != false && state.getUIState(entityType)!.selectedId != getLoggedInUserId(store)) {
+    if (shouldSelectEntity != false &&
+        state.getUIState(entityType)!.selectedId != getLoggedInUserId(store)) {
       // null is a special case which means we need to reselect
       // the current selection to add it to the history
-      final entityId = shouldSelectEntity == null 
+      final entityId = shouldSelectEntity == null
           ? state.getUIState(entityType)!.selectedId
           : (entityList.isEmpty ? null : entityList.first);
 
@@ -165,8 +163,8 @@ class _ProfileListState extends State<ProfileList> {
     }
 
     listOrTable() {
-      if (ProjectConfig.swipingProfilesEnabled(isAdmin(state)) && 
-          entityType == EntityType.profile && 
+      if (ProjectConfig.swipingProfilesEnabled(isAdmin(state)) &&
+          entityType == EntityType.profile &&
           !isInMultiselect) {
         return SwipeProfileView(
           profileList: entityList.whereType<String>().toList(),
@@ -336,7 +334,8 @@ class _ProfileListState extends State<ProfileList> {
                                       child: IconText(
                                         icon: getEntityActionIcon(action),
                                         text: ProjectConfig.getEntityActionText(
-                                            entityType, action, entity: entities.first),
+                                            entityType, action,
+                                            entity: entities.first),
                                       ),
                                       onPressed: () {
                                         handleEntitiesActions(entities, action);

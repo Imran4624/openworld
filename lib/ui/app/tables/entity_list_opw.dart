@@ -2480,7 +2480,9 @@ class _EntityListOpwState extends State<EntityListOpw>
       return b.id.compareTo(a.id);
     });
 
-    if (_currentZoomLevel >= 15.0) {
+    if (_currentZoomLevel >= 18.0) {
+      _createAllIndividualMarkers(eventsAtLocation, markers);
+    } else if (_currentZoomLevel >= 15.0) {
       _createOffsetMarkers(eventsAtLocation, markers);
     } else if (_currentZoomLevel >= 12.0) {
       _createMediumZoomMarkers(eventsAtLocation, markers);
@@ -2493,10 +2495,33 @@ class _EntityListOpwState extends State<EntityListOpw>
           width: 130,
           height: 30,
           builder: (context) =>
-              _buildClusterMarkerWidget(latestEvent, eventsAtLocation.length),
+              _buildClusterMarkerWidget(latestEvent, eventsAtLocation.length, eventsAtLocation),
         );
         markers.add(marker);
       }
+    }
+  }
+
+  void _createAllIndividualMarkers(List<EventEntity> events, List<Marker> markers) {
+    const double offsetDistance = 0.0002;
+    
+    for (int i = 0; i < events.length; i++) {
+      final event = events[i];
+      final baseLocation = _getEventLocation(event);
+      if (baseLocation == null) continue;
+
+      final angle = (i * 2 * 3.14159) / math.max(6, events.length);
+      final radius = offsetDistance * (i / 6).ceil();
+      final offsetLat = baseLocation.latitude + (radius * math.cos(angle));
+      final offsetLng = baseLocation.longitude + (radius * math.sin(angle));
+
+      final marker = Marker(
+        point: LatLng(offsetLat, offsetLng),
+        width: 130,
+        height: 30,
+        builder: (context) => _buildSingleMarkerWidget(event),
+      );
+      markers.add(marker);
     }
   }
 
@@ -2526,6 +2551,7 @@ class _EntityListOpwState extends State<EntityListOpw>
     if (events.length > maxMarkers) {
       final baseLocation = _getEventLocation(events.first);
       if (baseLocation != null) {
+        final remainingEvents = events.sublist(maxMarkers);
         final marker = Marker(
           point: LatLng(
             baseLocation.latitude + offsetDistance * 1.5,
@@ -2534,7 +2560,7 @@ class _EntityListOpwState extends State<EntityListOpw>
           width: 40,
           height: 40,
           builder: (context) =>
-              _buildMoreEventsIndicator(events.length - maxMarkers),
+              _buildMoreEventsIndicator(events.length - maxMarkers, remainingEvents),
         );
         markers.add(marker);
       }
@@ -2552,7 +2578,7 @@ class _EntityListOpwState extends State<EntityListOpw>
           width: 130,
           height: 30,
           builder: (context) =>
-              _buildClusterMarkerWidget(latestEvent, events.length),
+              _buildClusterMarkerWidget(latestEvent, events.length, events),
         );
         markers.add(marker);
       } else {
@@ -2653,12 +2679,12 @@ class _EntityListOpwState extends State<EntityListOpw>
     );
   }
 
-  Widget _buildClusterMarkerWidget(EventEntity mainEvent, int eventCount) {
+  Widget _buildClusterMarkerWidget(EventEntity mainEvent, int eventCount, [List<EventEntity>? eventsAtLocation]) {
     final markerIcon = _createEventMarkerIcon(mainEvent);
     final isSelected = _selectedEvent?.id == mainEvent.id;
 
     return GestureDetector(
-      onTap: () => _onMarkerTapped(mainEvent),
+      onTap: () => _onClusterMarkerTapped(mainEvent, eventsAtLocation ?? [mainEvent]),
       child: ConstrainedBox(
         constraints: const BoxConstraints(
           maxWidth: 150,
@@ -2717,7 +2743,7 @@ class _EntityListOpwState extends State<EntityListOpw>
                         const SizedBox(width: 4),
                         Flexible(
                           child: Text(
-                            mainEvent.eventType ?? mainEvent.name,
+                            '${mainEvent.eventType ?? mainEvent.name} +${eventCount - 1}',
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 12,
@@ -2739,12 +2765,16 @@ class _EntityListOpwState extends State<EntityListOpw>
     );
   }
 
-  Widget _buildMoreEventsIndicator(int additionalCount) {
+  Widget _buildMoreEventsIndicator(int additionalCount, [List<EventEntity>? remainingEvents]) {
     return GestureDetector(
       onTap: () {
-        if (_currentZoomLevel < 18.0) {
-          _mapController.move(_mapController.center, _currentZoomLevel + 2);
-        }
+        _mapController.move(_mapController.center, 18.0);
+        setState(() {
+          _currentZoomLevel = 18.0;
+        });
+        Future.delayed(const Duration(milliseconds: 300), () {
+          _createEventMarkers();
+        });
       },
       child: Container(
         width: 30,
@@ -2874,6 +2904,19 @@ class _EntityListOpwState extends State<EntityListOpw>
 
     if (!_showSavedEventView) {
       _openEventDetails(event);
+    }
+  }
+
+  void _onClusterMarkerTapped(EventEntity mainEvent, List<EventEntity> eventsAtLocation) {
+    final eventLocation = _getEventLocation(mainEvent);
+    if (eventLocation != null) {
+      _mapController.move(eventLocation, 18.0);
+      setState(() {
+        _currentZoomLevel = 18.0;
+      });
+      Future.delayed(const Duration(milliseconds: 300), () {
+        _createEventMarkers();
+      });
     }
   }
 

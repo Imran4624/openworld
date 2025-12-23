@@ -1016,7 +1016,7 @@ class _BookEventScreenState extends State<BookEventScreen> {
       final appTypeName =
           ProjectConfig.appType == AppType.events121 ? 'events121' : 'opw';
       final stripeAccount =
-          ProjectConfig.appType == AppType.opw ? 'acct_1ScV8jIcmtG2wz4C' : null;
+          ProjectConfig.appType == AppType.opw ? 'kIrjKcF0cgZlLM4D1KqCznEioaE3' : null;
 
       final metadata = {
         'event_id': widget.event.id,

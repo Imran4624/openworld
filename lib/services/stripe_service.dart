@@ -265,11 +265,11 @@ class StripeService {
 
       HttpsCallable callable =
           _functions.httpsCallable('createPaymentMethod_$appName');
-      
+
       HttpsCallableResult result = await callable.call(paymentMethodData);
 
       dynamic responseData = result.data;
-      
+
       Map<String, dynamic> data;
 
       if (responseData is Map<String, dynamic>) {
@@ -497,7 +497,7 @@ class StripeService {
   }
 
   Future<Map<String, dynamic>> processOneTimePayment({
-    required int amount, 
+    required int amount,
     required String currency,
     required dynamic paymentMethod,
     String? description,
@@ -515,7 +515,7 @@ class StripeService {
       }
 
       String? paymentMethodId;
-      
+
       if (paymentMethod is String) {
         paymentMethodId = paymentMethod;
       } else if (paymentMethod is Map<String, dynamic>) {
@@ -528,59 +528,54 @@ class StripeService {
           'error': 'Valid payment method ID is required',
         };
       }
+      final HttpsCallable callable =
+          _functions.httpsCallable('processOneTimePayment_$appName');
 
-      if (ProjectConfig.appType == AppType.opw && stripeAccount != null) {
-        logInfo('DEBUG: Using events121 Cloud Function for OPW payment processing');
-        
-        final HttpsCallable callable = _functions.httpsCallable('processOneTimePayment_$appName');
-        
-        final requestData = {
-          'userId': currentUser.uid, 
-          'amount': amount,
-          'currency': currency,
-          'commissionAmount': applicationFeePercent ?? 0, 
-          'commissionType': 'percentage',
-          'recipientId': stripeAccount,
-          'paymentMethodId': paymentMethodId,
-          'description': description ?? 'Payment via mobile app',
-          'paymentType': 'marketplace', 
-          'metadata': metadata ?? {},
-        };
+      final requestData = {
+        'userId': currentUser.uid,
+        'amount': amount,
+        'currency': currency,
+        'commissionAmount': applicationFeePercent ?? 0,
+        'commissionType': 'percentage',
+        'recipientId': stripeAccount ?? '',
+        'paymentMethodId': paymentMethodId,
+        'description': description ?? 'Payment via mobile app',
+        'paymentType': stripeAccount != null ? 'marketplace' : 'direct',
+        'metadata': metadata ?? {},
+      };
 
-        logInfo('DEBUG: Cloud Function request data for OPW: $requestData');
-        
-        final result = await callable.call(requestData);
-        
-        logInfo('DEBUG: Cloud Function result for OPW: ${result.data}');
+      final result = await callable.call(requestData);
 
-        return {
-          'success': true,
-          'data': result.data,
-        };
+      dynamic responseData = result.data;
+      Map<String, dynamic> data;
+
+      if (responseData is Map<String, dynamic>) {
+        data = responseData;
+      } else if (responseData is Map) {
+        data = Map<String, dynamic>.from(responseData);
       } else {
-        final HttpsCallable callable = _functions.httpsCallable('processOneTimePayment_$appName');
-        
-        final requestData = {
-          'userId': currentUser.uid, 
-          'amount': amount,
-          'currency': currency,
-          'commissionAmount': applicationFeePercent ?? 0, 
-          'commissionType': 'percentage',
-          'recipientId': stripeAccount ?? '',
-          'paymentMethodId': paymentMethodId,
-          'description': description ?? 'Payment via mobile app',
-          'paymentType': stripeAccount != null ? 'marketplace' : 'direct',
-          'metadata': metadata ?? {},
-        };
-
-        
-        final result = await callable.call(requestData);
-
-        return {
-          'success': true,
-          'data': result.data,
-        };
+        data = {'data': responseData, 'success': false};
       }
+
+      logInfo('DEBUG: processOneTimePayment response: $data');
+
+      String? errorMessage;
+      if (data['error'] != null) {
+        final errorData = data['error'];
+        if (errorData is Map<String, dynamic>) {
+          errorMessage =
+              errorData['message']?.toString() ?? 'Unknown error occurred';
+        } else {
+          errorMessage = errorData.toString();
+        }
+      }
+
+      return {
+        'success': data['success'] ?? false,
+        'data': data['data'],
+        'error': errorMessage,
+        'message': data['message'],
+      };
     } catch (e) {
       logError('DEBUG: processOneTimePayment error: $e');
       return {
@@ -592,10 +587,10 @@ class StripeService {
 
   Future<Map<String, dynamic>> createSubscription({
     required String customerId,
-    String? priceId, 
+    String? priceId,
     required int amount,
     required String currency,
-    required String interval, 
+    required String interval,
     required int intervalCount,
     required String productName,
     int trialPeriodDays = 0,
@@ -613,7 +608,7 @@ class StripeService {
 
       final HttpsCallable callable =
           _functions.httpsCallable('subscribe_$appName');
-      
+
       final requestData = {
         'userId': currentUser.uid,
         'customerId': customerId,
@@ -639,7 +634,6 @@ class StripeService {
       } else {
         data = {'data': responseData, 'success': true};
       }
-
 
       String? errorMessage;
       if (data['error'] != null) {
@@ -677,18 +671,19 @@ class StripeService {
         };
       }
 
-      final QuerySnapshot subscriptionsSnapshot = await FirebaseFirestore.instance
+      final QuerySnapshot subscriptionsSnapshot = await FirebaseFirestore
+          .instance
           .collection('subscriptions')
           .where('userId', isEqualTo: currentUser.uid)
-          .where('status', whereIn: ['active', 'trialing', 'past_due'])
-          .get();
+          .where('status', whereIn: ['active', 'trialing', 'past_due']).get();
 
-      final List<Map<String, dynamic>> subscriptions = subscriptionsSnapshot.docs
-          .map((doc) => {
-                'subscriptionId': doc.id,
-                'data': doc.data() as Map<String, dynamic>,
-              })
-          .toList();
+      final List<Map<String, dynamic>> subscriptions =
+          subscriptionsSnapshot.docs
+              .map((doc) => {
+                    'subscriptionId': doc.id,
+                    'data': doc.data() as Map<String, dynamic>,
+                  })
+              .toList();
 
       return {
         'success': true,
@@ -703,7 +698,8 @@ class StripeService {
     }
   }
 
-  Future<Map<String, dynamic>> cancelSubscription(String subscriptionId, {bool cancelImmediately = false}) async {
+  Future<Map<String, dynamic>> cancelSubscription(String subscriptionId,
+      {bool cancelImmediately = false}) async {
     try {
       final User? currentUser = FirebaseAuth.instance.currentUser;
       if (currentUser == null) {
@@ -715,7 +711,7 @@ class StripeService {
 
       final HttpsCallable callable =
           _functions.httpsCallable('unsubscribe_$appName');
-      
+
       final requestData = {
         'userId': currentUser.uid,
         'subscriptionId': subscriptionId,
@@ -765,7 +761,7 @@ class StripeService {
 
   Future<Map<String, dynamic>> refundPayment({
     required String paymentIntentId,
-    int? amount, 
+    int? amount,
     String? reason,
   }) async {
     try {

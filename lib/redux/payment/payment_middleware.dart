@@ -24,7 +24,7 @@ List<Middleware<AppState>> createStorePaymentsMiddleware([
   PaymentRepository repository = const PaymentRepository(),
   PaymentManager? paymentManager,
 ]) {
-  final manager = paymentManager;
+  final manager = paymentManager ?? _getPaymentManager();
   final viewPaymentList = _viewPaymentList();
   final viewPayment = _viewPayment();
   final editPayment = _editPayment();
@@ -37,7 +37,7 @@ List<Middleware<AppState>> createStorePaymentsMiddleware([
   final restorePayment = _restorePayment(repository);
   final updateFilter = _updateFilter(repository);
 
-  final takePayment = _takePayment(manager!);
+  final takePayment = _takePayment(manager);
   final createPaymentIntent = _createPaymentIntent(manager);
   final confirmPayment = _confirmPayment(manager);
   final refundPayment = _refundPayment(manager);
@@ -547,4 +547,18 @@ PaymentProviderType _getPaymentProviderTypeFromConfig() {
   } catch (e) {
     return PaymentProviderType.stripe;
   }
+}
+
+PaymentManager? _paymentManager;
+
+PaymentManager _getPaymentManager() {
+  if (_paymentManager == null) {
+    final stripeClient = StripeClient(Config.STRIPE_SECRET_KEY);
+    final stripeProvider = StripePaymentProvider(stripeClient);
+
+    _paymentManager = PaymentManager({
+      PaymentProviderType.stripe: stripeProvider,
+    });
+  }
+  return _paymentManager!;
 }

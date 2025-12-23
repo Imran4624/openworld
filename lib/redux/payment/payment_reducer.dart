@@ -170,10 +170,6 @@ final paymentsReducer = combineReducers<PaymentState>([
   TypedReducer<PaymentState, DeletePaymentsSuccess>(_deletePaymentSuccess),
   TypedReducer<PaymentState, PurgePaymentsSuccess>(_purgePaymentSuccess),
   TypedReducer<PaymentState, RestorePaymentsSuccess>(_restorePaymentSuccess),
-  
-  TypedReducer<PaymentState, PaymentLoadingAction>(_paymentLoading),
-  TypedReducer<PaymentState, PaymentSuccessAction>(_paymentSuccess),
-  TypedReducer<PaymentState, PaymentFailureAction>(_paymentFailure),
 ]);
 
 PaymentState _archivePaymentSuccess(
@@ -264,39 +260,6 @@ PaymentState _setLoadedPayments(
       }
     });
   });
-}
-
-
-PaymentState _paymentLoading(
-    PaymentState paymentState, PaymentLoadingAction action) {
-  return paymentState.rebuild((b) => b
-    ..isProcessingPayment = true
-    ..processingMessage = action.message ?? 'Processing payment...'
-    ..lastPaymentError = '');
-}
-
-PaymentState _paymentSuccess(
-    PaymentState paymentState, PaymentSuccessAction action) {
-  return paymentState.rebuild((b) {
-    b
-      ..isProcessingPayment = false
-      ..processingMessage = action.message ?? 'Payment completed successfully'
-      ..lastPaymentError = '';
-    
-    if (action.result is PaymentIntent) {
-      b.lastPaymentIntent = action.result as PaymentIntent?;
-    } else if (action.result is Payment) {
-      b.lastPaymentResult = action.result as Payment?;
-    }
-  });
-}
-
-PaymentState _paymentFailure(
-    PaymentState paymentState, PaymentFailureAction action) {
-  return paymentState.rebuild((b) => b
-    ..isProcessingPayment = false
-    ..processingMessage = ''
-    ..lastPaymentError = action.error);
 }
 
 // PaymentState _setLoadedCompany(PaymentState paymentState, LoadCompanySuccess action) {

@@ -24,11 +24,8 @@ import 'package:flutter_boilerplate/redux/payment/payment_actions.dart';
 
 import 'package:flutter_boilerplate/redux/product/product_actions.dart';
 
-import 'package:flutter_boilerplate/redux/social/social_actions.dart';
 
 import 'package:flutter_boilerplate/redux/photo/photo_actions.dart';
-
-import 'package:flutter_boilerplate/redux/workout/workout_actions.dart';
 
 import 'package:flutter_boilerplate/redux/notification/notification_actions.dart';
 
@@ -91,15 +88,7 @@ final lastErrorReducer = combineReducers<String>([
     return '${action.error}';
   }),
 
-  TypedReducer<String, LoadSocialsFailure>((state, action) {
-    return '${action.error}';
-  }),
-
   TypedReducer<String, LoadPhotosFailure>((state, action) {
-    return '${action.error}';
-  }),
-
-  TypedReducer<String, LoadWorkoutsFailure>((state, action) {
     return '${action.error}';
   }),
 

@@ -36,15 +36,9 @@ class _$UserCompanyStateSerializer
       serializers.serialize(object.productState,
           specifiedType: const FullType(ProductState)),
       'socialState',
-      serializers.serialize(object.socialState,
-          specifiedType: const FullType(SocialState)),
-      'photoState',
       serializers.serialize(object.photoState,
           specifiedType: const FullType(PhotoState)),
       'workoutState',
-      serializers.serialize(object.workoutState,
-          specifiedType: const FullType(WorkoutState)),
-      'notificationState',
       serializers.serialize(object.notificationState,
           specifiedType: const FullType(NotificationState)),
       'profileOperationState',
@@ -106,17 +100,9 @@ class _$UserCompanyStateSerializer
           result.productState.replace(serializers.deserialize(value,
               specifiedType: const FullType(ProductState))! as ProductState);
           break;
-        case 'socialState':
-          result.socialState.replace(serializers.deserialize(value,
-              specifiedType: const FullType(SocialState))! as SocialState);
-          break;
         case 'photoState':
           result.photoState.replace(serializers.deserialize(value,
               specifiedType: const FullType(PhotoState))! as PhotoState);
-          break;
-        case 'workoutState':
-          result.workoutState.replace(serializers.deserialize(value,
-              specifiedType: const FullType(WorkoutState))! as WorkoutState);
           break;
         case 'notificationState':
           result.notificationState.replace(serializers.deserialize(value,
@@ -172,11 +158,7 @@ class _$UserCompanyState extends UserCompanyState {
   @override
   final ProductState productState;
   @override
-  final SocialState socialState;
-  @override
   final PhotoState photoState;
-  @override
-  final WorkoutState workoutState;
   @override
   final NotificationState notificationState;
   @override
@@ -204,9 +186,7 @@ class _$UserCompanyState extends UserCompanyState {
       required this.userCompany,
       required this.paymentState,
       required this.productState,
-      required this.socialState,
       required this.photoState,
-      required this.workoutState,
       required this.notificationState,
       required this.profileOperationState,
       required this.profileState,
@@ -227,11 +207,7 @@ class _$UserCompanyState extends UserCompanyState {
     BuiltValueNullFieldError.checkNotNull(
         productState, r'UserCompanyState', 'productState');
     BuiltValueNullFieldError.checkNotNull(
-        socialState, r'UserCompanyState', 'socialState');
-    BuiltValueNullFieldError.checkNotNull(
         photoState, r'UserCompanyState', 'photoState');
-    BuiltValueNullFieldError.checkNotNull(
-        workoutState, r'UserCompanyState', 'workoutState');
     BuiltValueNullFieldError.checkNotNull(
         notificationState, r'UserCompanyState', 'notificationState');
     BuiltValueNullFieldError.checkNotNull(
@@ -267,9 +243,7 @@ class _$UserCompanyState extends UserCompanyState {
         userCompany == other.userCompany &&
         paymentState == other.paymentState &&
         productState == other.productState &&
-        socialState == other.socialState &&
         photoState == other.photoState &&
-        workoutState == other.workoutState &&
         notificationState == other.notificationState &&
         profileOperationState == other.profileOperationState &&
         profileState == other.profileState &&
@@ -290,9 +264,7 @@ class _$UserCompanyState extends UserCompanyState {
     _$hash = $jc(_$hash, userCompany.hashCode);
     _$hash = $jc(_$hash, paymentState.hashCode);
     _$hash = $jc(_$hash, productState.hashCode);
-    _$hash = $jc(_$hash, socialState.hashCode);
     _$hash = $jc(_$hash, photoState.hashCode);
-    _$hash = $jc(_$hash, workoutState.hashCode);
     _$hash = $jc(_$hash, notificationState.hashCode);
     _$hash = $jc(_$hash, profileOperationState.hashCode);
     _$hash = $jc(_$hash, profileState.hashCode);
@@ -313,9 +285,7 @@ class _$UserCompanyState extends UserCompanyState {
           ..add('userCompany', userCompany)
           ..add('paymentState', paymentState)
           ..add('productState', productState)
-          ..add('socialState', socialState)
           ..add('photoState', photoState)
-          ..add('workoutState', workoutState)
           ..add('notificationState', notificationState)
           ..add('profileOperationState', profileOperationState)
           ..add('profileState', profileState)
@@ -359,24 +329,12 @@ class UserCompanyStateBuilder
   set productState(ProductStateBuilder? productState) =>
       _$this._productState = productState;
 
-  SocialStateBuilder? _socialState;
-  SocialStateBuilder get socialState =>
-      _$this._socialState ??= new SocialStateBuilder();
-  set socialState(SocialStateBuilder? socialState) =>
-      _$this._socialState = socialState;
 
   PhotoStateBuilder? _photoState;
   PhotoStateBuilder get photoState =>
       _$this._photoState ??= new PhotoStateBuilder();
   set photoState(PhotoStateBuilder? photoState) =>
       _$this._photoState = photoState;
-
-  WorkoutStateBuilder? _workoutState;
-  WorkoutStateBuilder get workoutState =>
-      _$this._workoutState ??= new WorkoutStateBuilder();
-  set workoutState(WorkoutStateBuilder? workoutState) =>
-      _$this._workoutState = workoutState;
-
   NotificationStateBuilder? _notificationState;
   NotificationStateBuilder get notificationState =>
       _$this._notificationState ??= new NotificationStateBuilder();
@@ -434,9 +392,7 @@ class UserCompanyStateBuilder
       _userCompany = $v.userCompany.toBuilder();
       _paymentState = $v.paymentState.toBuilder();
       _productState = $v.productState.toBuilder();
-      _socialState = $v.socialState.toBuilder();
       _photoState = $v.photoState.toBuilder();
-      _workoutState = $v.workoutState.toBuilder();
       _notificationState = $v.notificationState.toBuilder();
       _profileOperationState = $v.profileOperationState.toBuilder();
       _profileState = $v.profileState.toBuilder();
@@ -476,9 +432,7 @@ class UserCompanyStateBuilder
               userCompany: userCompany.build(),
               paymentState: paymentState.build(),
               productState: productState.build(),
-              socialState: socialState.build(),
               photoState: photoState.build(),
-              workoutState: workoutState.build(),
               notificationState: notificationState.build(),
               profileOperationState: profileOperationState.build(),
               profileState: profileState.build(),
@@ -497,11 +451,9 @@ class UserCompanyStateBuilder
         _$failedField = 'productState';
         productState.build();
         _$failedField = 'socialState';
-        socialState.build();
         _$failedField = 'photoState';
         photoState.build();
         _$failedField = 'workoutState';
-        workoutState.build();
         _$failedField = 'notificationState';
         notificationState.build();
         _$failedField = 'profileOperationState';

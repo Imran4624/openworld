@@ -3,7 +3,6 @@ import 'package:built_collection/built_collection.dart';
 import 'package:flutter_boilerplate/redux/design/design_state.dart';
 import 'package:flutter_boilerplate/redux/user/user_state.dart';
 import 'package:flutter_boilerplate/ui/photo/photo_screen.dart';
-import 'package:flutter_boilerplate/ui/social/social_screen.dart';
 import 'package:redux/redux.dart';
 
 // Project imports:
@@ -28,14 +27,8 @@ import 'package:flutter_boilerplate/redux/payment/payment_state.dart';
 import 'package:flutter_boilerplate/redux/product/product_reducer.dart';
 import 'package:flutter_boilerplate/redux/product/product_state.dart';
 
-import 'package:flutter_boilerplate/redux/social/social_reducer.dart';
-import 'package:flutter_boilerplate/redux/social/social_state.dart';
-
 import 'package:flutter_boilerplate/redux/photo/photo_reducer.dart';
 import 'package:flutter_boilerplate/redux/photo/photo_state.dart';
-
-import 'package:flutter_boilerplate/redux/workout/workout_reducer.dart';
-import 'package:flutter_boilerplate/redux/workout/workout_state.dart';
 
 import 'package:flutter_boilerplate/redux/notification/notification_reducer.dart';
 import 'package:flutter_boilerplate/redux/notification/notification_state.dart';
@@ -79,12 +72,8 @@ UIState uiReducer(UIState state, dynamic action) {
         paymentUIReducer(state.paymentUIState, action) as PaymentUIState)
     ..productUIState.replace(
         productUIReducer(state.productUIState, action) as ProductUIState)
-    ..socialUIState
-        .replace(socialUIReducer(state.socialUIState, action) as SocialUIState)
     ..photoUIState
         .replace(photoUIReducer(state.photoUIState, action) as PhotoUIState)
-    ..workoutUIState.replace(
-        workoutUIReducer(state.workoutUIState, action) as WorkoutUIState)
     ..notificationUIState.replace(
         notificationUIReducer(state.notificationUIState, action)
             as NotificationUIState)
@@ -146,8 +135,7 @@ Reducer<int> filterClearedAtReducer = combineReducers([
 Reducer<String> currentRouteReducer = combineReducers([
   TypedReducer<String, UpdateCurrentRoute>((currentRoute, action) {
     if (isWeb()) {
-      if (action.route.startsWith(PhotoScreen.route) ||
-          action.route.startsWith(SocialScreen.route)) {
+      if (action.route.startsWith(PhotoScreen.route) ) {
         return action.route;
       }
       String routeToUpdate;

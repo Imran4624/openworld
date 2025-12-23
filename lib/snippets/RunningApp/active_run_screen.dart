@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_boilerplate/data/models/workout_model.dart';
 import 'package:flutter_boilerplate/redux/app/app_state.dart';
-import 'package:flutter_boilerplate/redux/workout/workout_actions.dart';
 import 'package:flutter_boilerplate/ui/app/shared.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -168,19 +166,6 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
     final pace = distanceCovered > 0 ? (totalSeconds / distanceCovered).round() : 0;
     final calories = 0; 
     final elevationGain = 0;
-    final workoutEntity = WorkoutEntity().rebuild((b) => b
-      ..type = 'Running'
-      ..startTime = startTime.millisecondsSinceEpoch
-      ..endTime = endTime.millisecondsSinceEpoch
-      ..duration = totalSeconds
-      ..distance = distanceMeters
-      ..averagePace = pace
-      ..caloriesBurned = calories
-      ..elevationGain = elevationGain
-      ..createdAt = now.millisecondsSinceEpoch
-      ..updatedAt = now.millisecondsSinceEpoch
-    );
-    store.dispatch(EditWorkout(workout: workoutEntity));
   }
 
   void _updateRunProgress(Timer timer) {

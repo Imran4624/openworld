@@ -14,11 +14,7 @@ import 'package:flutter_boilerplate/redux/payment/payment_state.dart';
 
 import 'package:flutter_boilerplate/redux/product/product_state.dart';
 
-import 'package:flutter_boilerplate/redux/social/social_state.dart';
-
 import 'package:flutter_boilerplate/redux/photo/photo_state.dart';
-
-import 'package:flutter_boilerplate/redux/workout/workout_state.dart';
 
 import 'package:flutter_boilerplate/redux/notification/notification_state.dart';
 
@@ -44,11 +40,7 @@ abstract class UserCompanyState
 
       productState: ProductState(),
 
-      socialState: SocialState(),
-
       photoState: PhotoState(),
-
-      workoutState: WorkoutState(),
 
       notificationState: NotificationState(),
 
@@ -82,9 +74,7 @@ abstract class UserCompanyState
   // STARTER: fields - do not remove comment
   PaymentState get paymentState;
   ProductState get productState;
-  SocialState get socialState;
   PhotoState get photoState;
-  WorkoutState get workoutState;
   NotificationState get notificationState;
   ProfileOperationState get profileOperationState;
   ProfileState get profileState;

@@ -1,19 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/constants.dart';
-import 'package:flutter_boilerplate/data/mock/boilerplateQuestions.dart';
-import 'package:flutter_boilerplate/data/mock/cac.dart';
-import 'package:flutter_boilerplate/data/mock/events121.dart';
-import 'package:flutter_boilerplate/data/mock/lvc.dart';
 import 'package:flutter_boilerplate/data/mock/opw.dart';
-import 'package:flutter_boilerplate/data/mock/documentDemo.dart';
-import 'package:flutter_boilerplate/data/mock/documentQuestions.dart';
-import 'package:flutter_boilerplate/data/mock/lm.dart';
-import 'package:flutter_boilerplate/data/mock/loopjam.dart';
-import 'package:flutter_boilerplate/data/mock/myIslamicSpouseQuestions.dart';
-import 'package:flutter_boilerplate/data/mock/onboardingQuestions.dart';
-import 'package:flutter_boilerplate/data/mock/profileQuestions.dart';
-import 'package:flutter_boilerplate/data/mock/tourQuestions.dart';
-import 'package:flutter_boilerplate/data/mock/travelPlanner.dart';
 import 'package:flutter_boilerplate/ui/app/shared.dart';
 
 enum SearchableType {
@@ -254,60 +241,9 @@ class QuestionGroupModel {
 
   static List<QuestionGroupModel> fromQuestionList(QuestionType type) {
     switch (type) {
-      case QuestionType.tour:
-        return (tourQuestions['groups'] as List)
-            .map((group) => QuestionGroupModel.fromJson(group))
-            .toList();
-      case QuestionType.documentDemo:
-        return (documentDemoQuestions['groups'] as List)
-            .map((group) => QuestionGroupModel.fromJson(group))
-            .toList();
-      case QuestionType.onboarding:
-        return (onboardingQuestions['groups'] as List)
-            .map((group) => QuestionGroupModel.fromJson(group))
-            .toList();
-      case QuestionType.profile:
-        return (profileQuestions['groups'] as List)
-            .map((group) => QuestionGroupModel.fromJson(group))
-            .toList();
-      case QuestionType.planner:
-        return (travelPlannerQuestions['groups'] as List)
-            .map((group) => QuestionGroupModel.fromJson(group))
-            .toList();
-      case QuestionType.document:
-        return (documentQuestions['groups'] as List)
-            .map((group) => QuestionGroupModel.fromJson(group))
-            .toList();
-      case QuestionType.cac:
-        return (cacQuestions['groups'] as List)
-            .map((group) => QuestionGroupModel.fromJson(group))
-            .toList();
-      case QuestionType.boilerplate:
-        return (boilerplateQuestions['groups'] as List)
-            .map((group) => QuestionGroupModel.fromJson(group))
-            .toList();
-      case QuestionType.events121:
-        return (events121Questions['groups'] as List)
-            .map((group) => QuestionGroupModel.fromJson(group))
-            .toList();
+      
       case QuestionType.opw:
         return (opwQuestions['groups'] as List)
-            .map((group) => QuestionGroupModel.fromJson(group))
-            .toList();
-      case QuestionType.lvc:
-        return (lvcQuestions['groups'] as List)
-            .map((group) => QuestionGroupModel.fromJson(group))
-            .toList();
-      case QuestionType.myIslamicSpouse:
-        return (myIslamicSpouseQuestions['groups'] as List)
-            .map((group) => QuestionGroupModel.fromJson(group))
-            .toList();
-      case QuestionType.lm:
-        return (lmQuestions['groups'] as List)
-            .map((group) => QuestionGroupModel.fromJson(group))
-            .toList();
-      case QuestionType.loopjam:
-        return (loopjamQuestions['groups'] as List)
             .map((group) => QuestionGroupModel.fromJson(group))
             .toList();
       default:
@@ -389,28 +325,8 @@ class TimelineNode {
 extension QuestionTypeExtension on QuestionType {
   String getName() {
     switch (this) {
-      case QuestionType.profile:
-        return profileQuestions['name'] as String;
-      case QuestionType.cac:
-        return cacQuestions['name'] as String;
-      case QuestionType.boilerplate:
-        return boilerplateQuestions['name'] as String;
-      case QuestionType.events121:
-        return events121Questions['name'] as String;
       case QuestionType.opw:
         return opwQuestions['name'] as String;
-      case QuestionType.lvc:
-        return lvcQuestions['name'] as String;
-      case QuestionType.tour:
-        return tourQuestions['name'] as String;
-      case QuestionType.documentDemo:
-        return documentDemoQuestions['name'] as String;
-      case QuestionType.onboarding:
-        return onboardingQuestions['name'] as String;
-      case QuestionType.planner:
-        return travelPlannerQuestions['name'] as String;
-      case QuestionType.document:
-        return documentQuestions['name'] as String;
       default:
         return '';
     }

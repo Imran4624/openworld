@@ -24,11 +24,7 @@ import 'package:flutter_boilerplate/redux/payment/payment_actions.dart';
 
 import 'package:flutter_boilerplate/redux/product/product_actions.dart';
 
-import 'package:flutter_boilerplate/redux/social/social_actions.dart';
-
 import 'package:flutter_boilerplate/redux/photo/photo_actions.dart';
-
-import 'package:flutter_boilerplate/redux/workout/workout_actions.dart';
 
 import 'package:flutter_boilerplate/redux/notification/notification_actions.dart';
 
@@ -520,21 +516,6 @@ Reducer<BuiltList<HistoryRecord>> historyReducer = combineReducers([
       _addToHistory(
           historyList, HistoryRecord(entityType: EntityType.product))),
 
-  TypedReducer<BuiltList<HistoryRecord>, ViewSocial>((historyList, action) =>
-      _addToHistory(historyList,
-          HistoryRecord(id: action.socialId, entityType: EntityType.social))),
-  TypedReducer<BuiltList<HistoryRecord>, EditSocial>((historyList, action) =>
-      _addToHistory(historyList,
-          HistoryRecord(id: action.social.id, entityType: EntityType.social))),
-  TypedReducer<BuiltList<HistoryRecord>, ViewSocialList>(
-      (historyList, action) => _addToHistory(
-          historyList,
-          HistoryRecord(
-              //id: action.socialId,
-              entityType: EntityType.social))),
-  TypedReducer<BuiltList<HistoryRecord>, EditSocial>((historyList, action) =>
-      _addToHistory(historyList, HistoryRecord(entityType: EntityType.social))),
-
   TypedReducer<BuiltList<HistoryRecord>, ViewPhoto>((historyList, action) =>
       _addToHistory(historyList,
           HistoryRecord(id: action.photoId, entityType: EntityType.photo))),
@@ -545,21 +526,6 @@ Reducer<BuiltList<HistoryRecord>> historyReducer = combineReducers([
       _addToHistory(historyList, HistoryRecord(entityType: EntityType.photo))),
   TypedReducer<BuiltList<HistoryRecord>, EditPhoto>((historyList, action) =>
       _addToHistory(historyList, HistoryRecord(entityType: EntityType.photo))),
-
-  TypedReducer<BuiltList<HistoryRecord>, ViewWorkout>((historyList, action) =>
-      _addToHistory(historyList,
-          HistoryRecord(id: action.workoutId, entityType: EntityType.workout))),
-  TypedReducer<BuiltList<HistoryRecord>, EditWorkout>((historyList, action) =>
-      _addToHistory(
-          historyList,
-          HistoryRecord(
-              id: action.workout.id, entityType: EntityType.workout))),
-  TypedReducer<BuiltList<HistoryRecord>, ViewWorkoutList>(
-      (historyList, action) => _addToHistory(
-          historyList, HistoryRecord(entityType: EntityType.workout))),
-  TypedReducer<BuiltList<HistoryRecord>, EditWorkout>((historyList, action) =>
-      _addToHistory(
-          historyList, HistoryRecord(entityType: EntityType.workout))),
 
   TypedReducer<BuiltList<HistoryRecord>, ViewNotification>(
       (historyList, action) => _addToHistory(

@@ -36,20 +36,10 @@ import 'package:flutter_boilerplate/ui/product/product_screen_vm.dart';
 import 'package:flutter_boilerplate/ui/product/edit/product_edit_vm.dart';
 import 'package:flutter_boilerplate/ui/product/view/product_view_vm.dart';
 
-import 'package:flutter_boilerplate/ui/social/social_screen.dart';
-import 'package:flutter_boilerplate/ui/social/social_screen_vm.dart';
-import 'package:flutter_boilerplate/ui/social/edit/social_edit_vm.dart';
-import 'package:flutter_boilerplate/ui/social/view/social_view_vm.dart';
-
 import 'package:flutter_boilerplate/ui/photo/photo_screen.dart';
 import 'package:flutter_boilerplate/ui/photo/photo_screen_vm.dart';
 import 'package:flutter_boilerplate/ui/photo/edit/photo_edit_vm.dart';
 import 'package:flutter_boilerplate/ui/photo/view/photo_view_vm.dart';
-
-import 'package:flutter_boilerplate/ui/workout/workout_screen.dart';
-import 'package:flutter_boilerplate/ui/workout/workout_screen_vm.dart';
-import 'package:flutter_boilerplate/ui/workout/edit/workout_edit_vm.dart';
-import 'package:flutter_boilerplate/ui/workout/view/workout_view_vm.dart';
 
 import 'package:flutter_boilerplate/ui/notification/notification_screen.dart';
 import 'package:flutter_boilerplate/ui/notification/notification_screen_vm.dart';
@@ -173,21 +163,9 @@ class MainScreen extends StatelessWidget {
             editingFilterEntity: editingFilterEntity,
           );
           break;
-        case SocialScreen.route:
-          screen = EntityScreens(
-            entityType: EntityType.social,
-            editingFilterEntity: editingFilterEntity,
-          );
-          break;
         case PhotoScreen.route:
           screen = EntityScreens(
             entityType: EntityType.photo,
-            editingFilterEntity: editingFilterEntity,
-          );
-          break;
-        case WorkoutScreen.route:
-          screen = EntityScreens(
-            entityType: EntityType.workout,
             editingFilterEntity: editingFilterEntity,
           );
           break;
@@ -480,15 +458,10 @@ class EntityScreens extends StatelessWidget {
         case EntityType.product:
           child = const ProductEditScreen();
           break;
-        case EntityType.social:
-          child = const SocialEditScreen();
-          break;
         case EntityType.photo:
           child = const PhotoEditScreen();
           break;
-        case EntityType.workout:
-          child = const WorkoutEditScreen();
-          break;
+  
         case EntityType.notification:
           child = const NotificationEditScreen();
           break;
@@ -534,15 +507,10 @@ class EntityScreens extends StatelessWidget {
           case EntityType.product:
             child = const ProductViewScreen();
             break;
-          case EntityType.social:
-            child = const SocialViewScreen();
-            break;
           case EntityType.photo:
             child = const PhotoViewScreen();
             break;
-          case EntityType.workout:
-            child = const WorkoutViewScreen();
-            break;
+       
           case EntityType.notification:
             child = const NotificationViewScreen();
             break;
@@ -697,14 +665,8 @@ class EntityScreens extends StatelessWidget {
       case EntityType.product:
         listWidget = const ProductScreenBuilder();
         break;
-      case EntityType.social:
-        listWidget = const SocialScreenBuilder();
-        break;
       case EntityType.photo:
         listWidget = const PhotoScreenBuilder();
-        break;
-      case EntityType.workout:
-        listWidget = const WorkoutScreenBuilder();
         break;
       case EntityType.notification:
         listWidget = const NotificationScreenBuilder();

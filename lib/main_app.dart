@@ -80,20 +80,11 @@ import 'package:flutter_boilerplate/ui/product/edit/product_edit_vm.dart';
 import 'package:flutter_boilerplate/ui/product/view/product_view_vm.dart';
 import 'package:flutter_boilerplate/ui/product/product_screen_vm.dart';
 
-import 'package:flutter_boilerplate/ui/social/social_screen.dart';
-import 'package:flutter_boilerplate/ui/social/edit/social_edit_vm.dart';
-import 'package:flutter_boilerplate/ui/social/view/social_view_vm.dart';
-import 'package:flutter_boilerplate/ui/social/social_screen_vm.dart';
-
 import 'package:flutter_boilerplate/ui/photo/photo_screen.dart';
 import 'package:flutter_boilerplate/ui/photo/edit/photo_edit_vm.dart';
 import 'package:flutter_boilerplate/ui/photo/view/photo_view_vm.dart';
 import 'package:flutter_boilerplate/ui/photo/photo_screen_vm.dart';
 
-import 'package:flutter_boilerplate/ui/workout/workout_screen.dart';
-import 'package:flutter_boilerplate/ui/workout/edit/workout_edit_vm.dart';
-import 'package:flutter_boilerplate/ui/workout/view/workout_view_vm.dart';
-import 'package:flutter_boilerplate/ui/workout/workout_screen_vm.dart';
 
 import 'package:flutter_boilerplate/ui/notification/notification_screen.dart';
 import 'package:flutter_boilerplate/ui/notification/edit/notification_edit_vm.dart';
@@ -582,26 +573,12 @@ class FlutterBoilerplateAppState extends State<FlutterBoilerplateApp> {
                           ProductEditScreen.route: (context) =>
                               const ProductEditScreen(),
 
-                          SocialScreen.route: (context) =>
-                              const SocialScreenBuilder(),
-                          SocialViewScreen.route: (context) =>
-                              const SocialViewScreen(),
-                          SocialEditScreen.route: (context) =>
-                              const SocialEditScreen(),
-
                           PhotoScreen.route: (context) =>
                               const PhotoScreenBuilder(),
                           PhotoViewScreen.route: (context) =>
                               const PhotoViewScreen(),
                           PhotoEditScreen.route: (context) =>
                               const PhotoEditScreen(),
-
-                          WorkoutScreen.route: (context) =>
-                              const WorkoutScreenBuilder(),
-                          WorkoutViewScreen.route: (context) =>
-                              const WorkoutViewScreen(),
-                          WorkoutEditScreen.route: (context) =>
-                              const WorkoutEditScreen(),
 
                           NotificationScreen.route: (context) =>
                               const NotificationScreenBuilder(),

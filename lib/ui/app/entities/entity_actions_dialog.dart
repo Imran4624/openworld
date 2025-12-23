@@ -21,9 +21,7 @@ import 'package:flutter_boilerplate/utils/localization.dart';
 // STARTER: import - do not remove comment
 import 'package:flutter_boilerplate/redux/payment/payment_actions.dart';
 import 'package:flutter_boilerplate/redux/product/product_actions.dart';
-import 'package:flutter_boilerplate/redux/social/social_actions.dart';
 import 'package:flutter_boilerplate/redux/photo/photo_actions.dart';
-import 'package:flutter_boilerplate/redux/workout/workout_actions.dart';
 import 'package:flutter_boilerplate/redux/notification/notification_actions.dart';
 import 'package:flutter_boilerplate/redux/profile_operation/profile_operation_actions.dart';
 import 'package:flutter_boilerplate/redux/profile/profile_actions.dart';
@@ -137,15 +135,10 @@ class EntityActionListTile extends StatelessWidget {
           case EntityType.product:
             handleProductAction(context, entities!, action!);
             break;
-          case EntityType.social:
-            handleSocialAction(context, entities!, action!);
-            break;
           case EntityType.photo:
             handlePhotoAction(context, entities!, action!);
             break;
-          case EntityType.workout:
-            handleWorkoutAction(context, entities!, action!);
-            break;
+ 
           case EntityType.notification:
             handleNotificationAction(context, entities!, action!);
             break;

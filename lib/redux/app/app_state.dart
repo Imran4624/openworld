@@ -43,14 +43,9 @@ import 'package:flutter_boilerplate/ui/payment/edit/payment_edit_vm.dart';
 import 'package:flutter_boilerplate/redux/product/product_state.dart';
 import 'package:flutter_boilerplate/ui/product/edit/product_edit_vm.dart';
 
-import 'package:flutter_boilerplate/redux/social/social_state.dart';
-import 'package:flutter_boilerplate/ui/social/edit/social_edit_vm.dart';
-
 import 'package:flutter_boilerplate/redux/photo/photo_state.dart';
 import 'package:flutter_boilerplate/ui/photo/edit/photo_edit_vm.dart';
 
-import 'package:flutter_boilerplate/redux/workout/workout_state.dart';
-import 'package:flutter_boilerplate/ui/workout/edit/workout_edit_vm.dart';
 
 import 'package:flutter_boilerplate/redux/notification/notification_state.dart';
 import 'package:flutter_boilerplate/ui/notification/edit/notification_edit_vm.dart';
@@ -265,14 +260,10 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
       case EntityType.product:
         return productState.map;
 
-      case EntityType.social:
-        return socialState.map;
 
       case EntityType.photo:
         return photoState.map;
 
-      case EntityType.workout:
-        return workoutState.map;
 
       case EntityType.notification:
         return notificationState.map;
@@ -331,14 +322,10 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
       case EntityType.product:
         return productState.list;
 
-      case EntityType.social:
-        return socialState.list;
-
       case EntityType.photo:
         return photoState.list;
 
-      case EntityType.workout:
-        return workoutState.list;
+
 
       case EntityType.notification:
         return notificationState.list;
@@ -385,14 +372,8 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
       case EntityType.product:
         return productUIState;
 
-      case EntityType.social:
-        return socialUIState;
-
       case EntityType.photo:
         return photoUIState;
-
-      case EntityType.workout:
-        return workoutUIState;
 
       case EntityType.notification:
         return notificationUIState;
@@ -435,17 +416,9 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   ListUIState get productListState => uiState.productUIState.listUIState;
   ProductUIState get productUIState => uiState.productUIState;
 
-  SocialState get socialState => userCompanyState.socialState;
-  ListUIState get socialListState => uiState.socialUIState.listUIState;
-  SocialUIState get socialUIState => uiState.socialUIState;
-
   PhotoState get photoState => userCompanyState.photoState;
   ListUIState get photoListState => uiState.photoUIState.listUIState;
   PhotoUIState get photoUIState => uiState.photoUIState;
-
-  WorkoutState get workoutState => userCompanyState.workoutState;
-  ListUIState get workoutListState => uiState.workoutUIState.listUIState;
-  WorkoutUIState get workoutUIState => uiState.workoutUIState;
 
   NotificationState get notificationState => userCompanyState.notificationState;
   ListUIState get notificationListState =>
@@ -495,14 +468,8 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
       case ProductEditScreen.route:
         return productUIState.editing!.isChanged == true;
 
-      case SocialEditScreen.route:
-        return socialUIState.editing!.isChanged == true;
-
       case PhotoEditScreen.route:
         return photoUIState.editing!.isChanged == true;
-
-      case WorkoutEditScreen.route:
-        return workoutUIState.editing!.isChanged == true;
 
       case NotificationEditScreen.route:
         return notificationUIState.editing!.isChanged == true;

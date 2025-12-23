@@ -3,7 +3,6 @@ import 'package:built_collection/built_collection.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_boilerplate/constants.dart';
-import 'package:flutter_boilerplate/data/repositories/azure_client.dart';
 import 'package:flutter_boilerplate/data/repositories/firebase_repository.dart';
 import 'package:flutter_boilerplate/data/models/serializers.dart';
 import 'package:flutter_boilerplate/data/models/models.dart';
@@ -18,7 +17,6 @@ class PhotoRepository {
   static final FirebaseRepository _firebaseRepository =
       FirebaseRepository('photos');
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  static final AzureClient _azureClient = AzureClient(containerName: 'photos');
 
   static final FirebaseStorage _storage = FirebaseStorage.instance;
 
@@ -215,11 +213,6 @@ class PhotoRepository {
   // Upload a single image to storage (Firebase or Azure based on config)
   Future<String> _uploadImageToStorage(
       Uint8List imageData, String imageName) async {
-    if (ProjectConfig.getStorageType() == StorageType.azure.toString()) {
-      return await _azureClient.uploadFile(imageData, imageName,
-          subPath: 'images');
-    } else {
-      // Original Firebase implementation
       try {
         final String timestamp =
             DateTime.now().millisecondsSinceEpoch.toString();
@@ -247,7 +240,6 @@ class PhotoRepository {
         logError(' Error uploading image to Firebase: $e');
         return '';
       }
-    }
   }
 
   Future<List<String>> _uploadMultipleImagesToStorage(
@@ -256,11 +248,6 @@ class PhotoRepository {
     if (imagesData.isEmpty) {
       return [];
     }
-    if (ProjectConfig.getStorageType() == StorageType.azure.toString()) {
-      return await _azureClient.uploadMultipleFiles(imagesData,
-          subPath: 'images');
-    } else {
-      // Original Firebase implementation
       try {
         final List<Future<String>> uploadFutures = imagesData.map((imageData) {
           final bytes = imageData['bytes'] as Uint8List;
@@ -274,7 +261,6 @@ class PhotoRepository {
         logError(' Error uploading multiple images: $e');
         return [];
       }
-    }
   }
 
   Future<PhotoEntity> saveData(Credentials credentials, PhotoEntity photo,

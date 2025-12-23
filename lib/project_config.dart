@@ -939,10 +939,6 @@ class ProjectConfig {
       // return appType == AppType.loopjam;
       case EntityType.photo:
         return state.photoState.filter.stateFilter == EntityState.myEntities;
-      case EntityType.product:
-        return state.productState.filter.stateFilter == EntityState.myEntities;
-      case EntityType.social:
-        return state.socialState.filter.stateFilter == EntityState.myEntities;
       default:
         return true;
     }

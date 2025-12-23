@@ -42,11 +42,7 @@ import 'package:flutter_boilerplate/redux/payment/payment_middleware.dart';
 
 import 'package:flutter_boilerplate/redux/product/product_middleware.dart';
 
-import 'package:flutter_boilerplate/redux/social/social_middleware.dart';
-
 import 'package:flutter_boilerplate/redux/photo/photo_middleware.dart';
-
-import 'package:flutter_boilerplate/redux/workout/workout_middleware.dart';
 
 import 'package:flutter_boilerplate/redux/notification/notification_middleware.dart';
 
@@ -201,9 +197,7 @@ void main({bool isTesting = false}) async {
         // STARTER: middleware - do not remove comment
         ..addAll(createStorePaymentsMiddleware())
         ..addAll(createStoreProductsMiddleware())
-        ..addAll(createStoreSocialsMiddleware())
         ..addAll(createStorePhotosMiddleware())
-        ..addAll(createStoreWorkoutsMiddleware())
         ..addAll(createStoreNotificationsMiddleware())
         ..addAll(createStoreProfileOperationsMiddleware())
         ..addAll(createStoreProfilesMiddleware())

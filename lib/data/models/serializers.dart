@@ -30,11 +30,8 @@ import 'package:flutter_boilerplate/redux/payment/payment_state.dart';
 
 import 'package:flutter_boilerplate/redux/product/product_state.dart';
 
-import 'package:flutter_boilerplate/redux/social/social_state.dart';
 
 import 'package:flutter_boilerplate/redux/photo/photo_state.dart';
-
-import 'package:flutter_boilerplate/redux/workout/workout_state.dart';
 
 import 'package:flutter_boilerplate/redux/notification/notification_state.dart';
 
@@ -80,20 +77,11 @@ part 'serializers.g.dart';
   ProductListResponse,
   ProductItemResponse,
 
-  SocialEntity,
-  SocialListResponse,
-  SocialItemResponse,
-
   PhotoEntity,
   PhotoListResponse,
   PhotoItemResponse,
 
-  WorkoutEntity,
-  WorkoutListResponse,
-  WorkoutItemResponse,
-  PlanInfo,
-  Weather,
-  LocationPoint,
+
 
   NotificationEntity,
   NotificationListResponse,

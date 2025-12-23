@@ -14,11 +14,7 @@ import 'package:flutter_boilerplate/redux/payment/payment_reducer.dart';
 
 import 'package:flutter_boilerplate/redux/product/product_reducer.dart';
 
-import 'package:flutter_boilerplate/redux/social/social_reducer.dart';
-
 import 'package:flutter_boilerplate/redux/photo/photo_reducer.dart';
-
-import 'package:flutter_boilerplate/redux/workout/workout_reducer.dart';
 
 import 'package:flutter_boilerplate/redux/notification/notification_reducer.dart';
 
@@ -42,9 +38,7 @@ UserCompanyState companyReducer(UserCompanyState state, dynamic action) {
     // STARTER: reducer - do not remove comment
     ..paymentState.replace(paymentsReducer(state.paymentState, action))
     ..productState.replace(productsReducer(state.productState, action))
-    ..socialState.replace(socialsReducer(state.socialState, action))
     ..photoState.replace(photosReducer(state.photoState, action))
-    ..workoutState.replace(workoutsReducer(state.workoutState, action))
     ..notificationState
         .replace(notificationsReducer(state.notificationState, action))
     ..profileOperationState

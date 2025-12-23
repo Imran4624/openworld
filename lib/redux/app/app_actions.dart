@@ -33,24 +33,18 @@ import 'package:flutter_boilerplate/ui/app/dialogs/alert_dialog.dart';
 import 'package:flutter_boilerplate/ui/app/entities/entity_actions_dialog.dart';
 import 'package:flutter_boilerplate/ui/design/design_screen.dart';
 import 'package:flutter_boilerplate/ui/user/user_screen.dart';
-import 'package:flutter_boilerplate/ui/event/view/event_view_vm.dart';
-import 'package:flutter_boilerplate/ui/photo/view/photo_view_vm.dart';
 import 'package:flutter_boilerplate/utils/dialogs.dart';
 import 'package:flutter_boilerplate/utils/localization.dart';
 import 'package:flutter_boilerplate/utils/platforms.dart';
-import 'package:flutter_boilerplate/utils/web_stub.dart'
-    if (dart.library.html) 'package:flutter_boilerplate/utils/web.dart';
 
 // STARTER: import - do not remove comment
 import 'package:flutter_boilerplate/redux/payment/payment_actions.dart';
 
 import 'package:flutter_boilerplate/redux/product/product_actions.dart';
 
-import 'package:flutter_boilerplate/redux/social/social_actions.dart';
 
 import 'package:flutter_boilerplate/redux/photo/photo_actions.dart';
 
-import 'package:flutter_boilerplate/redux/workout/workout_actions.dart';
 
 import 'package:flutter_boilerplate/redux/notification/notification_actions.dart';
 
@@ -672,16 +666,8 @@ void viewEntitiesByType({
             action = ViewProductList();
             break;
 
-          case EntityType.social:
-            action = ViewSocialList();
-            break;
-
           case EntityType.photo:
             action = ViewPhotoList();
-            break;
-
-          case EntityType.workout:
-            action = ViewWorkoutList();
             break;
 
           case EntityType.notification:
@@ -908,23 +894,9 @@ void viewEntityById({
             ));
             break;
 
-          case EntityType.social:
-            store.dispatch(ViewSocial(
-              socialId: entityId,
-              force: force,
-            ));
-            break;
-
           case EntityType.photo:
             store.dispatch(ViewPhoto(
               photoId: entityId,
-              force: force,
-            ));
-            break;
-
-          case EntityType.workout:
-            store.dispatch(ViewWorkout(
-              workoutId: entityId,
               force: force,
             ));
             break;
@@ -1057,13 +1029,6 @@ void createEntityByType({
             ));
             break;
 
-          case EntityType.social:
-            store.dispatch(EditSocial(
-              force: force,
-              social: SocialEntity(state: state),
-            ));
-            break;
-
           case EntityType.photo:
             store.dispatch(EditPhoto(
               force: force,
@@ -1071,12 +1036,6 @@ void createEntityByType({
             ));
             break;
 
-          case EntityType.workout:
-            store.dispatch(EditWorkout(
-              force: force,
-              workout: WorkoutEntity(state: state),
-            ));
-            break;
 
           case EntityType.notification:
             store.dispatch(EditNotification(
@@ -1185,23 +1144,9 @@ void createEntity({
                 completer: completer));
             break;
 
-          case EntityType.social:
-            store.dispatch(EditSocial(
-                social: entity as SocialEntity,
-                force: force,
-                completer: completer));
-            break;
-
           case EntityType.photo:
             store.dispatch(EditPhoto(
                 photo: entity as PhotoEntity,
-                force: force,
-                completer: completer));
-            break;
-
-          case EntityType.workout:
-            store.dispatch(EditWorkout(
-                workout: entity as WorkoutEntity,
                 force: force,
                 completer: completer));
             break;
@@ -1295,19 +1240,10 @@ void editEntity({
                 product: entity as ProductEntity, completer: completer));
             break;
 
-          case EntityType.social:
-            store.dispatch(EditSocial(
-                social: entity as SocialEntity, completer: completer));
-            break;
 
           case EntityType.photo:
             store.dispatch(
                 EditPhoto(photo: entity as PhotoEntity, completer: completer));
-            break;
-
-          case EntityType.workout:
-            store.dispatch(EditWorkout(
-                workout: entity as WorkoutEntity, completer: completer));
             break;
 
           case EntityType.notification:
@@ -1396,16 +1332,8 @@ void handleEntitiesActions(List<BaseEntity> entities, EntityAction? action,
       handleProductAction(context!, entities, action!);
       break;
 
-    case EntityType.social:
-      handleSocialAction(context!, entities, action!);
-      break;
-
     case EntityType.photo:
       handlePhotoAction(context!, entities, action!);
-      break;
-
-    case EntityType.workout:
-      handleWorkoutAction(context!, entities, action!);
       break;
 
     case EntityType.notification:

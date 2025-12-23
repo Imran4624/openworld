@@ -19,11 +19,7 @@ import 'package:flutter_boilerplate/redux/payment/payment_state.dart';
 
 import 'package:flutter_boilerplate/redux/product/product_state.dart';
 
-import 'package:flutter_boilerplate/redux/social/social_state.dart';
-
 import 'package:flutter_boilerplate/redux/photo/photo_state.dart';
-
-import 'package:flutter_boilerplate/redux/workout/workout_state.dart';
 
 import 'package:flutter_boilerplate/redux/notification/notification_state.dart';
 
@@ -60,11 +56,7 @@ abstract class UIState implements Built<UIState, UIStateBuilder> {
 
       productUIState: ProductUIState(sortFields[EntityType.product]),
 
-      socialUIState: SocialUIState(sortFields[EntityType.social]),
-
       photoUIState: PhotoUIState(sortFields[EntityType.photo]),
-
-      workoutUIState: WorkoutUIState(sortFields[EntityType.workout]),
 
       notificationUIState:
           NotificationUIState(sortFields[EntityType.notification]),
@@ -120,11 +112,7 @@ abstract class UIState implements Built<UIState, UIStateBuilder> {
 
   ProductUIState get productUIState;
 
-  SocialUIState get socialUIState;
-
   PhotoUIState get photoUIState;
-
-  WorkoutUIState get workoutUIState;
 
   NotificationUIState get notificationUIState;
 

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_boilerplate/data/repositories/clients/ticket_tailor_api.dart';
 import 'package:flutter_boilerplate/data/repositories/clients/eventbrite_client.dart';
 import 'package:flutter_boilerplate/redux/app/app_state.dart';
 import 'package:flutter_boilerplate/redux/ui/ui_actions.dart';
@@ -41,67 +40,7 @@ class _AdminScreenState extends State<AdminScreen> {
     }
   }
 
-  Future<void> fetchEventLegacy(Store<AppState> store) async {
-    final api = TicketTailorAPI(
-        store: store,
-        companyName: 'Default Company', 
-        updateStatus: (message) {
-          setState(() {
-            statusMessage = message;
-          });
-        });
-
-    try {
-      setState(() {
-        isLoading = true;
-        statusMessage = 'Starting event fetch process...';
-      });
-
-      await api.fetchEvents();
-
-      setState(() {
-        isLoading = false;
-        statusMessage = 'TicketTailor events fetched successfully!';
-      });
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-        statusMessage = 'Failed to fetch TicketTailor events: $e';
-      });
-    }
-  }
-
-  Future<void> fetchEventBriteEventsLegacy(Store<AppState> store) async {
-    final eventBriteClient = EventBriteClient(
-        apiKey: Config.EVENTBRITE_API_KEY,
-        organizationId: Config.EVENTBRITE_ORGANIZATION_ID,
-        companyName: 'Default Company', 
-        store: store,
-        updateStatus: (message) {
-          setState(() {
-            statusMessage = message;
-          });
-        });
-
-    try {
-      setState(() {
-        isLoading = true;
-        statusMessage = 'Starting EventBrite event fetch process...';
-      });
-
-      await eventBriteClient.fetchEvents();
-
-      setState(() {
-        isLoading = false;
-        statusMessage = 'EventBrite events fetched successfully!';
-      });
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-        statusMessage = 'Failed to fetch EventBrite events: $e';
-      });
-    }
-  }
+ 
 
   Future<void> _initializeConfigurations(Store<AppState> store) async {
     if (isInitialized || _store != null) return;
@@ -209,21 +148,18 @@ class _AdminScreenState extends State<AdminScreen> {
           return;
         }
 
-        const orgId = Config.EVENTBRITE_ORGANIZATION_ID;
 
         setState(() {
           statusMessage =
               'Starting EventBrite import with $configName for $companyName...';
         });
 
-        await fetchEventBriteEvents(store, apiKey, orgId, companyName);
       } else if (importFrom.toLowerCase() == 'tickettailor') {
         setState(() {
           statusMessage =
               'Starting TicketTailor import with $configName for $companyName...';
         });
 
-        await fetchEvent(store, companyName);
       } else {
         setState(() {
           isLoading = false;
@@ -238,51 +174,7 @@ class _AdminScreenState extends State<AdminScreen> {
     }
   }
 
-  Future<void> fetchEvent(Store<AppState> store, String companyName) async {
-    final api = TicketTailorAPI(
-        store: store,
-        companyName: companyName,
-        updateStatus: (message) {
-          setState(() {
-            statusMessage = message;
-            if (message.contains('Successfully fetched and saved') &&
-                message.contains('events with all their orders')) {
-              final RegExp regex =
-                  RegExp(r'(\d+) events with all their orders');
-              final match = regex.firstMatch(message);
-              if (match != null) {
-                lastFetchedEventCount = int.parse(match.group(1)!);
-                lastSuccessfulFetchType = 'TicketTailor';
-              }
-            }
-          });
-        });
-
-    try {
-      setState(() {
-        isLoading = true;
-        statusMessage = 'Starting event fetch process...';
-        lastFetchedEventCount = 0;
-      });
-
-      await api.fetchEvents();
-
-      setState(() {
-        isLoading = false;
-        if (lastFetchedEventCount > 0) {
-          statusMessage =
-              'TicketTailor events fetched successfully! Total events fetched: $lastFetchedEventCount';
-        } else {
-          statusMessage = 'TicketTailor events fetched successfully!';
-        }
-      });
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-        statusMessage = 'Failed to fetch TicketTailor events: $e';
-      });
-    }
-  }
+ 
 
   Future<void> fetchEventBriteEvents(Store<AppState> store, String apiKey,
       String organizationId, String companyName) async {
@@ -367,9 +259,7 @@ class _AdminScreenState extends State<AdminScreen> {
             ElevatedButton(
               onPressed: isLoading
                   ? null
-                  : () => ProjectConfig.appType == AppType.events121
-                      ? fetchEventBriteEventsLegacy(store)
-                      : fetchEventLegacy(store),
+                  : () => {},
               style: ElevatedButton.styleFrom(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 16),

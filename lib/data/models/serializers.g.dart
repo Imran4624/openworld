@@ -75,7 +75,6 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(LastMessageEntity.serializer)
       ..add(LineItem.serializer)
       ..add(ListUIState.serializer)
-      ..add(LocationPoint.serializer)
       ..add(LoginResponse.serializer)
       ..add(MessageState.serializer)
       ..add(ModuleLayout.serializer)
@@ -99,7 +98,6 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(PhotoListResponse.serializer)
       ..add(PhotoState.serializer)
       ..add(PhotoUIState.serializer)
-      ..add(PlanInfo.serializer)
       ..add(PrefState.serializer)
       ..add(PrefStateSortField.serializer)
       ..add(ProductEntity.serializer)
@@ -126,12 +124,6 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(SizeEntity.serializer)
       ..add(SizeItemResponse.serializer)
       ..add(SizeListResponse.serializer)
-      ..add(SocialEntity.serializer)
-      ..add(SocialFilter.serializer)
-      ..add(SocialItemResponse.serializer)
-      ..add(SocialListResponse.serializer)
-      ..add(SocialState.serializer)
-      ..add(SocialUIState.serializer)
       ..add(StaticDataEntity.serializer)
       ..add(StaticDataItemResponse.serializer)
       ..add(StaticState.serializer)
@@ -155,13 +147,6 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(UserTwoFactorResponse.serializer)
       ..add(UserUIState.serializer)
       ..add(Venue.serializer)
-      ..add(Weather.serializer)
-      ..add(WorkoutEntity.serializer)
-      ..add(WorkoutFilter.serializer)
-      ..add(WorkoutItemResponse.serializer)
-      ..add(WorkoutListResponse.serializer)
-      ..add(WorkoutState.serializer)
-      ..add(WorkoutUIState.serializer)
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(ActivityEntity)]),
           () => new ListBuilder<ActivityEntity>())
@@ -328,9 +313,6 @@ Serializers _$serializers = (new Serializers().toBuilder()
           const FullType(BuiltList, const [const FullType(SizeEntity)]),
           () => new ListBuilder<SizeEntity>())
       ..addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(SocialEntity)]),
-          () => new ListBuilder<SocialEntity>())
-      ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(String)]),
           () => new ListBuilder<String>())
       ..addBuilderFactory(
@@ -358,9 +340,6 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(UserEntity)]),
           () => new ListBuilder<UserEntity>())
-      ..addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(WorkoutEntity)]),
-          () => new ListBuilder<WorkoutEntity>())
       ..addBuilderFactory(
           const FullType(BuiltMap,
               const [const FullType(EntityType), const FullType(bool)]),
@@ -474,10 +453,6 @@ Serializers _$serializers = (new Serializers().toBuilder()
           const FullType(BuiltList, const [const FullType(String)]),
           () => new ListBuilder<String>())
       ..addBuilderFactory(
-          const FullType(BuiltMap,
-              const [const FullType(String), const FullType(LocationPoint)]),
-          () => new MapBuilder<String, LocationPoint>())
-      ..addBuilderFactory(
           const FullType(BuiltMap, const [
             const FullType(String),
             const FullType(NotificationEntity)
@@ -571,10 +546,6 @@ Serializers _$serializers = (new Serializers().toBuilder()
           const FullType(BuiltList, const [const FullType(String)]),
           () => new ListBuilder<String>())
       ..addBuilderFactory(
-          const FullType(BuiltMap,
-              const [const FullType(String), const FullType(SocialEntity)]),
-          () => new MapBuilder<String, SocialEntity>())
-      ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(String)]),
           () => new ListBuilder<String>())
       ..addBuilderFactory(
@@ -588,10 +559,6 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(String)]),
           () => new ListBuilder<String>())
-      ..addBuilderFactory(
-          const FullType(BuiltMap,
-              const [const FullType(String), const FullType(WorkoutEntity)]),
-          () => new MapBuilder<String, WorkoutEntity>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(String)]),
           () => new ListBuilder<String>())

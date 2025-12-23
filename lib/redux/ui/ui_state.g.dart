@@ -53,15 +53,9 @@ class _$UIStateSerializer implements StructuredSerializer<UIState> {
       'productUIState',
       serializers.serialize(object.productUIState,
           specifiedType: const FullType(ProductUIState)),
-      'socialUIState',
-      serializers.serialize(object.socialUIState,
-          specifiedType: const FullType(SocialUIState)),
       'photoUIState',
       serializers.serialize(object.photoUIState,
           specifiedType: const FullType(PhotoUIState)),
-      'workoutUIState',
-      serializers.serialize(object.workoutUIState,
-          specifiedType: const FullType(WorkoutUIState)),
       'notificationUIState',
       serializers.serialize(object.notificationUIState,
           specifiedType: const FullType(NotificationUIState)),
@@ -175,18 +169,9 @@ class _$UIStateSerializer implements StructuredSerializer<UIState> {
                   specifiedType: const FullType(ProductUIState))!
               as ProductUIState);
           break;
-        case 'socialUIState':
-          result.socialUIState.replace(serializers.deserialize(value,
-              specifiedType: const FullType(SocialUIState))! as SocialUIState);
-          break;
         case 'photoUIState':
           result.photoUIState.replace(serializers.deserialize(value,
               specifiedType: const FullType(PhotoUIState))! as PhotoUIState);
-          break;
-        case 'workoutUIState':
-          result.workoutUIState.replace(serializers.deserialize(value,
-                  specifiedType: const FullType(WorkoutUIState))!
-              as WorkoutUIState);
           break;
         case 'notificationUIState':
           result.notificationUIState.replace(serializers.deserialize(value,
@@ -259,11 +244,7 @@ class _$UIState extends UIState {
   @override
   final ProductUIState productUIState;
   @override
-  final SocialUIState socialUIState;
-  @override
   final PhotoUIState photoUIState;
-  @override
-  final WorkoutUIState workoutUIState;
   @override
   final NotificationUIState notificationUIState;
   @override
@@ -298,9 +279,7 @@ class _$UIState extends UIState {
       required this.dashboardUIState,
       required this.paymentUIState,
       required this.productUIState,
-      required this.socialUIState,
       required this.photoUIState,
-      required this.workoutUIState,
       required this.notificationUIState,
       required this.profileOperationUIState,
       required this.profileUIState,
@@ -333,11 +312,7 @@ class _$UIState extends UIState {
     BuiltValueNullFieldError.checkNotNull(
         productUIState, r'UIState', 'productUIState');
     BuiltValueNullFieldError.checkNotNull(
-        socialUIState, r'UIState', 'socialUIState');
-    BuiltValueNullFieldError.checkNotNull(
         photoUIState, r'UIState', 'photoUIState');
-    BuiltValueNullFieldError.checkNotNull(
-        workoutUIState, r'UIState', 'workoutUIState');
     BuiltValueNullFieldError.checkNotNull(
         notificationUIState, r'UIState', 'notificationUIState');
     BuiltValueNullFieldError.checkNotNull(
@@ -380,9 +355,7 @@ class _$UIState extends UIState {
         dashboardUIState == other.dashboardUIState &&
         paymentUIState == other.paymentUIState &&
         productUIState == other.productUIState &&
-        socialUIState == other.socialUIState &&
         photoUIState == other.photoUIState &&
-        workoutUIState == other.workoutUIState &&
         notificationUIState == other.notificationUIState &&
         profileOperationUIState == other.profileOperationUIState &&
         profileUIState == other.profileUIState &&
@@ -411,9 +384,7 @@ class _$UIState extends UIState {
     _$hash = $jc(_$hash, dashboardUIState.hashCode);
     _$hash = $jc(_$hash, paymentUIState.hashCode);
     _$hash = $jc(_$hash, productUIState.hashCode);
-    _$hash = $jc(_$hash, socialUIState.hashCode);
     _$hash = $jc(_$hash, photoUIState.hashCode);
-    _$hash = $jc(_$hash, workoutUIState.hashCode);
     _$hash = $jc(_$hash, notificationUIState.hashCode);
     _$hash = $jc(_$hash, profileOperationUIState.hashCode);
     _$hash = $jc(_$hash, profileUIState.hashCode);
@@ -442,9 +413,7 @@ class _$UIState extends UIState {
           ..add('dashboardUIState', dashboardUIState)
           ..add('paymentUIState', paymentUIState)
           ..add('productUIState', productUIState)
-          ..add('socialUIState', socialUIState)
           ..add('photoUIState', photoUIState)
-          ..add('workoutUIState', workoutUIState)
           ..add('notificationUIState', notificationUIState)
           ..add('profileOperationUIState', profileOperationUIState)
           ..add('profileUIState', profileUIState)
@@ -528,23 +497,12 @@ class UIStateBuilder implements Builder<UIState, UIStateBuilder> {
   set productUIState(ProductUIStateBuilder? productUIState) =>
       _$this._productUIState = productUIState;
 
-  SocialUIStateBuilder? _socialUIState;
-  SocialUIStateBuilder get socialUIState =>
-      _$this._socialUIState ??= new SocialUIStateBuilder();
-  set socialUIState(SocialUIStateBuilder? socialUIState) =>
-      _$this._socialUIState = socialUIState;
 
   PhotoUIStateBuilder? _photoUIState;
   PhotoUIStateBuilder get photoUIState =>
       _$this._photoUIState ??= new PhotoUIStateBuilder();
   set photoUIState(PhotoUIStateBuilder? photoUIState) =>
       _$this._photoUIState = photoUIState;
-
-  WorkoutUIStateBuilder? _workoutUIState;
-  WorkoutUIStateBuilder get workoutUIState =>
-      _$this._workoutUIState ??= new WorkoutUIStateBuilder();
-  set workoutUIState(WorkoutUIStateBuilder? workoutUIState) =>
-      _$this._workoutUIState = workoutUIState;
 
   NotificationUIStateBuilder? _notificationUIState;
   NotificationUIStateBuilder get notificationUIState =>
@@ -615,9 +573,7 @@ class UIStateBuilder implements Builder<UIState, UIStateBuilder> {
       _dashboardUIState = $v.dashboardUIState.toBuilder();
       _paymentUIState = $v.paymentUIState.toBuilder();
       _productUIState = $v.productUIState.toBuilder();
-      _socialUIState = $v.socialUIState.toBuilder();
       _photoUIState = $v.photoUIState.toBuilder();
-      _workoutUIState = $v.workoutUIState.toBuilder();
       _notificationUIState = $v.notificationUIState.toBuilder();
       _profileOperationUIState = $v.profileOperationUIState.toBuilder();
       _profileUIState = $v.profileUIState.toBuilder();
@@ -671,9 +627,7 @@ class UIStateBuilder implements Builder<UIState, UIStateBuilder> {
               dashboardUIState: dashboardUIState.build(),
               paymentUIState: paymentUIState.build(),
               productUIState: productUIState.build(),
-              socialUIState: socialUIState.build(),
               photoUIState: photoUIState.build(),
-              workoutUIState: workoutUIState.build(),
               notificationUIState: notificationUIState.build(),
               profileOperationUIState: profileOperationUIState.build(),
               profileUIState: profileUIState.build(),
@@ -696,12 +650,8 @@ class UIStateBuilder implements Builder<UIState, UIStateBuilder> {
         paymentUIState.build();
         _$failedField = 'productUIState';
         productUIState.build();
-        _$failedField = 'socialUIState';
-        socialUIState.build();
         _$failedField = 'photoUIState';
         photoUIState.build();
-        _$failedField = 'workoutUIState';
-        workoutUIState.build();
         _$failedField = 'notificationUIState';
         notificationUIState.build();
         _$failedField = 'profileOperationUIState';

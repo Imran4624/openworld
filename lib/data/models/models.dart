@@ -26,12 +26,10 @@ export 'package:flutter_boilerplate/data/models/user_model.dart';
 // STARTER: export - do not remove comment
 export 'package:flutter_boilerplate/data/models/payment_model.dart';
 export 'package:flutter_boilerplate/data/models/product_model.dart';
-export 'package:flutter_boilerplate/data/models/social_model.dart';
 export 'package:flutter_boilerplate/data/models/auth_model.dart';
 export 'package:flutter_boilerplate/data/models/auth_response_model.dart';
 export 'package:flutter_boilerplate/data/models/auth_models.dart';
 export 'package:flutter_boilerplate/data/models/photo_model.dart';
-export 'package:flutter_boilerplate/data/models/workout_model.dart';
 export 'package:flutter_boilerplate/data/models/notification_model.dart';
 export 'package:flutter_boilerplate/data/models/profile_operation_model.dart';
 export 'package:flutter_boilerplate/data/models/profile_model.dart';

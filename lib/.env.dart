@@ -19,8 +19,6 @@ class Config {
   static const String TEST_PASSWORD = '123456';
   static const String TEST_URL = 'https://demo.flutterboilerplate.com';
   static const String TEST_SECRET = '';
-  static const String EVENTBRITE_API_KEY = '';
-  static const String EVENTBRITE_ORGANIZATION_ID = '';
 
   // New Payment Cloud Functions
   static const String CF_CREATE_STRIPE_CUSTOMER = '';
@@ -54,7 +52,6 @@ class Config {
   static const String CLOUDFUNCTION_SENDEMAIL =
       'https://sendemail-a2h24aioca-uc.a.run.app';
 
-  static const String TICKET_TAILOR_API_KEY = '';
 
   static const String STRIPE_PUBLISHABLE_KEY = 'pk_test_51SORA1IPMSTLVcCTyaqU57MmFGTifiGysXg9ZztiksSgZvnjb1CYMR0tJJZbZUTw8yxABgP8f6UbD1qvtRWGcPut00TBk3hQwU';
   static const bool PAYMENT_ENABLED = true; 
@@ -81,6 +78,4 @@ class Config {
   static const bool APP_VERSION_UPDATE_REQUIRED = false;
   static const bool APP_VERSION_MAINTENANCE_MODE = false;
   static const String APP_VERSION_MAINTENANCE_MESSAGE = '';
-  static const String AZURE_CLIENT_BASE_URL = '';
-  static const String AZURE_CLIENT_SAS_TOKEN = '';
 }

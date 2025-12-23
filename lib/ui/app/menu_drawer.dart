@@ -9,7 +9,6 @@ import 'package:flutter_boilerplate/redux/company/company_actions.dart';
 import 'package:flutter_boilerplate/redux/profile/profile_actions.dart';
 import 'package:flutter_boilerplate/redux/ui/ui_actions.dart';
 import 'package:flutter_boilerplate/services/session_managment_service.dart';
-import 'package:flutter_boilerplate/snippets/marathon/custom3dmap.dart';
 import 'package:flutter_boilerplate/ui/admin/admin_screen.dart';
 import 'package:flutter_boilerplate/ui/app/about_us.dart';
 import 'package:flutter_boilerplate/ui/app/app_webview_url.dart' as appView;
@@ -79,12 +78,9 @@ class _MenuDrawerState extends State<MenuDrawer> {
     }
   }
 
-  void _loadUserCompanies() {
-    
-  }
+  void _loadUserCompanies() {}
 
   void _handleAutoCompanySelection() {
-
     final Store<AppState> store = StoreProvider.of<AppState>(context);
     final state = store.state;
 
@@ -111,7 +107,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
     }
 
     final currentSelectedCompanyId = state.userCompanyState.selectedCompanyId;
-    
+
     if (currentSelectedCompanyId.isEmpty && userCompanies.isNotEmpty) {
       final targetCompanyId = userCompanies.first.id;
       store.dispatch(SelectCompanyById(companyId: targetCompanyId));
@@ -365,8 +361,6 @@ class _MenuDrawerState extends State<MenuDrawer> {
     }
 
     Widget? companyDropdown() {
-   
-
       if (!isAuthenticated(state)) {
         return null;
       }
@@ -477,15 +471,15 @@ class _MenuDrawerState extends State<MenuDrawer> {
             if (value == 'add_company') {
               _navigateToCompanyEdit(context, null);
             } else if (value?.isNotEmpty == true) {
-                final companyIndex = widget.viewModel.state.companies
-                    .indexWhere((c) => c.id == value);
-                if (companyIndex >= 0) {
-                  widget.viewModel.onCompanyChanged(
-                    context,
-                    companyIndex,
-                    widget.viewModel.state.companies[companyIndex],
-                  );
-                }
+              final companyIndex = widget.viewModel.state.companies
+                  .indexWhere((c) => c.id == value);
+              if (companyIndex >= 0) {
+                widget.viewModel.onCompanyChanged(
+                  context,
+                  companyIndex,
+                  widget.viewModel.state.companies[companyIndex],
+                );
+              }
             }
           },
         ),
@@ -1088,7 +1082,6 @@ class _MenuDrawerState extends State<MenuDrawer> {
   }
 
   void _navigateToCompanyEdit(BuildContext context, [CompanyEntity? company]) {
-   
     Navigator.of(context).pop();
 
     UserCompany? userCompany;
@@ -1233,8 +1226,6 @@ class _DrawerTileState extends State<DrawerTile> {
       isSelected = uiState.currentRoute.startsWith(currentRoute);
     } else if (isSettingsTab) {
       isSelected = uiState.currentRoute.startsWith(currentRoute);
-    } else if (isMarathonMapTab) {
-      isSelected = uiState.currentRoute == LondonMarathonMapScreen.route;
     } else if (widget.entityType != null) {
       if (uiState.currentRoute == currentRoute) {
         isSelected = true;

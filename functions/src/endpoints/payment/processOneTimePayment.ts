@@ -48,7 +48,7 @@ export const processOneTimePayment = onCall(async (request) => {
   try {
     // Authentication check
     if (!auth?.uid) {
-      console.log("[Payment] Authentication failed - User not authenticated");
+      console.log("Authentication failed - returning UNAUTHENTICATED error");
       return PaymentIntentResponseBuilder.error(
         ERROR_CODES.UNAUTHENTICATED,
         "User must be authenticated"
@@ -61,7 +61,7 @@ export const processOneTimePayment = onCall(async (request) => {
     try {
       paymentRequest = new PaymentRequest(data);
     } catch (validationError: any) {
-      console.log(`[Payment] Validation failed for user ${userId}: ${validationError.message}`);
+      console.log("Validation failed - returning MISSING_REQUIRED_FIELD error:", validationError.message);
       return PaymentIntentResponseBuilder.error(
         ERROR_CODES.MISSING_REQUIRED_FIELD,
         validationError.message
@@ -81,7 +81,7 @@ export const processOneTimePayment = onCall(async (request) => {
 
       if (!recipientData?.orgStripeAccountId) {
         await completeIdempotency(ref, "failed");
-        console.log(`[Payment] Error - Recipient ${paymentRequest.recipientId} does not have a valid Stripe Connect account`);
+        console.log("Recipient validation failed - returning CUSTOMER_NOT_FOUND error: No Stripe Connect account");
         return PaymentIntentResponseBuilder.error(
           ERROR_CODES.CUSTOMER_NOT_FOUND,
           "Recipient does not have a valid Stripe Connect account"
@@ -96,7 +96,11 @@ export const processOneTimePayment = onCall(async (request) => {
 
         if (transfersCapability !== "active") {
           await completeIdempotency(ref, "failed");
-          console.log(`[Payment] Error - Recipient account ${connectAccount.id} transfers capability not active: ${transfersCapability}`);
+          console.log("Transfers capability not active - returning STRIPE_ERROR:", {
+            accountId: connectAccount.id,
+            transfersCapability,
+            chargesEnabled: connectAccount.charges_enabled,
+          });
           return PaymentIntentResponseBuilder.error(
             ERROR_CODES.STRIPE_ERROR,
             "Recipient's account is not ready to receive transfers. Please complete account setup.",
@@ -111,7 +115,11 @@ export const processOneTimePayment = onCall(async (request) => {
 
         if (cardPaymentsCapability !== "active") {
           await completeIdempotency(ref, "failed");
-          console.log(`[Payment] Error - Recipient account ${connectAccount.id} card payments capability not active: ${cardPaymentsCapability}`);
+          console.log("Card payments capability not active - returning STRIPE_ERROR:", {
+            accountId: connectAccount.id,
+            cardPaymentsCapability,
+            chargesEnabled: connectAccount.charges_enabled,
+          });
           return PaymentIntentResponseBuilder.error(
             ERROR_CODES.STRIPE_ERROR,
             "Recipient's account cannot accept card payments. Please complete account setup.",
@@ -125,7 +133,7 @@ export const processOneTimePayment = onCall(async (request) => {
         }
       } catch (accountError: any) {
         await completeIdempotency(ref, "failed");
-        console.log(`[Payment] Error - Unable to verify recipient account status: ${accountError.message}`);
+        console.log("Account verification failed - returning STRIPE_ERROR:", accountError.message);
         return PaymentIntentResponseBuilder.error(
           ERROR_CODES.STRIPE_ERROR,
           "Unable to verify recipient's account status",
@@ -140,7 +148,7 @@ export const processOneTimePayment = onCall(async (request) => {
 
       if (!customerId) {
         await completeIdempotency(ref, "failed");
-        console.log(`[Payment] Error - Payer ${paymentRequest.userId} does not have a valid Stripe customer ID`);
+        console.log("Payer validation failed - returning CUSTOMER_NOT_FOUND error: No Stripe customer ID");
         return PaymentIntentResponseBuilder.error(
           ERROR_CODES.CUSTOMER_NOT_FOUND,
           "Payer does not have a valid Stripe customer ID"
@@ -153,7 +161,7 @@ export const processOneTimePayment = onCall(async (request) => {
 
       if (!paymentMethodData) {
         await completeIdempotency(ref, "failed");
-        console.log(`[Payment] Error - Payment method ${paymentRequest.paymentMethodId} not found for user ${paymentRequest.userId}`);
+        console.log("Payment method validation failed - returning CUSTOMER_NOT_FOUND error: Payment method not found");
         return PaymentIntentResponseBuilder.error(
           ERROR_CODES.CUSTOMER_NOT_FOUND,
           "Payment method not found for this user"
@@ -162,7 +170,7 @@ export const processOneTimePayment = onCall(async (request) => {
 
       if (paymentMethodData.isEnabled === false) {
         await completeIdempotency(ref, "failed");
-        console.log(`[Payment] Error - Payment method ${paymentRequest.paymentMethodId} is disabled for user ${paymentRequest.userId}`);
+        console.log("Payment method disabled - returning PAYMENT_METHOD_DISABLED error");
         return PaymentIntentResponseBuilder.error(
           "PAYMENT_METHOD_DISABLED",
           "Payment method is disabled"
@@ -219,13 +227,22 @@ export const processOneTimePayment = onCall(async (request) => {
       // Complete idempotency
       await completeIdempotency(ref, "completed");
 
-      console.log(`[Payment] Success - Payment intent ${paymentIntent.id} created successfully for amount ${paymentRequest.amount} from user ${paymentRequest.userId} to ${paymentRequest.recipientId}`);
+      console.log("Payment processed successfully - returning success response:", {
+        paymentIntentId: paymentIntent.id,
+        amount: paymentRequest.amount,
+        status: paymentIntent.status,
+        userId: paymentRequest.userId,
+        recipientId: paymentRequest.recipientId,
+      });
       return PaymentIntentResponseBuilder.success(responseData);
     } catch (error: any) {
       await completeIdempotency(ref, "failed");
 
       if (error.type === "StripeCardError") {
-        console.log(`[Payment] Stripe Card Error - ${error.message} (Code: ${error.code})`);
+        console.log("Stripe card error - returning CARD_ERROR:", {
+          message: error.message,
+          code: error.code,
+        });
         return PaymentIntentResponseBuilder.error(
           "CARD_ERROR",
           error.message,
@@ -234,7 +251,7 @@ export const processOneTimePayment = onCall(async (request) => {
       }
 
       if (error.type === "StripeInvalidRequestError") {
-        console.log(`[Payment] Stripe Invalid Request Error - ${error.message}`);
+        console.log("Stripe invalid request - returning STRIPE_ERROR:", error.message);
         return PaymentIntentResponseBuilder.error(
           "STRIPE_ERROR",
           "Invalid payment request",
@@ -246,7 +263,10 @@ export const processOneTimePayment = onCall(async (request) => {
     }
   } catch (error: any) {
     console.error("Marketplace payment processing error:", error);
-    console.log("[Payment] Internal Error - An unexpected error occurred while processing marketplace payment");
+    console.log("Unexpected error - returning INTERNAL_ERROR:", {
+      message: error.message,
+      timestamp: new Date().toISOString(),
+    });
     return PaymentIntentResponseBuilder.error(
       "INTERNAL_ERROR",
       "An unexpected error occurred while processing marketplace payment",

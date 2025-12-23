@@ -55,6 +55,24 @@ export const createStripeConnectAccount = onCall(async (request) => {
     } = data;
     const userId = auth.uid;
 
+    console.log("createStripeConnectAccount called with data:", {
+      email,
+      businessType,
+      country,
+      firstName,
+      lastName,
+      businessName,
+      businessUrl,
+      phone,
+      refreshUrl,
+      returnUrl,
+      bankAccountNumber: bankAccountNumber ? "***" + bankAccountNumber.slice(-4) : null,
+      bankRoutingNumber,
+      bankAccountHolderName,
+      bankName,
+      userId,
+    });
+
     if (!email || !businessType || !country || !refreshUrl || !returnUrl) {
       return {
         success: false,
@@ -159,6 +177,15 @@ export const createStripeConnectAccount = onCall(async (request) => {
 
       let bankAccount: any = null;
       if (bankAccountNumber && bankRoutingNumber) {
+        console.log("Creating bank account with details:", {
+          bankAccountNumber: bankAccountNumber ? "***" + bankAccountNumber.slice(-4) : null,
+          bankRoutingNumber: bankRoutingNumber,
+          bankAccountHolderName: bankAccountHolderName,
+          bankName: bankName,
+          country: country,
+          businessType: businessType,
+        });
+
         try {
           const getCurrencyByCountry = (country: string): string => {
             const currencyMap: {[key: string]: string} = {
@@ -172,20 +199,41 @@ export const createStripeConnectAccount = onCall(async (request) => {
             return currencyMap[country] || "usd";
           };
 
-          bankAccount = await stripe.accounts.createExternalAccount(account.id, {
+          const externalAccountData = {
             external_account: {
-              object: "bank_account",
+              object: "bank_account" as const,
               country: country,
               currency: getCurrencyByCountry(country),
               account_number: bankAccountNumber,
               routing_number: bankRoutingNumber,
               account_holder_name: bankAccountHolderName || `${firstName} ${lastName}`.trim(),
-              account_holder_type: businessType === "company" ? "company" : "individual",
+              account_holder_type: businessType === "company" ? "company" as const : "individual" as const,
             },
+          };
+
+          console.log("Creating external account with data:", JSON.stringify(externalAccountData, null, 2));
+
+          bankAccount = await stripe.accounts.createExternalAccount(account.id, externalAccountData);
+
+          console.log("Bank account created successfully:", {
+            id: bankAccount.id,
+            last4: bankAccount.last4,
+            status: bankAccount.status,
+            currency: bankAccount.currency,
           });
         } catch (bankError: any) {
           console.error("Bank account creation error:", bankError);
+          console.error("Bank account error details:", {
+            type: bankError.type,
+            code: bankError.code,
+            message: bankError.message,
+            param: bankError.param,
+          });
+
+          console.log("Continuing without bank account due to error");
         }
+      } else {
+        console.log("No bank account details provided - skipping bank account creation");
       }
 
       const accountLink = await stripe.accountLinks.create({
@@ -204,7 +252,7 @@ export const createStripeConnectAccount = onCall(async (request) => {
       });
 
       // Create STRIPE_ACCOUNTS document
-      await db.collection(COLLECTIONS.STRIPE_ACCOUNTS).doc(account.id).set({
+      const stripeAccountData = {
         userId,
         accountId: account.id,
         email: email,
@@ -234,40 +282,82 @@ export const createStripeConnectAccount = onCall(async (request) => {
         metadata: {
           idempotencyKey,
         },
-      });
+      };
+
+      console.log("Saving to Firebase stripe_accounts collection:", JSON.stringify(stripeAccountData, null, 2));
+
+      await db.collection(COLLECTIONS.STRIPE_ACCOUNTS).doc(account.id).set(stripeAccountData);
+
+      console.log("Successfully saved stripe account data to Firebase");
+
+      // Verify the data was saved correctly by reading it back
+      const savedDoc = await db.collection(COLLECTIONS.STRIPE_ACCOUNTS).doc(account.id).get();
+      const savedData = savedDoc.data();
+
+      if (savedDoc.exists && savedData) {
+        console.log("Verification - Document exists in Firebase");
+        if (savedData.bankAccount) {
+          console.log("Verification - Bank account data successfully saved:", {
+            id: savedData.bankAccount.id,
+            bankName: savedData.bankAccount.bankName,
+            last4: savedData.bankAccount.last4,
+            status: savedData.bankAccount.status,
+          });
+        } else {
+          console.log("Verification - No bank account data found in saved document");
+        }
+      } else {
+        console.error("Verification - Document was not saved to Firebase!");
+      }
+
+      if (bankAccount) {
+        console.log("Bank account included in saved data:", {
+          id: bankAccount.id,
+          bankName: bankName,
+          last4: bankAccount.last4,
+          status: bankAccount.status,
+        });
+      } else {
+        console.log("No bank account data to save");
+      }
 
       await completeIdempotency(ref, "completed");
 
+      const responseData = {
+        accountId: account.id,
+        country: account.country,
+        email: account.email,
+        businessType: businessType,
+        detailsSubmitted: account.details_submitted,
+        chargesEnabled: account.charges_enabled,
+        payoutsEnabled: account.payouts_enabled,
+        onboardingUrl: accountLink.url,
+        // Include capability status
+        capabilities: {
+          card_payments: account.capabilities?.card_payments,
+          transfers: account.capabilities?.transfers,
+        },
+        // Add onboarding status information
+        onboardingRequired: !account.details_submitted ||
+                           account.capabilities?.card_payments !== "active" ||
+                           account.capabilities?.transfers !== "active",
+        bankAccount: bankAccount ? {
+          id: bankAccount.id,
+          bankName: bankName,
+          last4: bankAccount.last4,
+          currency: bankAccount.currency,
+          status: bankAccount.status,
+          accountHolderName: bankAccountHolderName || `${firstName} ${lastName}`.trim(),
+          accountHolderType: businessType === "company" ? "company" : "individual",
+        } : null,
+        createdAt: new Date((account.created || 0) * 1000).toISOString(),
+      };
+
+      console.log("Returning response data:", JSON.stringify(responseData, null, 2));
+
       return {
         success: true,
-        data: {
-          accountId: account.id,
-          country: account.country,
-          email: account.email,
-          businessType: businessType,
-          detailsSubmitted: account.details_submitted,
-          chargesEnabled: account.charges_enabled,
-          payoutsEnabled: account.payouts_enabled,
-          onboardingUrl: accountLink.url,
-          // Include capability status
-          capabilities: {
-            card_payments: account.capabilities?.card_payments,
-            transfers: account.capabilities?.transfers,
-          },
-          // Add onboarding status information
-          onboardingRequired: !account.details_submitted ||
-                             account.capabilities?.card_payments !== "active" ||
-                             account.capabilities?.transfers !== "active",
-          bankAccount: bankAccount ? {
-            id: bankAccount.id,
-            bankName: bankName,
-            last4: bankAccount.last4,
-            currency: bankAccount.currency,
-            status: bankAccount.status,
-            accountHolderName: bankAccountHolderName || `${firstName} ${lastName}`.trim(),
-          } : null,
-          createdAt: new Date((account.created || 0) * 1000).toISOString(),
-        },
+        data: responseData,
       };
     } catch (error: any) {
       await completeIdempotency(ref, "failed");

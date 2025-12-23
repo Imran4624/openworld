@@ -92,7 +92,7 @@ class ProjectConfig {
   static bool get isLoggingEnabled {
     switch (appType) {
       default:
-        return true;
+        return false;
     }
   }
 

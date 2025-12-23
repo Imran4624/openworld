@@ -142,6 +142,7 @@ class _EntityListOpwState extends State<EntityListOpw>
   bool _isLoadingNearbyLocations = false;
   bool _locationInitialized = false;
   Timer? _locationTimer;
+  Timer? _markerCreationTimer;
 
   final List<ChatMessage> _chatMessages = [];
   bool _isChatOpen = false;
@@ -263,6 +264,7 @@ class _EntityListOpwState extends State<EntityListOpw>
     _searchFocusNode.dispose();
     _radarAnimationController.dispose();
     _locationTimer?.cancel();
+    _markerCreationTimer?.cancel();
     super.dispose();
   }
 
@@ -381,6 +383,10 @@ class _EntityListOpwState extends State<EntityListOpw>
           _locationTimer = Timer(const Duration(milliseconds: 300), () {
             if (mounted && _currentViewMode == ViewMode.map) {
               _mapController.move(currentLocation, _defaultZoom);
+              setState(() {
+                _currentZoomLevel = _defaultZoom;
+              });
+              _createEventMarkers();
             }
           });
 
@@ -422,6 +428,10 @@ class _EntityListOpwState extends State<EntityListOpw>
     _locationTimer = Timer(const Duration(milliseconds: 300), () {
       if (mounted && _currentViewMode == ViewMode.map) {
         _mapController.move(defaultLocationCoords, _defaultZoom);
+        setState(() {
+          _currentZoomLevel = _defaultZoom;
+        });
+        _createEventMarkers();
       }
     });
 
@@ -535,6 +545,8 @@ class _EntityListOpwState extends State<EntityListOpw>
     }
   }
 
+  // View mode saving method - currently unused as toggle buttons are hidden
+  /*
   Future<void> _saveViewMode(ViewMode viewMode) async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -544,6 +556,7 @@ class _EntityListOpwState extends State<EntityListOpw>
       logError('Error saving view mode: $e');
     }
   }
+  */
 
   void _addUserMessage(String content) {
     final message = ChatMessage(
@@ -780,13 +793,14 @@ class _EntityListOpwState extends State<EntityListOpw>
                     ),
                   ],
                 ),
-                child: Row(
+                child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    _buildToggleButton(
-                        'Map', ViewMode.map, Icons.map, theme, themeColors),
-                    _buildToggleButton('List', ViewMode.list,
-                        HugeIcons.strokeRoundedMenu01, theme, themeColors),
+                    // Toggle buttons hidden - showing only map
+                    // _buildToggleButton(
+                    //     'Map', ViewMode.map, Icons.map, theme, themeColors),
+                    // _buildToggleButton('List', ViewMode.list,
+                    //     HugeIcons.strokeRoundedMenu01, theme, themeColors),
                   ],
                 ),
               ),
@@ -868,13 +882,14 @@ class _EntityListOpwState extends State<EntityListOpw>
                 ),
               ],
             ),
-            child: Row(
+            child: const Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                _buildToggleButton(
-                    'Map', ViewMode.map, Icons.map, theme, themeColors),
-                _buildToggleButton('List', ViewMode.list,
-                    HugeIcons.strokeRoundedMenu01, theme, themeColors),
+                // Toggle buttons hidden - showing only map
+                // _buildToggleButton(
+                //     'Map', ViewMode.map, Icons.map, theme, themeColors),
+                // _buildToggleButton('List', ViewMode.list,
+                //     HugeIcons.strokeRoundedMenu01, theme, themeColors),
               ],
             ),
           ),
@@ -885,6 +900,8 @@ class _EntityListOpwState extends State<EntityListOpw>
     );
   }
 
+  // Toggle button method - currently unused as toggle buttons are hidden
+  /*
   Widget _buildToggleButton(String text, ViewMode mode, IconData icon,
       ThemeData theme, ThemeColors themeColors) {
     final isSelected = _currentViewMode == mode;
@@ -938,6 +955,7 @@ class _EntityListOpwState extends State<EntityListOpw>
       ),
     );
   }
+  */
 
   Widget _buildProfilePicture(ThemeData theme, ThemeColors themeColors) {
     final state = widget.state;
@@ -1055,47 +1073,72 @@ class _EntityListOpwState extends State<EntityListOpw>
       mapCenter = _currentUserLocation!;
     }
 
-    return FlutterMap(
-      mapController: _mapController,
-      options: MapOptions(
-        center: mapCenter,
-        zoom: _defaultZoom,
-        minZoom: 3.0,
-        maxZoom: 18.0,
-        onPositionChanged: (MapPosition position, bool hasGesture) {
-          if (hasGesture &&
-              position.zoom != null &&
-              position.zoom != _currentZoomLevel) {
-            setState(() {
-              _currentZoomLevel = position.zoom!;
-            });
-            _createEventMarkers();
-          }
-        },
-        onTap: (tapPosition, point) {
-          setState(() {
-            _selectedEvent = null;
-          });
-        },
-      ),
+    return Stack(
       children: [
-        TileLayer(
-          urlTemplate:
-              'https://cartodb-basemaps-a.global.ssl.fastly.net/light_all/{z}/{x}/{y}{r}.png',
-          subdomains: const ['a', 'b', 'c'],
-          tileBuilder: (context, tileWidget, tile) {
-            return ColorFiltered(
-              colorFilter: ColorFilter.mode(
-                themeColors.background.withOpacity(0.1),
-                BlendMode.overlay,
-              ),
-              child: tileWidget,
-            );
-          },
+        FlutterMap(
+          mapController: _mapController,
+          options: MapOptions(
+            center: mapCenter,
+            zoom: _defaultZoom,
+            minZoom: 3.0,
+            maxZoom: 18.0,
+            onPositionChanged: (MapPosition position, bool hasGesture) {
+              if (hasGesture &&
+                  position.zoom != null &&
+                  position.zoom != _currentZoomLevel) {
+                final newZoom = position.zoom!;
+
+                if ((newZoom - _currentZoomLevel).abs() >= 0.5) {
+                  setState(() {
+                    _currentZoomLevel = newZoom;
+                  });
+
+                  _debounceMarkerCreation();
+                }
+              }
+            },
+            onTap: (tapPosition, point) {
+              setState(() {
+                _selectedEvent = null;
+              });
+            },
+          ),
+          children: [
+            TileLayer(
+              urlTemplate:
+                  'https://cartodb-basemaps-a.global.ssl.fastly.net/light_all/{z}/{x}/{y}{r}.png',
+              subdomains: const ['a', 'b', 'c'],
+              tileBuilder: (context, tileWidget, tile) {
+                return ColorFiltered(
+                  colorFilter: ColorFilter.mode(
+                    themeColors.background.withOpacity(0.1),
+                    BlendMode.overlay,
+                  ),
+                  child: tileWidget,
+                );
+              },
+            ),
+            MarkerLayer(
+              markers: allMarkers,
+            ),
+          ],
         ),
-        MarkerLayer(
-          markers: allMarkers,
-        ),
+        if (_currentZoomLevel >= 16.0)
+          Positioned(
+            bottom: 20,
+            right: 20,
+            child: FloatingActionButton.small(
+              heroTag: "zoom_out",
+              onPressed: () {
+                _mapController.move(_mapController.center, 12.0);
+                setState(() {
+                  _currentZoomLevel = 12.0;
+                });
+              },
+              backgroundColor: Colors.white,
+              child: const Icon(Icons.zoom_out, color: Colors.black),
+            ),
+          ),
       ],
     );
   }
@@ -2284,6 +2327,7 @@ class _EntityListOpwState extends State<EntityListOpw>
       setState(() {
         _currentZoomLevel = _defaultZoom;
       });
+      _createEventMarkers();
     } else {
       try {
         final location = await LocationService.getCurrentLocation();
@@ -2315,12 +2359,14 @@ class _EntityListOpwState extends State<EntityListOpw>
           setState(() {
             _currentZoomLevel = _defaultZoom;
           });
+          _createEventMarkers();
         } else {
           _setDefaultLocationAsCurrentLocation();
           _mapController.move(_defaultLocation, _defaultZoom);
           setState(() {
             _currentZoomLevel = _defaultZoom;
           });
+          _createEventMarkers();
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
@@ -2338,6 +2384,7 @@ class _EntityListOpwState extends State<EntityListOpw>
         setState(() {
           _currentZoomLevel = _defaultZoom;
         });
+        _createEventMarkers();
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -2462,6 +2509,30 @@ class _EntityListOpwState extends State<EntityListOpw>
     }
   }
 
+  void _fetchEventsForNewLocation() {
+      final store = StoreProvider.of<AppState>(context);
+      store.dispatch(LoadEvents(isRefresh: true));
+
+      if (!_showSavedEventView) {
+        _performInitialAiSearch();
+      }
+
+      Timer(const Duration(milliseconds: 1000), () {
+        if (mounted) {
+          _createEventMarkers();
+        }
+      });
+  }
+
+  void _debounceMarkerCreation() {
+    _markerCreationTimer?.cancel();
+    _markerCreationTimer = Timer(const Duration(milliseconds: 200), () {
+      if (mounted) {
+        _createEventMarkers();
+      }
+    });
+  }
+
   int _getLocationPrecision(double zoomLevel) {
     if (zoomLevel >= 15.0) return 6;
     if (zoomLevel >= 12.0) return 5;
@@ -2480,7 +2551,7 @@ class _EntityListOpwState extends State<EntityListOpw>
       return b.id.compareTo(a.id);
     });
 
-    if (_currentZoomLevel >= 18.0) {
+    if (_currentZoomLevel >= 17.0) {
       _createAllIndividualMarkers(eventsAtLocation, markers);
     } else if (_currentZoomLevel >= 15.0) {
       _createOffsetMarkers(eventsAtLocation, markers);
@@ -2494,17 +2565,18 @@ class _EntityListOpwState extends State<EntityListOpw>
           point: eventLocation,
           width: 130,
           height: 30,
-          builder: (context) =>
-              _buildClusterMarkerWidget(latestEvent, eventsAtLocation.length, eventsAtLocation),
+          builder: (context) => _buildClusterMarkerWidget(
+              latestEvent, eventsAtLocation.length, eventsAtLocation),
         );
         markers.add(marker);
       }
     }
   }
 
-  void _createAllIndividualMarkers(List<EventEntity> events, List<Marker> markers) {
-    const double offsetDistance = 0.0002;
-    
+  void _createAllIndividualMarkers(
+      List<EventEntity> events, List<Marker> markers) {
+    const double offsetDistance = 0.0003;
+
     for (int i = 0; i < events.length; i++) {
       final event = events[i];
       final baseLocation = _getEventLocation(event);
@@ -2559,8 +2631,8 @@ class _EntityListOpwState extends State<EntityListOpw>
           ),
           width: 40,
           height: 40,
-          builder: (context) =>
-              _buildMoreEventsIndicator(events.length - maxMarkers, remainingEvents),
+          builder: (context) => _buildMoreEventsIndicator(
+              events.length - maxMarkers, remainingEvents),
         );
         markers.add(marker);
       }
@@ -2679,12 +2751,14 @@ class _EntityListOpwState extends State<EntityListOpw>
     );
   }
 
-  Widget _buildClusterMarkerWidget(EventEntity mainEvent, int eventCount, [List<EventEntity>? eventsAtLocation]) {
+  Widget _buildClusterMarkerWidget(EventEntity mainEvent, int eventCount,
+      [List<EventEntity>? eventsAtLocation]) {
     final markerIcon = _createEventMarkerIcon(mainEvent);
     final isSelected = _selectedEvent?.id == mainEvent.id;
 
     return GestureDetector(
-      onTap: () => _onClusterMarkerTapped(mainEvent, eventsAtLocation ?? [mainEvent]),
+      onTap: () =>
+          _onClusterMarkerTapped(mainEvent, eventsAtLocation ?? [mainEvent]),
       child: ConstrainedBox(
         constraints: const BoxConstraints(
           maxWidth: 150,
@@ -2765,7 +2839,8 @@ class _EntityListOpwState extends State<EntityListOpw>
     );
   }
 
-  Widget _buildMoreEventsIndicator(int additionalCount, [List<EventEntity>? remainingEvents]) {
+  Widget _buildMoreEventsIndicator(int additionalCount,
+      [List<EventEntity>? remainingEvents]) {
     return GestureDetector(
       onTap: () {
         _mapController.move(_mapController.center, 18.0);
@@ -2907,7 +2982,8 @@ class _EntityListOpwState extends State<EntityListOpw>
     }
   }
 
-  void _onClusterMarkerTapped(EventEntity mainEvent, List<EventEntity> eventsAtLocation) {
+  void _onClusterMarkerTapped(
+      EventEntity mainEvent, List<EventEntity> eventsAtLocation) {
     final eventLocation = _getEventLocation(mainEvent);
     if (eventLocation != null) {
       _mapController.move(eventLocation, 18.0);
@@ -3173,7 +3249,7 @@ class _EntityListOpwState extends State<EntityListOpw>
           _locationTimer = Timer(const Duration(milliseconds: 100), () {
             if (mounted) {
               _mapController.move(selectedLatLng, _defaultZoom);
-              _createEventMarkers();
+              _fetchEventsForNewLocation();
             }
           });
         }
@@ -3251,6 +3327,8 @@ class _EntityListOpwState extends State<EntityListOpw>
         await _getCurrentUserLocation();
 
         if (mounted) {
+          _fetchEventsForNewLocation();
+
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Location updated'),

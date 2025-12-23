@@ -33,8 +33,6 @@ class _AdminScreenState extends State<AdminScreen> {
     super.initState();
   }
 
- 
-
   Future<void> _initializeConfigurations(Store<AppState> store) async {
     if (isInitialized || _store != null) return;
 
@@ -141,18 +139,15 @@ class _AdminScreenState extends State<AdminScreen> {
           return;
         }
 
-
         setState(() {
           statusMessage =
               'Starting EventBrite import with $configName for $companyName...';
         });
-
       } else if (importFrom.toLowerCase() == 'tickettailor') {
         setState(() {
           statusMessage =
               'Starting TicketTailor import with $configName for $companyName...';
         });
-
       } else {
         setState(() {
           isLoading = false;
@@ -167,9 +162,6 @@ class _AdminScreenState extends State<AdminScreen> {
     }
   }
 
- 
-
-
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, Store<AppState>>(
@@ -179,8 +171,6 @@ class _AdminScreenState extends State<AdminScreen> {
       },
     );
   }
-
-  
 
   Widget _buildEvents121UI(BuildContext context, Store<AppState> store) {
     final state = store.state;

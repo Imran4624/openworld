@@ -23,7 +23,6 @@ class _EventViewDetailsState extends State<EventViewDetails> {
     return ScrollableListView(
       children: [
         const SizedBox(height: 16.0),
-        
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
@@ -31,9 +30,7 @@ class _EventViewDetailsState extends State<EventViewDetails> {
             style: Theme.of(context).textTheme.headlineMedium,
           ),
         ),
-
         const SizedBox(height: 16.0),
-
         if (event.description.isNotEmpty)
           Padding(
             padding: const EdgeInsets.all(16.0),

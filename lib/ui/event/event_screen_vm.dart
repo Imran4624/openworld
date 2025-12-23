@@ -18,7 +18,7 @@ class EventScreenBuilder extends StatelessWidget {
     return StoreConnector<AppState, EventScreenVM>(
       converter: EventScreenVM.fromStore,
       onInit: (store) {
-          store.dispatch(LoadEvents(isRefresh: true));
+        store.dispatch(LoadEvents(isRefresh: true));
       },
       builder: (context, vm) {
         return EventScreen(

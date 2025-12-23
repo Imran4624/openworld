@@ -94,7 +94,7 @@ class PhotoListVM {
               EntityAction action) =>
           handlePhotoAction(context, photos, action),
       onRefreshed: (context) => _handleRefresh(context),
-        tableColumns:
+      tableColumns:
           state.userCompany.settings.getTableColumns(EntityType.photo) ??
               PhotoPresenter.getDefaultTableFields(state.userCompany),
       onSortColumn: (field) => store.dispatch(UpdatePhotoFilter(

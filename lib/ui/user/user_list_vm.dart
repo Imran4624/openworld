@@ -98,7 +98,7 @@ class UserListVM {
       isLoading: state.isLoading,
       filter: state.userUIState.listUIState.filter,
       onRefreshed: (context) => _handleRefresh(context),
-        tableColumns:
+      tableColumns:
           state.userCompany.settings.getTableColumns(EntityType.profile) ??
               ProfilePresenter.getDefaultTableFields(state.userCompany),
       onSortColumn: (field) => store.dispatch(SortUsers(field)),

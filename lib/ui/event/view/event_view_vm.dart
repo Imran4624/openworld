@@ -81,7 +81,8 @@ class EventViewVM {
       },
       onEntityAction: (BuildContext context, EntityAction action) =>
           handleEntitiesActions([event], action, autoPop: true),
-      onEventOperation: (String eventId, String userId, int eventOperationType, [Completer? completer]) {
+      onEventOperation: (String eventId, String userId, int eventOperationType,
+          [Completer? completer]) {
         store.dispatch(SaveEventOperation(
           eventId: eventId,
           userId: userId,
@@ -98,7 +99,8 @@ class EventViewVM {
   final Function(BuildContext, EntityAction) onEntityAction;
   final Function(BuildContext) onRefreshed;
   final Function onBackPressed;
-  final Function(String eventId, String userId, int eventOperationType, [Completer? completer]) onEventOperation;
+  final Function(String eventId, String userId, int eventOperationType,
+      [Completer? completer]) onEventOperation;
   final bool isSaving;
   final bool isLoading;
   final bool isDirty;

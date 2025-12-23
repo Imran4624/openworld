@@ -152,7 +152,9 @@ class EditScaffold extends StatelessWidget {
                     if (state.isSaving) LinearProgressIndicator(),
                   ],
                 ),
-          drawer: (isDesktop(context) && state.prefState.isMenuFloated) ? MenuDrawerBuilder() : null,
+          drawer: (isDesktop(context) && state.prefState.isMenuFloated)
+              ? MenuDrawerBuilder()
+              : null,
           appBar: AppBar(
             centerTitle: false,
             automaticallyImplyLeading: isMobile(context) &&
@@ -177,7 +179,9 @@ class EditScaffold extends StatelessWidget {
                       entity: state.getEntity(entity!.entityType, entity!.id)),
                   SizedBox(width: 8),
                 ],
-                if (showOverflow && ProjectConfig.showSaveButtonByEntityType(entity!.entityType!))
+                if (showOverflow &&
+                    ProjectConfig.showSaveButtonByEntityType(
+                        entity!.entityType!))
                   Expanded(
                     child: Align(
                       alignment: Alignment.centerRight,

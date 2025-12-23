@@ -55,8 +55,7 @@ class ProfileViewVM {
     final state = store.state;
 
     var profile = ProfileEntity(id: state.profileUIState.selectedId);
-    if (state.profileUIState.selectedId ==
-        getLoggedInUserId(store)) {
+    if (state.profileUIState.selectedId == getLoggedInUserId(store)) {
       profile = state.profileState.loggedInUserProfile;
     } else {
       profile = state.profileState.map[state.profileUIState.selectedId] ??

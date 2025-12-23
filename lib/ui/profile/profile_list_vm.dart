@@ -109,7 +109,7 @@ class ProfileListVM {
               EntityAction action) =>
           handleProfileAction(context, profiles, action),
       onRefreshed: (context) => _handleRefresh(context),
-        tableColumns:
+      tableColumns:
           state.userCompany.settings.getTableColumns(EntityType.profile) ??
               ProfilePresenter.getDefaultTableFields(state.userCompany),
       onSortColumn: (field) => store.dispatch(UpdateProfileFilter(

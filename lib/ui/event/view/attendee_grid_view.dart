@@ -236,8 +236,6 @@ class AttendeeGridItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
-
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(

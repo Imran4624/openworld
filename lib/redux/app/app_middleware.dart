@@ -308,28 +308,29 @@ Middleware<AppState> _createLoadState(
       } else {
         final email = WebUtils.getUrlParameter('email');
         final authType = WebUtils.getUrlParameter('authType');
-        
+
         if (email != null && email.isNotEmpty && authType == 'opw') {
-          if (calculateLayout(navigatorKey.currentContext!) == AppLayout.mobile) {
+          if (calculateLayout(navigatorKey.currentContext!) ==
+              AppLayout.mobile) {
             store.dispatch(UpdateUserPreferences(appLayout: AppLayout.mobile));
           } else {
             store.dispatch(ViewMainScreen());
           }
-          
+
           store.dispatch(SetEmailLinkAuthenticationEmail(email: email));
           final completer = Completer<Null>();
           store.dispatch(EmailLinkLoginRequest(
             email: email,
             completer: completer,
           ));
-          
+
           WidgetsBinding.instance.addPostFrameCallback((duration) {
             RoutingRules.onRefreshRouting(store.state.prefState.appLayout);
           });
           AppBuilder.of(navigatorKey.currentContext!)!.rebuild();
-          return; 
+          return;
         }
-        
+
         if (!(store.state.authState.isEmailLinkAuth)) {
           store.dispatch(UserLogout());
         }
@@ -339,7 +340,6 @@ Middleware<AppState> _createLoadState(
     next(action);
   };
 }
-
 
 Middleware<AppState> _createUserLoggedIn(
   PersistenceRepository authRepository,
@@ -449,9 +449,10 @@ Middleware<AppState> _createAccountLoaded() {
 
     try {
       logInfo(' Account Loaded: ${response.userCompanies.length}');
-      
+
       if (response.userCompanies.isEmpty) {
-        store.dispatch(SelectCompany(companyIndex: 0, clearSelection: loadedStaticData));
+        store.dispatch(
+            SelectCompany(companyIndex: 0, clearSelection: loadedStaticData));
         store.dispatch(UserLoginSuccess());
 
         if (!store.state.authState.isDialogLogin &&
@@ -464,7 +465,7 @@ Middleware<AppState> _createAccountLoaded() {
         WidgetUtils.updateData();
         return;
       }
-      
+
       for (int i = 0;
           i < min(response.userCompanies.length, kMaxNumberOfCompanies);
           i++) {

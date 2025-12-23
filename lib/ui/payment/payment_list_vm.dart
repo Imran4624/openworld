@@ -101,7 +101,7 @@ class PaymentListVM {
               EntityAction action) =>
           handlePaymentAction(context, payments, action),
       onRefreshed: (context) => _handleRefresh(context),
-        tableColumns:
+      tableColumns:
           state.userCompany.settings.getTableColumns(EntityType.payment) ??
               PaymentPresenter.getDefaultTableFields(state.userCompany),
       onSortColumn: (field) => store.dispatch(UpdatePaymentFilter(

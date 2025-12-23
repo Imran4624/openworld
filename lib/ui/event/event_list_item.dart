@@ -42,14 +42,14 @@ class EventListItem extends StatelessWidget {
     return DismissibleEntity(
       userCompany: state.userCompany,
       entity: event,
-      isSelected: isDesktop(context) && event.id ==
-          (uiState.isEditing
-              ? eventUIState.editing?.id
-              : eventUIState.selectedId),
+      isSelected: isDesktop(context) &&
+          event.id ==
+              (uiState.isEditing
+                  ? eventUIState.editing?.id
+                  : eventUIState.selectedId),
       child: ListTile(
-         onTap: () =>
-                    onTap != null ? onTap!() : selectEntity(entity: event),
-         onLongPress: () => onLongPress != null
+        onTap: () => onTap != null ? onTap!() : selectEntity(entity: event),
+        onLongPress: () => onLongPress != null
             ? onLongPress!()
             : selectEntity(entity: event, longPress: true),
         leading: showCheckbox

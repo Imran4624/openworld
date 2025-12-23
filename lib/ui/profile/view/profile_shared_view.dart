@@ -572,7 +572,8 @@ Widget ProfileSharedView(BuildContext context, ProfileViewVM? profileViewModel,
                         ),
                       ),
                     ),
-                  if (showChatButton && ProjectConfig.showProfileChatOperationButtons)
+                  if (showChatButton &&
+                      ProjectConfig.showProfileChatOperationButtons)
                     Container(
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,

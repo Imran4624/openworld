@@ -111,7 +111,7 @@ class EventRepository {
 
       return event;
     }
-    
+
     logError('Event with ID $entityId not found');
     return EventEntity(id: entityId);
   }
@@ -579,13 +579,12 @@ class EventRepository {
           await _firebaseRepository.saveItem(event.id, data);
           return updatedEvent.rebuild((b) => b
             ..createdByObj = createdByObj
-            ..createdUserId =
-                event.createdUserId);
+            ..createdUserId = event.createdUserId);
         }
       }
     } catch (e) {
       logError(' Error saving event: $e');
-      return event; 
+      return event;
     }
   }
 

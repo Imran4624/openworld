@@ -27,8 +27,7 @@ class _EventTabsState extends State<EventTabs> with TickerProviderStateMixin {
   void didUpdateWidget(EventTabs oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.showMyEventsOnly != widget.showMyEventsOnly) {
-        _tabController.index = widget.showMyEventsOnly ? 1 : 0;
-      
+      _tabController.index = widget.showMyEventsOnly ? 1 : 0;
     }
   }
 
@@ -54,11 +53,8 @@ class _EventTabsState extends State<EventTabs> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-   
-      return _buildOriginalUI();
+    return _buildOriginalUI();
   }
-
-  
 
   Widget _buildOriginalUI() {
     return Container(
@@ -75,5 +71,4 @@ class _EventTabsState extends State<EventTabs> with TickerProviderStateMixin {
       ),
     );
   }
-
 }

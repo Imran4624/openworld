@@ -50,7 +50,6 @@ class _PhotoGridItemState extends State<PhotoGridItem> {
     final isGuest = isGuestUser(state);
 
     bool shouldBlurImage = false;
-    
 
     return Card(
       elevation: isSelected || isMultiSelected ? 6 : 4,
@@ -78,20 +77,19 @@ class _PhotoGridItemState extends State<PhotoGridItem> {
               fit: StackFit.expand,
               children: [
                 widget.photo.url.isNotEmpty
-                    ?
-                        CachedNetworkImage(
-                            imageUrl: widget.photo.url,
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) => const Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                            errorWidget: (context, url, error) =>
-                                _buildDefaultImage(),
-                          )
+                    ? CachedNetworkImage(
+                        imageUrl: widget.photo.url,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                        errorWidget: (context, url, error) =>
+                            _buildDefaultImage(),
+                      )
                     : _buildDefaultImage(),
                 if (widget.photo.category.isNotEmpty ||
                     widget.photo.tags.isNotEmpty ||
-                    ( _isHovered))
+                    (_isHovered))
                   Positioned.fill(
                     child: Container(
                       decoration: BoxDecoration(

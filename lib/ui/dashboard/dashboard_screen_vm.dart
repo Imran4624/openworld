@@ -41,10 +41,6 @@ class DashboardScreenBuilder extends StatelessWidget {
         final state = viewModel.state;
         final company = state.company;
 
-        if (ProjectConfig.appType == AppType.lp) {
-          return GoalTrackerHome();
-        }
-
         if (!state.isUserConfirmed) {
           return ConfirmEmailBuilder();
         }

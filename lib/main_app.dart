@@ -42,7 +42,6 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_boilerplate/ui/payment/stripe/stripe_connect_screen.dart';
 import 'package:flutter_boilerplate/ui/payment/stripe/stripe_payment_screen.dart';
 import 'package:flutter_boilerplate/ui/payment/stripe/payment_method_manager_screen.dart';
-import 'package:flutter_boilerplate/ui/payment/loopjam_stripe_upgrade_screen.dart';
 
 // Project imports:
 import 'package:flutter_boilerplate/constants.dart';
@@ -319,18 +318,6 @@ class FlutterBoilerplateAppState extends State<FlutterBoilerplateApp> {
       case '/payment_method_manager':
         return MaterialPageRoute<dynamic>(
             builder: (_) => const PaymentMethodManagerScreen());
-      case '/loopjam_stripe_upgrade':
-        final arguments = settings.arguments as Map<String, dynamic>?;
-        return MaterialPageRoute<dynamic>(
-          builder: (_) => LoopjamStripeUpgradeScreen(
-            feature: arguments?['feature'] ?? 'upgrade',
-            description: arguments?['description'],
-            adminStripeAccountId: arguments?['adminStripeAccountId'],
-            amount: arguments?['amount'],
-            priceId: arguments?['priceId'],
-          ),
-          settings: settings,
-        );
       case '/company_edit':
         return MaterialPageRoute<dynamic>(
           builder: (_) => const CompanyEditScreen(),
@@ -659,9 +646,6 @@ class FlutterBoilerplateAppState extends State<FlutterBoilerplateApp> {
                               const StripePaymentScreen(),
                           PaymentMethodManagerScreen.route: (context) =>
                               const PaymentMethodManagerScreen(),
-                          LoopjamStripeUpgradeScreen.route: (context) =>
-                              const LoopjamStripeUpgradeScreen(
-                                  feature: 'upgrade'),
                         }
                       : {},
                 ),

@@ -17,12 +17,6 @@ class AboutUs extends StatelessWidget {
     switch (ProjectConfig.appType) {
       case AppType.cac:
         return 'About Cocktails & Conversation';
-      case AppType.mis:
-        return 'About MyIslamicSpouse';
-      case AppType.lvc:
-        return 'About YourLuvCode';
-      case AppType.loopjam:
-        return 'About Loopjam';
       default:
         return 'About Us';
     }
@@ -32,12 +26,6 @@ class AboutUs extends StatelessWidget {
     switch (ProjectConfig.appType) {
       case AppType.cac:
         return 'Cocktails & Conversation is a curated event and social connection platform for singles who value real-world chemistry.';
-      case AppType.mis:
-        return 'MyIslamicSpouse is a trusted Islamic matrimonial platform designed to help Muslims find their life partners in accordance with Islamic values and traditions.';
-      case AppType.lvc:
-        return 'YourLuvCode is a modern dating platform that helps singles find meaningful connections through curated events and a user-friendly app experience.';
-      case AppType.loopjam:
-        return 'Loopjam is a mobile-first app for sharing photos and videos at real-world events, beginning with weddings. Our focus is providing couples and their guests with a fast, private, and intuitive way to share media during events.';
       default:
         return 'Welcome to our platform designed to connect people and build meaningful relationships.';
     }
@@ -47,10 +35,6 @@ class AboutUs extends StatelessWidget {
     switch (ProjectConfig.appType) {
       case AppType.cac:
         return 'We\'re not a dating app — we believe true connections begin in person. That\'s why we host elegant, thoughtfully curated events where you can meet new people face-to-face. After the event, the app allows you to reconnect with guests you met, continue conversations, and explore meaningful connections in a relaxed, organic way.';
-      case AppType.mis:
-        return 'Our platform provides a safe, secure, and respectful environment where Muslim singles can connect with potential spouses. We understand the importance of family values, religious compatibility, and cultural understanding in Islamic marriages. Our comprehensive profiles allow you to find someone who shares your faith, values, and life goals.\n\nWith advanced privacy controls and verification features, we ensure that every interaction is meaningful and respectful. Whether you\'re looking for someone from your local community or from around the world, MyIslamicSpouse helps facilitate connections that could lead to blessed and fulfilling marriages, In Sha Allah.';
-      case AppType.lvc:
-        return 'YourLuvCode is a modern dating platform that helps singles find meaningful connections through curated events and a user-friendly app experience.';
       default:
         return 'Our platform is designed to help you connect with like-minded individuals and build meaningful relationships in a safe and respectful environment.';
     }

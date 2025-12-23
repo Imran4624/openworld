@@ -67,7 +67,7 @@ class ProfileScreen extends StatelessWidget {
         }
       },
       body: ProfileListBuilder(),
-      bottomNavigationBar: isAdmin(state) || ProjectConfig.appType == AppType.boilerplate
+      bottomNavigationBar: isAdmin(state)
           ? AppBottomBar(
               entityType: EntityType.profile,
               tableColumns: ProfilePresenter.getAllTableFields(userCompany),

@@ -70,27 +70,7 @@ class AppTheme {
   }
 
   static ThemeColors get light {
-    if (ProjectConfig.appType == AppType.loopjam) {
-      return const ThemeColors(
-        primary: Color(0xFF2218E2),
-        secondary: Colors.white,
-        iconLight: Colors.white,
-        background: Color(0xFFF3F4F6),
-        text: Colors.black87,
-        textSecondary: Colors.black54,
-        defaultColor: Color(0xFF666666),
-        success: Color(0xFF4c9a1c),
-        danger: Color(0xffb93700),
-        warning: Color(0xFFcd8900),
-        info: Color(0xFF57a6e4),
-        transparent: Colors.transparent,
-        emptyStateBackground: Color(0xFFE8E9F4),
-        sentMessageBackground: Color(0xFFD4F7D4),
-        surfaceContainer: Color(0xFFFFFFFF),
-        onSurfaceVariant: Color(0xFF666666),
-        outline: Color(0xFFE0E0E0),
-      );
-    } else if (ProjectConfig.appType == AppType.opw) {
+if (ProjectConfig.appType == AppType.opw) {
       return const ThemeColors(
         primary: Colors.black,
         secondary: Colors.white,
@@ -134,27 +114,7 @@ class AppTheme {
   }
 
   static ThemeColors get dark {
-    if (ProjectConfig.appType == AppType.loopjam) {
-      return const ThemeColors(
-        primary: Color(0xFF2218E2),
-        secondary: Colors.black,
-        iconLight: Colors.white,
-        background: Color(0xFF2F2E2E),
-        text: Colors.white,
-        textSecondary: Colors.white70,
-        defaultColor: Color(0xFFAAAAAA),
-        success: Color(0xFF73a839),
-        danger: Color(0xffb93700),
-        warning: Color(0xFFcd8900),
-        info: Color(0xFF57a6e4),
-        transparent: Colors.transparent,
-        emptyStateBackground: Color(0xFF232336),
-        sentMessageBackground: Color(0xFFD4F7D4),
-        surfaceContainer: Color(0xFF3C3C3C),
-        onSurfaceVariant: Color(0xFFAAAAAA),
-        outline: Color(0xFF555555),
-      );
-    } else if (ProjectConfig.appType == AppType.opw) {
+  if (ProjectConfig.appType == AppType.opw) {
       return const ThemeColors(
         primary: Colors.white,
         secondary: Colors.black,

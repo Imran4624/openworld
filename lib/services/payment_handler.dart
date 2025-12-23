@@ -4,7 +4,6 @@ import 'package:flutter_boilerplate/utils/pricing_utils.dart';
 import 'package:flutter_boilerplate/utils/premium_access_utils.dart';
 import 'package:flutter_boilerplate/services/user_service.dart';
 import 'package:flutter_boilerplate/ui/widgets/premium_upgrade_button.dart';
-import 'package:flutter_boilerplate/ui/payment/loopjam_stripe_upgrade_screen.dart';
 import 'package:flutter_boilerplate/redux/app/app_state.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -37,30 +36,8 @@ class PaymentHandler {
     String feature,
     VoidCallback? onSuccess,
   ) {
-    final store = StoreProvider.of<AppState>(context);
-    final state = store.state;
-    final adminStripeAccountId = PricingUtils.getAdminStripeAccountId(state);
+   
 
-    Navigator.of(context).pushNamed(
-      LoopjamStripeUpgradeScreen.route,
-      arguments: {
-        'feature': feature,
-        'description': PricingUtils.getPaymentDescription(feature),
-        'adminStripeAccountId': adminStripeAccountId,
-        'amount': PricingUtils.guestLandingPagePrice,
-        'priceId': PricingUtils.stripeGuestLandingPagePriceId,
-      },
-    ).then((result) {
-      // Handle payment result
-      if (result != null && result is Map<String, dynamic>) {
-        if (result['success'] == true) {
-          _updateUserPaymentStatus(store, 'paid');
-          _handlePaymentSuccess(context, feature, onSuccess);
-        } else {
-          _handlePaymentError(context, result['error'] ?? 'Payment cancelled');
-        }
-      }
-    });
   }
 
   static void _updateUserPaymentStatus(

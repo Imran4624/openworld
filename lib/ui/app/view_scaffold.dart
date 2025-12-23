@@ -357,7 +357,7 @@ class ViewScaffold extends StatelessWidget {
 
   List<EntityAction?> entityActions(UserCompanyEntity userCompany, Store<AppState> store) {
 
-    final isAuthor = entity.createdUserId == getLoggedInUserId(store) || ProjectConfig.appType == AppType.boilerplate;
+    final isAuthor = entity.createdUserId == getLoggedInUserId(store) ;
       
     return isAuthor || isAdmin(store.state) ? entity.getActions(
                           userCompany: userCompany,

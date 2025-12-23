@@ -225,7 +225,7 @@ abstract class PhotoEntity extends Object
     if (!multiselect && (userCompany?.canEditEntity(this) == true || author)) {
       actions.add(EntityAction.purge);
     }
-    if (multiselect && ProjectConfig.appType == AppType.loopjam && (userCompany?.canEditEntity(this) == true || author)) {
+    if (multiselect &&  (userCompany?.canEditEntity(this) == true || author)) {
       actions.add(EntityAction.purge);
     }
 

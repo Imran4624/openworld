@@ -218,9 +218,8 @@ class _ListFilterState extends State<ListFilter> {
             isAuthenticated(state)) ...[
           if (widget.onSelectedState != null &&
               (ProjectConfig.showActionFiltersAndCheckBox(widget.entityType) ||
-                  isAdmin(state) ||
-                  (ProjectConfig.appType == AppType.loopjam &&
-                      widget.isAuthor))) ...[
+                  isAdmin(state)
+                  )) ...[
             SizedBox(width: 8),
             Container(
               constraints: BoxConstraints(maxWidth: 200),

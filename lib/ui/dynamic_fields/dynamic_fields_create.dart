@@ -424,7 +424,7 @@ class _DynamicFieldsCreateState extends State<DynamicFieldsCreate> {
                     !vm.questionGroups[vm.currentGroupIndex].showIntroScreen &&
                     !vm.questionGroups[vm.currentGroupIndex].showSlider);
 
-        final bool isProfileCreate = ProjectConfig.appType == AppType.boilerplate ? false :
+        final bool isProfileCreate = 
             vm.questionGroupType == ProjectConfig.onBoardingQuestionType;
 
         final profileBeingEdited = store.state.uiState.currentRoute.contains(LoginScreen.route) ;

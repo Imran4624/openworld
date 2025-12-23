@@ -33,10 +33,6 @@ class _AdminScreenState extends State<AdminScreen> {
   @override
   void initState() {
     super.initState();
-    if (ProjectConfig.appType != AppType.events121) {
-      statusMessage = 'System health is good. Ready to fetch events';
-      isInitialized = true;
-    }
   }
 
  
@@ -181,10 +177,6 @@ class _AdminScreenState extends State<AdminScreen> {
     return StoreConnector<AppState, Store<AppState>>(
       converter: (store) => store,
       builder: (context, store) {
-        if (ProjectConfig.appType != AppType.events121) {
-          return _buildLegacyUI(context, store);
-        }
-
         return _buildEvents121UI(context, store);
       },
     );

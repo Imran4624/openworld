@@ -244,14 +244,12 @@ class EventRepository {
         (DateTime.now().millisecondsSinceEpoch / 1000).floor();
     Query query = _firestore.collection('events');
 
-    if (ProjectConfig.appType == AppType.loopjam && !myEventsOnly) {
-      if (currentUserId != null) {
-        query = query.where('user_id', isEqualTo: currentUserId);
-      }
-    } else {
-      if (ProjectConfig.getEventEditFields().contains('end') && !myEventsOnly) {
-        query = query.where('end', isGreaterThan: currentTimestamp);
-      }
+    if (ProjectConfig.getEventEditFields().contains('start') && !myEventsOnly) {
+      query = query.where('start', isLessThan: currentTimestamp);
+    }
+
+    if (ProjectConfig.getEventEditFields().contains('end') && !myEventsOnly) {
+      query = query.where('end', isGreaterThan: currentTimestamp);
     }
 
     if (filter != null) {

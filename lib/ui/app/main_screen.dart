@@ -113,7 +113,6 @@ class MainScreen extends StatelessWidget {
       if (isAuthenticated(state) &&
           state.companies.isEmpty &&
           isEmailVerified(state) &&
-          ProjectConfig.appType != AppType.lp &&
           !(ProjectConfig.appType == AppType.opw &&
               state.authState.isEmailLinkAuth)) {
         return Container(
@@ -228,10 +227,6 @@ class MainScreen extends StatelessWidget {
           screen = const SearchOverviewScreen();
           break;
         case DashboardScreenBuilder.route:
-          if (ProjectConfig.appType == AppType.lp) {
-            screen = const DashboardScreenBuilder();
-            break;
-          }
           if (ProjectConfig.showDashboard &&
               state.userCompany.canViewDashboard) {
             screen = Row(
@@ -408,7 +403,7 @@ class EntityScreens extends StatelessWidget {
     } else if (isFullScreen &&
         uiState.currentRoute.contains(EventViewScreen.route)) {
       child = const EventViewScreen();
-    } else if (isFullScreen && ProjectConfig.appType == AppType.events121 &&
+    } else if (isFullScreen &&
         uiState.currentRoute.contains(ProfileViewScreen.route)) {
       child = const ProfileViewScreen();
     } else if (isFullScreen) {

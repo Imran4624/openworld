@@ -19,16 +19,7 @@ class EventScreenBuilder extends StatelessWidget {
     return StoreConnector<AppState, EventScreenVM>(
       converter: EventScreenVM.fromStore,
       onInit: (store) {
-        final state = store.state;
-        if (ProjectConfig.appType == AppType.loopjam) {
-          store.dispatch(LoadEvents(
-            isRefresh: true,
-            myEventsOnly: state.eventState.showMyEventsOnly,
-            currentUserEmail: state.authState.email,
-          ));
-        } else {
           store.dispatch(LoadEvents(isRefresh: true));
-        }
       },
       builder: (context, vm) {
         return EventScreen(

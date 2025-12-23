@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/ui/event/edit/event_edit_vm.dart';
-import 'package:flutter_boilerplate/ui/event/edit/event_edit_loopjam.dart';
 import 'package:flutter_boilerplate/ui/event/edit/event_edit_opw.dart';
 import 'package:flutter_boilerplate/project_config.dart';
 
@@ -20,12 +19,11 @@ class _EventEditState extends State<EventEdit> {
   @override
   Widget build(BuildContext context) {
     switch (ProjectConfig.appType) {
-      case AppType.loopjam:
-        return EventEditLoopjam(viewModel: widget.viewModel);
+      
       case AppType.opw:
         return EventEditOpw(viewModel: widget.viewModel);
       default:
-        return EventEditLoopjam(viewModel: widget.viewModel);
+        return EventEditOpw(viewModel: widget.viewModel);
     }
   }
 }

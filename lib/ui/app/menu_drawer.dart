@@ -62,21 +62,11 @@ class _MenuDrawerState extends State<MenuDrawer> {
   @override
   void initState() {
     super.initState();
-    if (ProjectConfig.appType == AppType.events121) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _loadUserCompanies();
-        _handleAutoCompanySelection();
-      });
-    }
   }
 
   @override
   void didUpdateWidget(MenuDrawer oldWidget) {
     super.didUpdateWidget(oldWidget);
-    
-    if (ProjectConfig.appType != AppType.events121) {
-      return;
-    }
 
     final oldCompanyIds = oldWidget.viewModel.userProfile?.companyIds.toSet();
     final newCompanyIds = widget.viewModel.userProfile?.companyIds.toSet();
@@ -90,22 +80,10 @@ class _MenuDrawerState extends State<MenuDrawer> {
   }
 
   void _loadUserCompanies() {
-    if (ProjectConfig.appType != AppType.events121) {
-      return;
-    }
     
-    final userProfile = widget.viewModel.userProfile;
-    if (userProfile != null && userProfile.companyIds.isNotEmpty) {
-      final Store<AppState> store = StoreProvider.of<AppState>(context);
-      store.dispatch(LoadCompaniesByIds(
-          companyIds: userProfile.companyIds.toList()));
-    }
   }
 
   void _handleAutoCompanySelection() {
-    if (ProjectConfig.appType != AppType.events121) {
-      return;
-    }
 
     final Store<AppState> store = StoreProvider.of<AppState>(context);
     final state = store.state;
@@ -387,9 +365,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
     }
 
     Widget? companyDropdown() {
-      if (ProjectConfig.appType != AppType.events121) {
-        return null;
-      }
+   
 
       if (!isAuthenticated(state)) {
         return null;
@@ -460,10 +436,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
       final expandedCompanySelector = SizedBox(
         height: kTopBottomBarHeight,
         child: AppDropdownButton<String>(
-          value: ProjectConfig.appType == AppType.events121
-              ? _getValidDropdownValueForEvents121(userCompanies, isUserAdmin,
-                  state.userCompanyState.selectedCompanyId)
-              : _getValidDropdownValue(userCompanies, isUserAdmin, company.id),
+          value: _getValidDropdownValue(userCompanies, isUserAdmin, company.id),
           selectedItemBuilder: (context) => [
             if (userCompanies.isNotEmpty)
               ...userCompanies.map((company) =>
@@ -504,15 +477,6 @@ class _MenuDrawerState extends State<MenuDrawer> {
             if (value == 'add_company') {
               _navigateToCompanyEdit(context, null);
             } else if (value?.isNotEmpty == true) {
-              if (ProjectConfig.appType == AppType.events121) {
-                final store = StoreProvider.of<AppState>(context);
-                final currentSelectedCompanyId =
-                    store.state.userCompanyState.selectedCompanyId;
-
-                if (currentSelectedCompanyId != value) {
-                  store.dispatch(SelectCompanyById(companyId: value));
-                }
-              } else {
                 final companyIndex = widget.viewModel.state.companies
                     .indexWhere((c) => c.id == value);
                 if (companyIndex >= 0) {
@@ -522,7 +486,6 @@ class _MenuDrawerState extends State<MenuDrawer> {
                     widget.viewModel.state.companies[companyIndex],
                   );
                 }
-              }
             }
           },
         ),
@@ -1019,23 +982,6 @@ class _MenuDrawerState extends State<MenuDrawer> {
                                     icon: getEntityIcon(EntityType.workout),
                                     title: localization.workouts,
                                   ),
-                                  if (ProjectConfig.appType == AppType.lm)
-                                    DrawerTile(
-                                      company: company,
-                                      icon: getIconByType('map'),
-                                      title: localization.marathonMap,
-                                      onTap: () {
-                                        store.dispatch(UpdateCurrentRoute(
-                                            LondonMarathonMapScreen.route));
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const LondonMarathonMapScreen(),
-                                          ),
-                                        );
-                                      },
-                                    ),
                                   if (isAdmin(state) ||
                                       ProjectConfig
                                           .showEntityDrawerTabByEntityType(
@@ -1142,10 +1088,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
   }
 
   void _navigateToCompanyEdit(BuildContext context, [CompanyEntity? company]) {
-    if (ProjectConfig.appType != AppType.events121) {
-      return;
-    }
-
+   
     Navigator.of(context).pop();
 
     UserCompany? userCompany;

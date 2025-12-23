@@ -128,9 +128,7 @@ class MenuDrawerVM {
               store.dispatch(DiscardChanges());
               store.dispatch(SelectCompany(companyIndex: index));
               
-              if (ProjectConfig.appType == AppType.events121) {
-                store.dispatch(LoadProfiles(isRefresh: true));
-              } else if (store.state.company.isLarge && !store.state.isLoaded) {
+              if (store.state.company.isLarge && !store.state.isLoaded) {
                 // store.dispatch(LoadClients());
                 store.dispatch(RefreshData());
               } else if (store.state.isStale) {

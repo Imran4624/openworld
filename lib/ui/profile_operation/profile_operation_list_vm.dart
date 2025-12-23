@@ -162,7 +162,7 @@ class _ProfileOperationListBuilderState
         message = 'You haven\'t liked any profiles yet';
         icon = Icons.favorite_border;
         actionText =
-            ProjectConfig.appType == AppType.cac ? null : 'Explore Profiles';
+             'Explore Profiles';
         onActionPressed = () {
           viewEntitiesByType(entityType: EntityType.profile);
         };
@@ -177,7 +177,7 @@ class _ProfileOperationListBuilderState
             'You don\'t have any matches yet.\nStart liking profiles to get matches!';
         icon = Icons.people_outline;
         actionText =
-            ProjectConfig.appType == AppType.cac ? null : 'Start Matching';
+           'Start Matching';
         onActionPressed = () {
           viewEntitiesByType(entityType: EntityType.profile);
         };

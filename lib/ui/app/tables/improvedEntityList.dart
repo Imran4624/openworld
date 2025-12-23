@@ -193,8 +193,8 @@ class _ImprovedEntityListState extends State<ImprovedEntityList> {
     }
 
     Widget buildGridView() {
-      final spacing = ProjectConfig.appType == AppType.loopjam ? 2.0 : 12.0;
-      final aspectRatio = ProjectConfig.appType == AppType.loopjam ? 1.25 : 1.0;
+      const spacing =  12.0;
+      const aspectRatio =  1.0;
 
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),

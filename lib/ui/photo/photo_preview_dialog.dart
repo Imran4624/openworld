@@ -94,19 +94,14 @@ class _PhotoPreviewDialogState extends State<PhotoPreviewDialog> {
 
   @override
   Widget build(BuildContext context) {
-    if (ProjectConfig.appType == AppType.loopjam) {
-      return _buildLoopjamUI(context);
-    } else {
+    
       return _buildDefaultUI(context);
-    }
   }
 
   bool shouldBlurImage(Store<AppState> store) {
     final state = store.state;
 
-    if (ProjectConfig.appType != AppType.loopjam) {
-      return false;
-    }
+   
 
     final currentUserId = state.authState.currentUserId;
     final isPhotoOwner = currentPhoto.createdUserId != null &&
@@ -637,8 +632,6 @@ class _PhotoPreviewDialogState extends State<PhotoPreviewDialog> {
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           if (!shouldBlurImage(store) &&
-                                              ProjectConfig.appType ==
-                                                  AppType.loopjam &&
                                               widget.creatorDetails
                                                       ?.hasValidDetails ==
                                                   true)
@@ -1407,9 +1400,8 @@ class _PhotoPreviewDialogState extends State<PhotoPreviewDialog> {
                   ),
                 ),
               if (((currentPhoto.category.isNotEmpty ||
-                          currentPhoto.tags.isNotEmpty) &&
-                      ProjectConfig.appType != AppType.loopjam) ||
-                  (ProjectConfig.appType == AppType.loopjam &&
+                          currentPhoto.tags.isNotEmpty)) ||
+                  (
                       widget.creatorDetails?.hasValidDetails == true &&
                       !shouldBlurImage(store)))
                 Positioned(
@@ -1431,7 +1423,6 @@ class _PhotoPreviewDialogState extends State<PhotoPreviewDialog> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         if (!shouldBlurImage(store) &&
-                            ProjectConfig.appType == AppType.loopjam &&
                             widget.creatorDetails?.hasValidDetails == true)
                           Container(
                             margin: const EdgeInsets.only(bottom: 12),
@@ -1452,8 +1443,7 @@ class _PhotoPreviewDialogState extends State<PhotoPreviewDialog> {
                               ],
                             ),
                           ),
-                        if (currentPhoto.category.isNotEmpty &&
-                            ProjectConfig.appType != AppType.loopjam)
+                        if (currentPhoto.category.isNotEmpty)
                           Text(
                             currentPhoto.category,
                             style: const TextStyle(
@@ -1462,8 +1452,7 @@ class _PhotoPreviewDialogState extends State<PhotoPreviewDialog> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                        if (currentPhoto.tags.isNotEmpty &&
-                            ProjectConfig.appType != AppType.loopjam) ...[
+                        if (currentPhoto.tags.isNotEmpty ) ...[
                           const SizedBox(height: 4),
                           Text(
                             currentPhoto.tags,

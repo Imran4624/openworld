@@ -38,10 +38,6 @@ class StaticTopBar extends StatelessWidget {
         final themeColors =
             AppTheme.getThemeColors(state.prefState.enableDarkMode);
 
-        if (ProjectConfig.appType != AppType.loopjam) {
-          return const SizedBox.shrink();
-        }
-
         if (isMobile(context)) {
           return Material(
             color: Colors.transparent,
@@ -414,8 +410,7 @@ class _LoopjamUserSelectorState extends State<_LoopjamUserSelector> {
                           padding: const EdgeInsets.symmetric(horizontal: 24.0),
                           child: Column(
                             children: [
-                              if (ProjectConfig.appType == AppType.loopjam &&
-                                  isAdmin(state))
+                              if (isAdmin(state))
                                 Padding(
                                   padding: const EdgeInsets.only(bottom: 12.0),
                                   child: SizedBox(
@@ -565,9 +560,6 @@ class _LoopjamUserSelectorState extends State<_LoopjamUserSelector> {
     } else if (value == DrawerActions.editProfile) {
       logInfo('Edit Profile clicked');
     } else if (value == DrawerActions.connectAccount) {
-      if (ProjectConfig.appType == AppType.loopjam) {
-        navigatorKey.currentState!.pushNamed('/stripe_connect');
-      }
     } else if (value == DrawerActions.deleteAccount) {
       showDialog(
         context: navigatorKey.currentContext!,

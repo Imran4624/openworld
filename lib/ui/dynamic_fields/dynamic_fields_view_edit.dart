@@ -120,7 +120,7 @@ class _EditOverviewScreenState extends State<EditOverviewScreen> {
         final store = StoreProvider.of<AppState>(context);
         final profileBeingEdited = store.state.uiState.currentRoute.contains(ProfileEditScreen.route) ;
         
-        final bool isProfileEdit = ProjectConfig.appType == AppType.boilerplate ? false :
+        final bool isProfileEdit = 
           vm.questionGroupType == ProjectConfig.onBoardingQuestionType;
         
        

@@ -226,8 +226,7 @@ class ListScaffold extends StatelessWidget {
                   ),
                   actions: [
                     ...appBarActions ?? <Widget>[],
-                    if (ProjectConfig.appType == AppType.loopjam &&
-                        entityType == EntityType.photo &&
+                    if (entityType == EntityType.photo &&
                         isEventAuthor &&
                         isAuthenticated(state))
                       PopupMenuButton<String>(

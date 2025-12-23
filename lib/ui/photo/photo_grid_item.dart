@@ -51,51 +51,7 @@ class _PhotoGridItemState extends State<PhotoGridItem> {
     final isGuest = isGuestUser(state);
 
     bool shouldBlurImage = false;
-    if (ProjectConfig.appType == AppType.loopjam) {
-      final currentUserId = state.authState.currentUserId;
-      final isPhotoOwner = widget.photo.createdUserId != null &&
-          widget.photo.createdUserId == currentUserId &&
-          currentUserId.isNotEmpty &&
-          widget.photo.createdUserId!.isNotEmpty;
-
-      if (isPhotoOwner) {
-        shouldBlurImage = false;
-      } else if (!state.authState.isAuthenticated) {
-        shouldBlurImage = true;
-      } else {
-        final selectedEventId = state.eventUIState.selectedId;
-        if (selectedEventId != null) {
-          final selectedEvent = state.eventState.map[selectedEventId];
-          if (selectedEvent != null) {
-            if (selectedEvent.privateEvent) {
-              final isAuthor = selectedEvent.createdUserId == currentUserId;
-
-              bool isApprovedAttendee = false;
-              if (selectedEvent.orders.isNotEmpty && currentUserId.isNotEmpty) {
-                final currentUserEmail = state.authState.email;
-
-                for (final order in selectedEvent.orders) {
-                  final buyerDetails = order.buyerDetails;
-                  final isCurrentUserOrder = buyerDetails.email.toLowerCase() ==
-                      currentUserEmail.toLowerCase();
-                  final isApproved =
-                      buyerDetails.attendeeStatus == AttendeeStatus.approved;
-
-                  if (isCurrentUserOrder && isApproved) {
-                    isApprovedAttendee = true;
-                    break;
-                  }
-                }
-              }
-
-              if (!isAuthor && !isApprovedAttendee) {
-                shouldBlurImage = true;
-              }
-            }
-          }
-        }
-      }
-    }
+    
 
     return Card(
       elevation: isSelected || isMultiSelected ? 6 : 4,
@@ -123,34 +79,8 @@ class _PhotoGridItemState extends State<PhotoGridItem> {
               fit: StackFit.expand,
               children: [
                 widget.photo.url.isNotEmpty
-                    ? shouldBlurImage
-                        ? ClipRect(
-                            child: Stack(
-                              children: [
-                                CachedNetworkImage(
-                                  imageUrl: widget.photo.url,
-                                  fit: BoxFit.cover,
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                  placeholder: (context, url) => const Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                  errorWidget: (context, url, error) =>
-                                      _buildDefaultImage(),
-                                ),
-                                Positioned.fill(
-                                  child: BackdropFilter(
-                                    filter: ImageFilter.blur(
-                                        sigmaX: 15.0, sigmaY: 15.0),
-                                    child: Container(
-                                      color: Colors.black.withOpacity(0.3),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          )
-                        : CachedNetworkImage(
+                    ?
+                        CachedNetworkImage(
                             imageUrl: widget.photo.url,
                             fit: BoxFit.cover,
                             placeholder: (context, url) => const Center(
@@ -162,7 +92,7 @@ class _PhotoGridItemState extends State<PhotoGridItem> {
                     : _buildDefaultImage(),
                 if (widget.photo.category.isNotEmpty ||
                     widget.photo.tags.isNotEmpty ||
-                    (ProjectConfig.appType == AppType.loopjam && _isHovered))
+                    ( _isHovered))
                   Positioned.fill(
                     child: Container(
                       decoration: BoxDecoration(
@@ -263,7 +193,6 @@ class _PhotoGridItemState extends State<PhotoGridItem> {
                   ),
                 if (!shouldBlurImage &&
                     _isHovered &&
-                    ProjectConfig.appType == AppType.loopjam &&
                     _hasValidAttendeeDetails(state))
                   Positioned(
                     bottom: 8,

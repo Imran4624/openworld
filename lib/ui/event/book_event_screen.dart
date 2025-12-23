@@ -1013,8 +1013,6 @@ class _BookEventScreenState extends State<BookEventScreen> {
       final stripeService = StripeService();
       final amountInCents = (total * 100).toInt();
 
-      final appTypeName =
-          ProjectConfig.appType == AppType.events121 ? 'events121' : 'opw';
       final stripeAccount =
           ProjectConfig.appType == AppType.opw ? 'kIrjKcF0cgZlLM4D1KqCznEioaE3' : null;
 
@@ -1033,7 +1031,7 @@ class _BookEventScreenState extends State<BookEventScreen> {
         'customer_phone': '+880 17597 25080',
         'ticket_price': ticketPrice.toString(),
         'total_amount': total.toString(),
-        'app_type': appTypeName,
+        'app_type': 'opw',
         'payment_type': 'event_ticket',
         if (stripeAccount != null) 'stripe_account': stripeAccount,
         if (_stripeCustomerId != null) 'stripe_customer_id': _stripeCustomerId!,

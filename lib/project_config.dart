@@ -1307,18 +1307,8 @@ class ProjectConfig {
 }
 
 enum AppType {
-   boilerplate,
-  loopjam,
-  boilerplatelocal,
-  mis,
   cac,
-  datingdemo,
-  datingdemozawaj,
-  lm,
-  lp,
-  lvc,
   opw,
-  events121,
 }
 
 enum LoginViewType {

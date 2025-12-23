@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_boilerplate/data/repositories/clients/eventbrite_client.dart';
 import 'package:flutter_boilerplate/redux/app/app_state.dart';
 import 'package:flutter_boilerplate/redux/ui/ui_actions.dart';
 import 'package:flutter_boilerplate/ui/dashboard/dashboard_screen_vm.dart';
@@ -176,54 +175,6 @@ class _AdminScreenState extends State<AdminScreen> {
 
  
 
-  Future<void> fetchEventBriteEvents(Store<AppState> store, String apiKey,
-      String organizationId, String companyName) async {
-    final eventBriteClient = EventBriteClient(
-        apiKey: apiKey,
-        organizationId: organizationId,
-        companyName: companyName,
-        store: store,
-        updateStatus: (message) {
-          setState(() {
-            statusMessage = message;
-            if (message.contains('Successfully fetched and saved') &&
-                message.contains('EventBrite events with all their orders')) {
-              final RegExp regex =
-                  RegExp(r'(\d+) EventBrite events with all their orders');
-              final match = regex.firstMatch(message);
-              if (match != null) {
-                lastFetchedEventCount = int.parse(match.group(1)!);
-                lastSuccessfulFetchType = 'EventBrite';
-              }
-            }
-          });
-        });
-
-    try {
-      setState(() {
-        isLoading = true;
-        statusMessage = 'Starting EventBrite event fetch process...';
-        lastFetchedEventCount = 0;
-      });
-
-      await eventBriteClient.fetchEvents();
-
-      setState(() {
-        isLoading = false;
-        if (lastFetchedEventCount > 0) {
-          statusMessage =
-              'EventBrite events fetched successfully! Total events fetched: $lastFetchedEventCount';
-        } else {
-          statusMessage = 'EventBrite events fetched successfully!';
-        }
-      });
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-        statusMessage = 'Failed to fetch EventBrite events: $e';
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

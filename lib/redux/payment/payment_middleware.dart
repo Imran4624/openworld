@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_boilerplate/.env.dart';
 import 'package:flutter_boilerplate/ui/app/shared.dart';
 import 'package:redux/redux.dart';
 import 'package:built_collection/built_collection.dart';
@@ -15,10 +14,6 @@ import 'package:flutter_boilerplate/ui/payment/view/payment_view_vm.dart';
 import 'package:flutter_boilerplate/redux/payment/payment_actions.dart';
 import 'package:flutter_boilerplate/redux/app/app_state.dart';
 import 'package:flutter_boilerplate/data/repositories/payment_repository.dart';
-import 'package:flutter_boilerplate/data/managers/payment_manager.dart';
-import 'package:flutter_boilerplate/data/providers/stripe_payment_provider.dart';
-import 'package:flutter_boilerplate/data/repositories/clients/stripeClient.dart';
-import 'package:flutter_boilerplate/data/models/payment_provider_models.dart';
 
 List<Middleware<AppState>> createStorePaymentsMiddleware([
   PaymentRepository repository = const PaymentRepository(),

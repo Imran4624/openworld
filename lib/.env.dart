@@ -34,7 +34,7 @@ class Config {
   static const String CF_UNSUBSCRIBE = '';
   static const String CF_REFUND = '';
   static const String CF_PAYMENT_WEBHOOKS = '';
-  static const String Gemini_API_KEY = 'AIzaSyAWPtjV1AXhoVQ5hR7aEK1KnJ7FBT6qWOk';
+  static const String Gemini_API_KEY = 'AIzaSyBih_Kd5pGOd_Y9lX4JUNcy5fSIr3Y3RBc';
   static const String API_KEY = 'AIzaSyCLJVijFd0KYft9SDB-Tt-DK-a3IgiYdVI';
   static const String AUTH_DOMAIN = 'openworld-app.firebaseapp.com';
   static const String PROJECT_ID = 'openworld-app';
@@ -53,7 +53,7 @@ class Config {
       'https://sendemail-a2h24aioca-uc.a.run.app';
 
 
-  static const String STRIPE_PUBLISHABLE_KEY = 'pk_test_51SORA1IPMSTLVcCTyaqU57MmFGTifiGysXg9ZztiksSgZvnjb1CYMR0tJJZbZUTw8yxABgP8f6UbD1qvtRWGcPut00TBk3hQwU';
+  static const String STRIPE_PUBLISHABLE_KEY = 'pk_live_51Rv0gGIVRY55KtDBjyS3i0ic80zQX5jzUn3U2Y3GEOhOh97jLx811quNrXD4A42G501NL6kApQuEpAuWLY43LVKw008jsAcf2Y';
   static const bool PAYMENT_ENABLED = true; 
   static const String PAYMENT_PROVIDER = 'stripe'; 
   static const String TEST_PAYMENT_METHOD = 'pm_card_visa'; 

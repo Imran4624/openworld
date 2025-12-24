@@ -53,7 +53,7 @@ export async function getSecret(name: string) {
 
 export async function initStripe() {
   // const key = await getSecret("STRIPE_SECRET");
-  return new Stripe("sk_test_51SORA1IPMSTLVcCTgI1vf3kpp2jMhyuo2H6tB1RWXzp4s4SbZnuRDcsudwNKp9IkXh0tytu8CAnZ5bIQ9A6s94fp00Eka7RONR", {apiVersion: "2024-06-20"});
+  return new Stripe("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", {apiVersion: "2024-06-20"});
 }
 
 export async function useIdempotency(userId: string, operation: string) {

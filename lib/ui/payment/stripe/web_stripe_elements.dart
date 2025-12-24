@@ -26,6 +26,14 @@ class WebStripeElements {
     }
 
     try {
+      final hasExtractFunction = js.context.hasProperty('extractCardDataForCloudFunction');
+      if (!hasExtractFunction) {
+        return {
+          'success': false,
+          'error': 'extractCardDataForCloudFunction JavaScript function not found. Please refresh the page.'
+        };
+      }
+
       final completer = Completer<Map<String, dynamic>>();
 
       js.context['__flutterPromiseResolver'] = (result) {

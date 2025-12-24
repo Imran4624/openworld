@@ -6,7 +6,6 @@ import 'dart:async';
 import 'order_complete_screen.dart';
 import '../../redux/app/app_state.dart';
 import '../../.env.dart';
-import '../app/forms/credit_card_input_widget.dart';
 import 'package:built_collection/built_collection.dart';
 import '../../redux/event/event_actions.dart';
 import '../../data/models/models.dart';
@@ -15,6 +14,11 @@ import '../../ui/app/shared.dart';
 import '../../services/analytics_manager.dart';
 import '../../services/stripe_service.dart';
 import '../../project_config.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+import '../payment/stripe/web_stripe_elements.dart'
+    if (dart.library.io) '../payment/stripe/web_stripe_elements_stub.dart';
 
 class BookEventScreen extends StatefulWidget {
   final EventEntity event;
@@ -36,17 +40,115 @@ class _BookEventScreenState extends State<BookEventScreen> {
 
   int quantity = 2;
   String selectedPayment = 'Credit Card';
-  Map<String, String> cardDetails = {};
-  bool isCardValid = false;
   bool _isLoadingStripe = true;
   String? _stripeCustomerId;
   List<Map<String, dynamic>> _paymentMethods = [];
   String? _stripeError;
 
+  bool _useStripeElements = !kIsWeb;
+  bool _webElementsReady = false;
+  CardFieldInputDetails? _cardFieldDetails;
+
+  final TextEditingController _nameController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
-    _initializeStripeCustomer();
+    _initializeStripe();
+    _initializeUserData();
+
+    _nameController.addListener(() {
+      setState(() {});
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _initializeStripeCustomer();
+      }
+    });
+  }
+
+  Future<void> _initializeStripe() async {
+    if (kIsWeb) {
+      try {
+        await Future.delayed(const Duration(milliseconds: 500));
+
+        final initResult = WebStripeElements.initializeStripeForWeb(
+            Config.STRIPE_PUBLISHABLE_KEY);
+        if (initResult == true) {
+          setState(() {
+            _useStripeElements = true;
+          });
+
+          await Future.delayed(const Duration(milliseconds: 1500));
+
+          if (mounted) {
+            setState(() {
+              _webElementsReady = true;
+            });
+          }
+        } else {
+          logError('DEBUG: Failed to initialize Stripe for web');
+          setState(() {
+            _stripeError = _getFriendlyErrorMessage(
+                'Failed to initialize Stripe for web payments');
+          });
+        }
+      } catch (e) {
+        logError('Error initializing Stripe for web: $e');
+        setState(() {
+          _stripeError =
+              _getFriendlyErrorMessage('Stripe initialization failed for web');
+        });
+      }
+      return;
+    }
+
+    if (Stripe.publishableKey.isEmpty) {
+      logError('DEBUG: Stripe publishable key is not set or empty');
+      if (mounted) {
+        setState(() {
+          _useStripeElements = false;
+          _stripeError =
+              _getFriendlyErrorMessage('Stripe publishable key not configured');
+        });
+      }
+      return;
+    }
+    if (mounted) {
+      setState(() {
+        _useStripeElements = true;
+      });
+    }
+  }
+
+  String _getFriendlyErrorMessage(String technicalError) {
+    if (technicalError.contains('firebase_functions/not-found') ||
+        technicalError.contains('NOT_FOUND')) {
+      return 'Payment service temporarily unavailable. Please try again later.';
+    } else if (technicalError.contains('network') ||
+        technicalError.contains('connection') ||
+        technicalError.contains('timeout')) {
+      return 'Network connection issue. Please check your internet and try again.';
+    } else if (technicalError.contains('permission') ||
+        technicalError.contains('unauthorized')) {
+      return 'Payment authentication failed. Please try again.';
+    } else if (technicalError.contains('Stripe not available') ||
+        technicalError.contains('initialization failed')) {
+      return 'Payment system is initializing. Please wait a moment and try again.';
+    } else if (technicalError.contains('invalid') ||
+        technicalError.contains('validation')) {
+      return 'Invalid payment information. Please check your details.';
+    } else {
+      return 'Payment system temporarily unavailable. Please try again later.';
+    }
+  }
+
+  Future<void> _initializeUserData() async {
+    final store = StoreProvider.of<AppState>(context, listen: false);
+    final authState = store.state.authState;
+    _nameController.text =
+        authState.currentUserName.isNotEmpty ? authState.currentUserName : '';
   }
 
   Future<void> _initializeStripeCustomer() async {
@@ -55,7 +157,6 @@ class _BookEventScreenState extends State<BookEventScreen> {
         _isLoadingStripe = true;
         _stripeError = null;
       });
-
 
       final store = StoreProvider.of<AppState>(context, listen: false);
       final authState = store.state.authState;
@@ -72,19 +173,20 @@ class _BookEventScreenState extends State<BookEventScreen> {
         },
       );
 
-
       if (customerResult['success'] == true) {
         _stripeCustomerId = customerResult['data']?['customerId'];
 
         await _loadPaymentMethods();
       } else {
-        _stripeError = customerResult['error']?.toString() ??
+        String technicalError = customerResult['error']?.toString() ??
             'Failed to create Stripe customer';
-        logError('DEBUG: Failed to create Stripe customer: $_stripeError');
+        _stripeError = _getFriendlyErrorMessage(technicalError);
+        logError('DEBUG: Failed to create Stripe customer: $technicalError');
       }
     } catch (error) {
-      _stripeError = error.toString();
-      logError('DEBUG: Error initializing Stripe customer: $error');
+      String technicalError = error.toString();
+      _stripeError = _getFriendlyErrorMessage(technicalError);
+      logError('DEBUG: Error initializing Stripe customer: $technicalError');
     } finally {
       if (mounted) {
         setState(() {
@@ -95,7 +197,6 @@ class _BookEventScreenState extends State<BookEventScreen> {
   }
 
   Future<void> _loadPaymentMethods() async {
-    try {
       if (_stripeCustomerId == null) {
         return;
       }
@@ -103,20 +204,13 @@ class _BookEventScreenState extends State<BookEventScreen> {
       final paymentMethodsResult =
           await _stripeService.getPaymentMethods(_stripeCustomerId);
 
-
       if (paymentMethodsResult['success'] == true) {
         final methods =
             paymentMethodsResult['data']?['paymentMethods'] as List<dynamic>? ??
                 [];
         _paymentMethods = methods.cast<Map<String, dynamic>>();
-
-      } else {
-        logError(
-            'DEBUG: Failed to load payment methods: ${paymentMethodsResult['error']}');
       }
-    } catch (error) {
-      logError('DEBUG: Error loading payment methods: $error');
-    }
+    
   }
 
   bool _canProcessPayment() {
@@ -125,9 +219,48 @@ class _BookEventScreenState extends State<BookEventScreen> {
     }
 
     if (selectedPayment == 'Credit Card') {
-      return isCardValid && cardDetails.isNotEmpty && _stripeCustomerId != null;
+      if (_stripeCustomerId == null || _nameController.text.trim().isEmpty) {
+        return false;
+      }
+
+      if (kIsWeb) {
+        return _useStripeElements && _webElementsReady;
+      } else {
+        return _useStripeElements
+            ? (_cardFieldDetails != null && _cardFieldDetails!.complete)
+            : false;
+      }
     }
     return false;
+  }
+
+  String _getPaymentButtonText(double total) {
+    if (_isLoadingStripe) {
+      return 'LOADING...';
+    }
+
+    if (_stripeError != null) {
+      return 'PAYMENT UNAVAILABLE';
+    }
+
+    if (_stripeCustomerId == null) {
+      return 'SETTING UP PAYMENT...';
+    }
+
+    if (_nameController.text.trim().isEmpty) {
+      return 'ENTER NAME TO PAY';
+    }
+
+    if (kIsWeb && !_webElementsReady) {
+      return 'LOADING PAYMENT FORM...';
+    }
+
+    if (!kIsWeb &&
+        _useStripeElements &&
+        (_cardFieldDetails == null || !_cardFieldDetails!.complete)) {
+      return 'ENTER CARD DETAILS';
+    }
+    return 'PAY \$${total.toStringAsFixed(0)}';
   }
 
   void _addCurrentUserAsAttendee(
@@ -171,12 +304,16 @@ class _BookEventScreenState extends State<BookEventScreen> {
     ));
 
     eventCompleter.future.then((_) {
-      logInfo('Event saved successfully, completing with updated event');
       completer.complete(updatedEvent);
     }).catchError((error) {
-      logError('Failed to save event: $error');
       completer.completeError(error);
     });
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
   }
 
   String _formatEventDateTime() {
@@ -580,34 +717,12 @@ class _BookEventScreenState extends State<BookEventScreen> {
                               ),
                             ],
                           ),
-                          OutlinedButton(
-                            onPressed: () {},
-                            style: OutlinedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 4),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                            child: Text('Edit',
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.grey[700]!)),
-                          ),
                         ],
                       ),
                       const SizedBox(height: 8),
                       Text(
                         state.authState.email,
                         style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                      ),
-                      Text(
-                        '+880 17597 25080 | California, CA',
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[600]!),
                       ),
                     ],
                   ),
@@ -739,12 +854,6 @@ class _BookEventScreenState extends State<BookEventScreen> {
                               isComingSoon: true,
                             ),
                             _buildDashedDivider(),
-                            _buildPaymentOption(
-                              assetIcon: 'assets/opw/icons/solana.png',
-                              label: 'Solana',
-                              isSelected: false,
-                              isComingSoon: true,
-                            ),
                           ],
                         ),
                       ),
@@ -834,37 +943,46 @@ class _BookEventScreenState extends State<BookEventScreen> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'Payment system error',
+                            'Unable to connect to payment system',
                             style: TextStyle(
                               color: Colors.red.shade700,
-                              fontSize: 14,
+                              fontSize: 16,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          const SizedBox(height: 6),
                           Text(
                             _stripeError!,
                             style: TextStyle(
                               color: Colors.red.shade600,
-                              fontSize: 12,
+                              fontSize: 14,
                             ),
                             textAlign: TextAlign.center,
                           ),
-                          const SizedBox(height: 8),
-                          ElevatedButton(
-                            onPressed: _initializeStripeCustomer,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red.shade700,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 8,
+                          const SizedBox(height: 12),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ElevatedButton.icon(
+                                onPressed: _initializeStripeCustomer,
+                                icon: const Icon(Icons.refresh, size: 16),
+                                label: const Text(
+                                  'Try Again',
+                                  style: TextStyle(fontSize: 14),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red.shade700,
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                    vertical: 12,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
                               ),
-                            ),
-                            child: const Text(
-                              'Retry',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 12),
-                            ),
+                            ],
                           ),
                         ],
                       ),
@@ -901,29 +1019,180 @@ class _BookEventScreenState extends State<BookEventScreen> {
                         ),
                       ),
                     ],
-                    CreditCardInputWidget(
-                      isTestMode: !Config.PAYMENT_ENABLED,
-                      onCardDetailsChanged: (details) {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          if (mounted) {
-                            setState(() {
-                              cardDetails = details;
-                            });
-                          }
-                        });
+                    TextFormField(
+                      controller: _nameController,
+                      decoration: const InputDecoration(
+                        labelText: 'Cardholder Name',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.person),
+                      ),
+                      textCapitalization: TextCapitalization.words,
+                      onChanged: (value) {
+                        setState(() {});
                       },
-                      onValidationChanged: () {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          if (mounted) {
+                    ),
+                    const SizedBox(height: 16),
+                    if (_useStripeElements && !kIsWeb) ...[
+                      const Text(
+                        'Card Information',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w500),
+                      ),
+                      const SizedBox(height: 8),
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey[300]!),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: CardField(
+                          onCardChanged: (card) {
                             setState(() {
-                              isCardValid = cardDetails.isNotEmpty &&
-                                  cardDetails['number']?.isNotEmpty == true &&
-                                  cardDetails['cvc']?.isNotEmpty == true &&
-                                  cardDetails['name']?.isNotEmpty == true;
+                              _cardFieldDetails = card;
                             });
-                          }
-                        });
-                      },
+                          },
+                        ),
+                      ),
+                    ] else if (!_useStripeElements && !kIsWeb) ...[
+                      const Text(
+                        'Card Information',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w500),
+                      ),
+                      const SizedBox(height: 8),
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.orange[50],
+                          border: Border.all(color: Colors.orange[200]!),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(Icons.warning,
+                                color: Colors.orange[700], size: 16),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                'Stripe Elements unavailable. Please try manual input or contact support.',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.orange[700],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Column(
+                        children: [
+                          TextFormField(
+                            decoration: const InputDecoration(
+                              labelText: 'Card Number',
+                              border: OutlineInputBorder(),
+                              prefixIcon: Icon(Icons.credit_card),
+                              hintText: '1234 5678 9012 3456',
+                            ),
+                            keyboardType: TextInputType.number,
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                          ),
+                          const SizedBox(height: 12),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextFormField(
+                                  decoration: const InputDecoration(
+                                    labelText: 'MM/YY',
+                                    border: OutlineInputBorder(),
+                                    hintText: '12/25',
+                                  ),
+                                  keyboardType: TextInputType.number,
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: TextFormField(
+                                  decoration: const InputDecoration(
+                                    labelText: 'CVC',
+                                    border: OutlineInputBorder(),
+                                    hintText: '123',
+                                  ),
+                                  keyboardType: TextInputType.number,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ] else if (kIsWeb) ...[
+                      const Text(
+                        'Card Information',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w500),
+                      ),
+                      const SizedBox(height: 8),
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.blue[50],
+                          border: Border.all(color: Colors.blue[200]!),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(Icons.security,
+                                color: Colors.blue[700], size: 16),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                'Secure card details powered by Stripe Elements',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.blue[700],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Container(
+                        height: 60,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey[300]!),
+                          borderRadius: BorderRadius.circular(8),
+                          color: Colors.white,
+                        ),
+                        child: WebStripeElements.createStripeElementsWidget(),
+                      ),
+                    ],
+                    const SizedBox(height: 16),
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.blue[50],
+                        border: Border.all(color: Colors.blue[200]!),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.security, color: Colors.blue[700]),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              'Your card information is encrypted and secure. We use Stripe to process payments.',
+                              style: TextStyle(
+                                color: Colors.blue[700],
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ],
@@ -946,7 +1215,7 @@ class _BookEventScreenState extends State<BookEventScreen> {
                       ),
                     ),
                     child: Text(
-                      'PAY \$${total.toStringAsFixed(0)}',
+                      _getPaymentButtonText(total),
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -968,7 +1237,7 @@ class _BookEventScreenState extends State<BookEventScreen> {
     final store = StoreProvider.of<AppState>(context);
     final ticketPrice = widget.ticketPrice ?? 30.00;
 
-    if (selectedPayment == 'Credit Card' && !isCardValid) {
+    if (!_canProcessPayment()) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please enter valid card details'),
@@ -977,7 +1246,6 @@ class _BookEventScreenState extends State<BookEventScreen> {
       );
       return;
     }
-
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -993,7 +1261,7 @@ class _BookEventScreenState extends State<BookEventScreen> {
               Text(
                 selectedPayment == 'Credit Card'
                     ? (Config.PAYMENT_ENABLED
-                        ? 'Processing with your card: **** **** **** ${cardDetails['number']?.substring(cardDetails['number']!.length - 4) ?? ''}'
+                        ? 'Processing with your card ending in ****'
                         : 'Using test card: **** **** **** 4242')
                     : 'Processing with $selectedPayment',
                 style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
@@ -1013,14 +1281,15 @@ class _BookEventScreenState extends State<BookEventScreen> {
       final stripeService = StripeService();
       final amountInCents = (total * 100).toInt();
 
-      final stripeAccount =
-          ProjectConfig.appType == AppType.opw ? 'kIrjKcF0cgZlLM4D1KqCznEioaE3' : null;
+      final stripeAccount = ProjectConfig.appType == AppType.opw
+          ? 'OfSNdPFlQ9XgR6OtVXHjugY7rY42'
+          : null;
 
       final metadata = {
         'event_id': widget.event.id,
         'event_name': widget.event.name,
         'event_description': widget.event.description,
-        'event_location': widget.event.location ?? 'Online Event',
+        'event_location': widget.event.location,
         'event_start':
             DateTime.fromMillisecondsSinceEpoch(widget.event.start).toString(),
         'event_end':
@@ -1028,7 +1297,7 @@ class _BookEventScreenState extends State<BookEventScreen> {
         'quantity': quantity.toString(),
         'payment_method': selectedPayment,
         'customer_email': store.state.authState.email,
-        'customer_phone': '+880 17597 25080',
+        'customer_phone': '',
         'ticket_price': ticketPrice.toString(),
         'total_amount': total.toString(),
         'app_type': 'opw',
@@ -1039,32 +1308,189 @@ class _BookEventScreenState extends State<BookEventScreen> {
 
       String? paymentMethodId;
       if (selectedPayment == 'Credit Card') {
-        if (Config.PAYMENT_ENABLED && _stripeCustomerId != null) {
-          paymentMethodId = cardDetails['payment_method_id'] ??
-              'pm_card_visa'; 
+        if (_stripeCustomerId != null) {
+          try {
+            if (kIsWeb) {
+              if (!_webElementsReady) {
+                Navigator.of(context).pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                        'Payment form is still loading. Please wait a moment and try again.'),
+                    backgroundColor: Colors.orange,
+                  ),
+                );
+                return;
+              }
 
-          if (cardDetails['payment_method_id'] == null &&
-              cardDetails['number']?.isNotEmpty == true) {
-            logInfo('DEBUG: Need to create payment method from card details');
-            paymentMethodId = 'pm_card_visa';
+              final billingDetails = {
+                'name': _nameController.text.trim(),
+                'email': store.state.authState.email,
+              };
+
+              final extractResult =
+                  await WebStripeElements.extractCardDataForCloudFunction(
+                      billingDetails);
+
+              final bool success = extractResult['success'] == true;
+              final String? error = extractResult['error'];
+              final dynamic token = extractResult['token'];
+              final dynamic paymentMethod = extractResult['paymentMethod'];
+
+              if (!success) {
+                Navigator.of(context).pop(); 
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content:
+                        Text(error ?? 'Failed to process card information'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+                return;
+              }
+
+              Map<String, dynamic> paymentData = {
+                'billingDetails': billingDetails,
+              };
+
+              if (paymentMethod != null) {
+                paymentData['paymentMethodId'] = paymentMethod['id'];
+              } else if (token != null) {
+                final String? tokenId = token['id']?.toString();
+                if (tokenId != null && tokenId.isNotEmpty) {
+                  paymentData['token'] = tokenId;
+                } else {
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Invalid payment data received'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                  return;
+                }
+              } else {
+                Navigator.of(context).pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('No valid payment data received'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+                return;
+              }
+
+              final cloudResult =
+                  await stripeService.createPaymentMethod(paymentData);
+
+              if (cloudResult['success'] == true) {
+                paymentMethodId = cloudResult['data']?['id'] ??
+                    cloudResult['data']?['paymentMethodId'];
+              } else {
+                String technicalError =
+                    cloudResult['error']?.toString() ?? 'Unknown error';
+                Navigator.of(context).pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(_getFriendlyErrorMessage(
+                        'Failed to create payment method: $technicalError')),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+                return;
+              }
+            } else {
+              if (_cardFieldDetails == null || !_cardFieldDetails!.complete) {
+                Navigator.of(context).pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Please enter complete card information'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+                return;
+              }
+
+              final paymentMethod = await Stripe.instance.createPaymentMethod(
+                params: PaymentMethodParams.card(
+                  paymentMethodData: PaymentMethodData(
+                    billingDetails: BillingDetails(
+                      name: _nameController.text.trim(),
+                      email: store.state.authState.email,
+                    ),
+                  ),
+                ),
+              );
+
+              final result = await stripeService.createPaymentMethod({
+                'paymentMethodId': paymentMethod.id,
+                'billingDetails': {
+                  'name': _nameController.text.trim(),
+                  'email': store.state.authState.email,
+                },
+              });
+
+              if (result['success'] == true) {
+                paymentMethodId =
+                    result['data']?['paymentMethodId'] ?? paymentMethod.id;
+              } else {
+                Navigator.of(context).pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                        'Failed to attach payment method: ${result['error']?.toString() ?? 'Unknown error'}'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+                return;
+              }
+            }
+          } catch (error) {
+            Navigator.of(context).pop();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content:
+                    Text('Payment method creation failed: ${error.toString()}'),
+                backgroundColor: Colors.red,
+              ),
+            );
+            return;
           }
         } else {
-          paymentMethodId = 'pm_card_visa'; 
+          Navigator.of(context).pop();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Please ensure customer is set up'),
+              backgroundColor: Colors.red,
+            ),
+          );
+          return;
         }
+      }
+
+      if (paymentMethodId == null) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                _getFriendlyErrorMessage('Failed to create payment method')),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
       }
 
       final result = await stripeService.processOneTimePayment(
         amount: amountInCents,
         currency: 'usd',
-        paymentMethod: paymentMethodId ?? 'pm_card_visa',
+        paymentMethod: paymentMethodId,
         description: 'Event Ticket - ${widget.event.name}',
         metadata: metadata,
         stripeAccount: stripeAccount,
-        applicationFeePercent:
-            stripeAccount != null ? 10.0 : null, 
+        applicationFeePercent: stripeAccount != null ? 10.0 : null,
       );
 
-      Navigator.of(context).pop(); 
+      Navigator.of(context).pop();
 
       if (result['success'] == true) {
         final transactionId = result['data']?['paymentIntentId'] ??
@@ -1128,12 +1554,14 @@ class _BookEventScreenState extends State<BookEventScreen> {
         );
       }
     } catch (error) {
-      logError('DEBUG: Exception in _processOneTimePayment: $error');
+      String technicalError = error.toString();
+      logError('DEBUG: Exception in _processOneTimePayment: $technicalError');
       Navigator.of(context).pop(); // Close loading dialog
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Payment error: ${error.toString()}'),
+          content:
+              Text(_getFriendlyErrorMessage('Payment error: $technicalError')),
           backgroundColor: Colors.red,
         ),
       );

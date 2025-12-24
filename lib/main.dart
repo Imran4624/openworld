@@ -126,6 +126,13 @@ void main({bool isTesting = false}) async {
 
   try {
     Stripe.publishableKey = Config.STRIPE_PUBLISHABLE_KEY;
+    
+    if (!kIsWeb) {
+      if (isAndroid()) {
+        await Stripe.instance.applySettings();
+      }
+    }
+    
     if (kDebugMode) {
       logInfo('Stripe initialized successfully');
     }

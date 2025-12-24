@@ -149,25 +149,28 @@ export const createPaymentMethod = onCall(async (request) => {
         }
       } else if (token) {
         // Option 2: Token approach (secure client-side tokenization)
-        const source = await stripe.sources.create({
+        // Use modern Payment Methods API instead of deprecated Sources API
+        const paymentMethod = await stripe.paymentMethods.create({
           type: "card",
-          token: token,
-        } as any);
+          card: {
+            token: token,
+          },
+        });
 
-        await stripe.customers.createSource(userData.stripeCustomerId, {
-          source: source.id,
+        await stripe.paymentMethods.attach(paymentMethod.id, {
+          customer: userData.stripeCustomerId,
         });
 
         finalPaymentMethod = {
-          id: source.id,
+          id: paymentMethod.id,
           type: "card",
           card: {
-            brand: (source as any).brand || "unknown",
-            last4: (source as any).last4 || "0000",
-            exp_month: (source as any).exp_month || 12,
-            exp_year: (source as any).exp_year || 2030,
+            brand: paymentMethod.card?.brand,
+            last4: paymentMethod.card?.last4,
+            exp_month: paymentMethod.card?.exp_month,
+            exp_year: paymentMethod.card?.exp_year,
           },
-          created: Math.floor(Date.now() / 1000),
+          created: paymentMethod.created,
         };
       } else if (webCardData) {
         // Option 3: Web Card Data (secure server-side processing for web)

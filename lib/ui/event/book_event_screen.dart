@@ -1282,7 +1282,7 @@ class _BookEventScreenState extends State<BookEventScreen> {
       final amountInCents = (total * 100).toInt();
 
       final stripeAccount = ProjectConfig.appType == AppType.opw
-          ? 'OfSNdPFlQ9XgR6OtVXHjugY7rY42'
+          ? 'kIrjKcF0cgZlLM4D1KqCznEioaE3'
           : null;
 
       final metadata = {

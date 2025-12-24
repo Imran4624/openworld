@@ -377,7 +377,7 @@ class _TicketScreenState extends State<TicketScreen> {
                     _buildTicketDetailRow('EVENT:', event.name, isEventName: true),
                     const SizedBox(height: 16),
                     
-                    _buildTicketDetailRow('WHEN:', DateFormat('HH:mm EEEE dd MMMM yyyy').format(DateTime.fromMillisecondsSinceEpoch(event.start))),
+                    _buildTicketDetailRow('WHEN:', DateFormat('HH:mm EEEE dd MMMM yyyy').format(DateTime.fromMillisecondsSinceEpoch(event.start * 1000))),
                     const SizedBox(height: 16),
                     
                     _buildTicketDetailRow('WHERE:', event.location ?? event.venue?.name ?? 'Online Event'),

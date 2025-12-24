@@ -576,10 +576,21 @@ class EventRepository {
           if (event.createdUserId != null && event.createdUserId!.isNotEmpty) {
             data['user_id'] = event.createdUserId;
           }
+          data['createdByObj'] = createdByObj;
           await _firebaseRepository.saveItem(event.id, data);
+          
+          MapBuilder<String, dynamic>? preservedDynamicFields;
+          if (data['dynamicFields'] != null) {
+            final dynamicFieldsMap = Map<String, dynamic>.from(data['dynamicFields'] as Map);
+            preservedDynamicFields = MapBuilder<String, dynamic>(dynamicFieldsMap);
+          } else {
+            preservedDynamicFields = updatedEvent.dynamicFields.toBuilder();
+          }
+          
           return updatedEvent.rebuild((b) => b
             ..createdByObj = createdByObj
-            ..createdUserId = event.createdUserId);
+            ..createdUserId = event.createdUserId
+            ..dynamicFields = preservedDynamicFields);
         }
       }
     } catch (e) {

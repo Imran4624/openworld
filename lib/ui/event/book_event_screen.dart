@@ -289,7 +289,7 @@ class _BookEventScreenState extends State<BookEventScreen> {
       ..id = BaseEntity.nextId
       ..status = 'completed'
       ..createdAt = DateTime.now().millisecondsSinceEpoch
-      ..total = ((widget.event.price ?? 0.0) * quantity).round()
+      ..total = (_getEventPrice(widget.event) * quantity).round()
       ..currency = 'USD'
       ..buyerDetails.replace(currentUserAttendee)
       ..issuedTickets = ListBuilder()
@@ -318,12 +318,12 @@ class _BookEventScreenState extends State<BookEventScreen> {
 
   String _formatEventDateTime() {
     return DateFormat('HH:mm EEEE dd MMMM yyyy')
-        .format(DateTime.fromMillisecondsSinceEpoch(widget.event.start));
+        .format(DateTime.fromMillisecondsSinceEpoch(widget.event.start * 1000));
   }
 
   @override
   Widget build(BuildContext context) {
-    final ticketPrice = widget.event.price ?? 30.00;
+    final ticketPrice = _getEventPrice(widget.event);
     final subtotal = ticketPrice * quantity;
     const salesTax = 0.00;
     const fees = 2.00;
@@ -1291,9 +1291,9 @@ class _BookEventScreenState extends State<BookEventScreen> {
         'event_description': widget.event.description,
         'event_location': widget.event.location,
         'event_start':
-            DateTime.fromMillisecondsSinceEpoch(widget.event.start).toString(),
+            DateTime.fromMillisecondsSinceEpoch(widget.event.start * 1000).toString(),
         'event_end':
-            DateTime.fromMillisecondsSinceEpoch(widget.event.end).toString(),
+            DateTime.fromMillisecondsSinceEpoch(widget.event.end * 1000).toString(),
         'quantity': quantity.toString(),
         'payment_method': selectedPayment,
         'customer_email': store.state.authState.email,
@@ -1508,7 +1508,7 @@ class _BookEventScreenState extends State<BookEventScreen> {
             'venue_name': widget.event.venue?.name ?? 'Unknown',
             'user_email': store.state.authState.email,
             'event_start':
-                DateTime.fromMillisecondsSinceEpoch(widget.event.start)
+                DateTime.fromMillisecondsSinceEpoch(widget.event.start * 1000)
                     .toIso8601String(),
             'payment_provider': 'stripe_direct',
           },
@@ -1773,5 +1773,24 @@ class _BookEventScreenState extends State<BookEventScreen> {
         ),
       ),
     );
+  }
+
+  double _getEventPrice(EventEntity event) {
+    final priceFromGetter = event.price;
+    final priceFromDynamicFields = event.dynamicFields['price'];
+    
+    final price = priceFromGetter ?? priceFromDynamicFields;
+    
+    if (price == null) return 0.0;
+    
+    if (price is int) {
+      return price.toDouble();
+    } else if (price is double) {
+      return price;
+    } else if (price is String) {
+      return double.tryParse(price) ?? 0.0;
+    } else {
+      return 0.0;
+    }
   }
 }

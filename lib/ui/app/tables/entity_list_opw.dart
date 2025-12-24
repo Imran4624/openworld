@@ -1349,24 +1349,7 @@ class _EntityListOpwState extends State<EntityListOpw>
                             color: Colors.black87,
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.art_track,
-                                color: Colors.white,
-                                size: 14,
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                'Free',
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: Colors.white,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
-                          ),
+                          child: _buildEventCardPriceWidget(event, theme),
                         ),
                       ],
                     ),
@@ -1809,6 +1792,62 @@ class _EntityListOpwState extends State<EntityListOpw>
               ),
               overflow: TextOverflow.ellipsis,
             ),
+          ),
+        ],
+      );
+    }
+  }
+
+  Widget _buildEventCardPriceWidget(EventEntity event, ThemeData theme) {
+    final priceFromGetter = event.price;
+    final priceFromDynamicFields = event.dynamicFields['price'];
+    
+    final priceValue = (priceFromGetter ?? priceFromDynamicFields)?.toString();
+    final bool isFree = priceValue == null ||
+        priceValue.isEmpty ||
+        priceValue.toLowerCase() == 'free' ||
+        priceValue == '0' ||
+        priceValue == '0.0';
+
+    if (isFree) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(
+            Icons.art_track,
+            color: Colors.white,
+            size: 14,
+          ),
+          const SizedBox(width: 4),
+          Text(
+            'Free',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: Colors.white,
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      );
+    } else {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(
+            Icons.attach_money,
+            color: Colors.white,
+            size: 14,
+          ),
+          const SizedBox(width: 4),
+          Text(
+            priceValue,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: Colors.white,
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+            ),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
           ),
         ],
       );
@@ -2409,7 +2448,7 @@ class _EntityListOpwState extends State<EntityListOpw>
 
   String _formatEventDateTime(EventEntity event) {
     if (event.start > 0) {
-      final startDate = DateTime.fromMillisecondsSinceEpoch(event.start);
+      final startDate = DateTime.fromMillisecondsSinceEpoch(event.start * 1000);
       final now = DateTime.now();
 
       if (startDate.day == now.day &&

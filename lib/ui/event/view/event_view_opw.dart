@@ -702,8 +702,7 @@ class EventViewOpwState extends State<EventViewOpw>
                                         return;
                                       }
 
-                                      if (event.price != null &&
-                                          event.price! > 0) {
+                                      if (_isEventPaid(event)) {
                                         _navigateToBookEvent(event);
                                         return;
                                       }
@@ -1267,7 +1266,7 @@ class EventViewOpwState extends State<EventViewOpw>
       }
     }
 
-    if (event.price != null && event.price! > 0) {
+    if (_isEventPaid(event)) {
       return 'PURCHASE TICKET';
     }
 
@@ -1412,9 +1411,7 @@ class EventViewOpwState extends State<EventViewOpw>
 
     final updatedEvent = event.rebuild((b) => b
       ..orders.add(newOrder)
-      ..totalOrders = event.totalOrders + 1
-      ..createdUserId = event.createdUserId
-      ..createdByObj = event.createdByObj);
+      ..totalOrders = event.totalOrders + 1);
 
     StoreProvider.of<AppState>(context).dispatch(SaveEventRequest(
       event: updatedEvent,
@@ -1433,9 +1430,7 @@ class EventViewOpwState extends State<EventViewOpw>
 
     final updatedEvent = event.rebuild((b) => b
       ..orders.replace(updatedOrders)
-      ..totalOrders = updatedOrders.length
-      ..createdUserId = event.createdUserId
-      ..createdByObj = event.createdByObj);
+      ..totalOrders = updatedOrders.length);
 
     StoreProvider.of<AppState>(context).dispatch(SaveEventRequest(
       event: updatedEvent,
@@ -1469,16 +1464,39 @@ class EventViewOpwState extends State<EventViewOpw>
     }
   }
 
-  void _navigateToBookEvent(EventEntity event) {
-    Navigator.push(
+  void _navigateToBookEvent(EventEntity event) async {
+    final eventPrice = _getEventPrice(event);
+    
+    await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => BookEventScreen(
           event: event,
-          ticketPrice: 29.99,
+          ticketPrice: eventPrice,
         ),
       ),
     );
+  }
+
+  double _getEventPrice(EventEntity event) {
+    final priceFromGetter = event.price;
+    final priceFromDynamicFields = event.dynamicFields['price'];
+    
+    final price = priceFromGetter ?? priceFromDynamicFields;
+    
+    if (price == null) {
+      return 0.0;
+    }
+    
+    if (price is int) {
+      return price.toDouble();
+    } else if (price is double) {
+      return price;
+    } else if (price is String) {
+      return double.tryParse(price) ?? 0.0;
+    }
+    
+    return 0.0;
   }
 
   void _showReportDialog(BuildContext context, EventEntity event) {
@@ -1633,5 +1651,29 @@ class EventViewOpwState extends State<EventViewOpw>
         }
       }
     }
+  }
+
+  bool _isEventPaid(EventEntity event) {
+    final priceFromGetter = event.price;
+    final priceFromDynamicFields = event.dynamicFields['price'];
+    
+    final price = priceFromGetter ?? priceFromDynamicFields;
+    
+    if (price == null) {
+      return false;
+    }
+    
+    double priceValue;
+    if (price is int) {
+      priceValue = price.toDouble();
+    } else if (price is double) {
+      priceValue = price;
+    } else if (price is String) {
+      priceValue = double.tryParse(price) ?? 0.0;
+    } else {
+      return false;
+    }
+    
+    return priceValue > 0;
   }
 }

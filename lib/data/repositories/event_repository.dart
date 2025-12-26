@@ -26,6 +26,27 @@ class EventRepository {
     final data = await _firebaseRepository.getItem(entityId);
 
     if (data != null) {
+      if (data.containsKey('createdByObj') && data['createdByObj'] is Map) {
+        final createdByObj = Map<String, dynamic>.from(data['createdByObj'] as Map);
+        
+        if (createdByObj.containsKey('thumbnail')) {
+          final thumbnail = createdByObj['thumbnail'];
+          if (thumbnail is String) {
+            createdByObj['thumbnail'] = {
+              'url': thumbnail,
+              'name': '',
+              'action': 'existing'
+            };
+          } else if (thumbnail is Map<String, dynamic>) {
+            createdByObj['thumbnail'] = thumbnail;
+          } else if (thumbnail is Map) {
+            createdByObj['thumbnail'] = Map<String, dynamic>.from(thumbnail);
+          }
+        }
+        
+        data['createdByObj'] = createdByObj;
+      }
+
       if (data.containsKey('views')) {
         if (data['views'] is Map && (data['views'] as Map).isEmpty) {
           data['views'] = <Map<String, dynamic>>[];
@@ -290,6 +311,26 @@ class EventRepository {
 
     for (final data in dataList) {
       try {
+        if (data.containsKey('createdByObj') && data['createdByObj'] is Map) {
+          final createdByObj = Map<String, dynamic>.from(data['createdByObj'] as Map);
+          if (createdByObj.containsKey('thumbnail')) {
+            final thumbnail = createdByObj['thumbnail'];
+            if (thumbnail is String) {
+              createdByObj['thumbnail'] = {
+                'url': thumbnail,
+                'name': '',
+                'action': 'existing'
+              };
+            } else if (thumbnail is Map<String, dynamic>) {
+              createdByObj['thumbnail'] = thumbnail;
+            } else if (thumbnail is Map) {
+              createdByObj['thumbnail'] = Map<String, dynamic>.from(thumbnail);
+            }
+          }
+          
+          data['createdByObj'] = createdByObj;
+        }
+
         if (!data.containsKey('orders') || data['orders'] == null) {
           data['orders'] = [];
         }

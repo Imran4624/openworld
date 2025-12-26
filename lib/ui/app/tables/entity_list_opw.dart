@@ -171,7 +171,7 @@ class _EntityListOpwState extends State<EntityListOpw>
     });
 
     _radarAnimationController = AnimationController(
-      duration: const Duration(milliseconds: 1500),
+      duration: const Duration(milliseconds: 3000), 
       vsync: this,
     );
     _radarAnimation = Tween<double>(
@@ -1088,7 +1088,7 @@ class _EntityListOpwState extends State<EntityListOpw>
                   position.zoom != _currentZoomLevel) {
                 final newZoom = position.zoom!;
 
-                if ((newZoom - _currentZoomLevel).abs() >= 0.5) {
+                if ((newZoom - _currentZoomLevel).abs() >= 1.0) {
                   setState(() {
                     _currentZoomLevel = newZoom;
                   });
@@ -2565,7 +2565,7 @@ class _EntityListOpwState extends State<EntityListOpw>
 
   void _debounceMarkerCreation() {
     _markerCreationTimer?.cancel();
-    _markerCreationTimer = Timer(const Duration(milliseconds: 200), () {
+    _markerCreationTimer = Timer(const Duration(milliseconds: 500), () {
       if (mounted) {
         _createEventMarkers();
       }

@@ -1799,10 +1799,7 @@ class _EntityListOpwState extends State<EntityListOpw>
   }
 
   Widget _buildEventCardPriceWidget(EventEntity event, ThemeData theme) {
-    final priceFromGetter = event.price;
-    final priceFromDynamicFields = event.dynamicFields['price'];
-    
-    final priceValue = (priceFromGetter ?? priceFromDynamicFields)?.toString();
+    final priceValue = event.price?.toString() ?? event.dynamicFields['price']?.toString();
     final bool isFree = priceValue == null ||
         priceValue.isEmpty ||
         priceValue.toLowerCase() == 'free' ||
@@ -3994,8 +3991,7 @@ class _EntityListOpwState extends State<EntityListOpw>
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Text(
-                              event.dynamicFields['price']?.toString() ??
-                                  'Free',
+                              event.dynamicFields['price']?.toString() ?? 'Free',
                               style: const TextStyle(
                                 color: Colors.black87,
                                 fontSize: 13,

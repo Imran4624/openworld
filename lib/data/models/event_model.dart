@@ -344,16 +344,37 @@ abstract class EventEntity extends Object
       locationData?.name ?? dynamicFields['location'] as String?;
 
   @BuiltValueField(serialize: false)
-  int? get capacity => dynamicFields['capacity'] as int?;
+  int? get capacity {
+    final capacityValue = dynamicFields['capacity'];
+    if (capacityValue == null) return null;
+    if (capacityValue is int) return capacityValue;
+    if (capacityValue is double) return capacityValue.toInt();
+    if (capacityValue is String) return int.tryParse(capacityValue);
+    return null;
+  }
 
   @BuiltValueField(serialize: false)
   String? get ticketType => dynamicFields['ticketType'] as String?;
 
   @BuiltValueField(serialize: false)
-  double? get price => dynamicFields['price'] as double?;
+  double? get price {
+    final priceValue = dynamicFields['price'];
+    if (priceValue == null) return null;
+    if (priceValue is double) return priceValue;
+    if (priceValue is int) return priceValue.toDouble();
+    if (priceValue is String) return double.tryParse(priceValue);
+    return null;
+  }
 
   @BuiltValueField(serialize: false)
-  int? get ageRestriction => dynamicFields['ageRestriction'] as int?;
+  int? get ageRestriction {
+    final ageValue = dynamicFields['ageRestriction'];
+    if (ageValue == null) return null;
+    if (ageValue is int) return ageValue;
+    if (ageValue is double) return ageValue.toInt();
+    if (ageValue is String) return int.tryParse(ageValue);
+    return null;
+  }
 
   @BuiltValueField(serialize: false)
   String? get genderRestriction =>

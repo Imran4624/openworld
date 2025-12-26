@@ -181,6 +181,13 @@ class EventRepository {
       adjustedMap['lng'] = adjustedMap['long'];
     }
 
+    if (adjustedMap['lat'] != null && adjustedMap['lat'] is int) {
+      adjustedMap['lat'] = (adjustedMap['lat'] as int).toDouble();
+    }
+    if (adjustedMap['lng'] != null && adjustedMap['lng'] is int) {
+      adjustedMap['lng'] = (adjustedMap['lng'] as int).toDouble();
+    }
+
     if (adjustedMap['lat'] == null) {
       adjustedMap['lat'] = 0.0;
     }

@@ -19,6 +19,7 @@ import 'package:flutter_boilerplate/ui/app/shared.dart';
 import 'package:flutter_boilerplate/services/session_managment_service.dart';
 import 'package:flutter_boilerplate/services/ai_service.dart';
 import 'package:flutter_boilerplate/services/ai_event_validator.dart';
+import 'package:flutter_boilerplate/services/ai_search_result.dart';
 import 'package:flutter_boilerplate/project_config.dart';
 import 'package:flutter_boilerplate/data/models/event_model_helper.dart';
 
@@ -548,16 +549,32 @@ Middleware<AppState> _chatWithAi(AiService aiService) {
     )
         .then((dynamic response) {
       try {
-        final List<EventEntity> events =
-            _buildEventsFromAiResponse(response, store);
+        AiSearchResult result;
+        
+        if (response['error'] != null) {
+          switch (response['error']) {
+            case 'rate_limit':
+              result = AiSearchResult.rateLimitError();
+              break;
+            case 'network':
+              result = AiSearchResult.networkError();
+              break;
+            default:
+              result = AiSearchResult.serviceUnavailable();
+              break;
+          }
+        } else {
+          final List<EventEntity> events = _buildEventsFromAiResponse(response, store);
+          result = AiSearchResult.success(events);
+        }
 
         Map<String, double>? mapBounds;
-        if (events.isNotEmpty) {
+        if (result.isSuccess && result.events.isNotEmpty) {
           try {
             final lats = <double>[];
             final lngs = <double>[];
 
-            for (final event in events) {
+            for (final event in result.events) {
               if (event.locationData != null) {
                 lats.add(event.locationData!.lat);
                 lngs.add(event.locationData!.lng);
@@ -577,21 +594,25 @@ Middleware<AppState> _chatWithAi(AiService aiService) {
           }
         }
 
-        if (events.isEmpty) {
-          showToast(
-              'No events found for your search. Try a different query or location.');
-        }
-        store.dispatch(ChatWithAiSuccess(events, mapBounds: mapBounds));
+        store.dispatch(ChatWithAiSuccess(result.events, mapBounds: mapBounds));
+        
         if (action.completer != null) {
-          action.completer!.complete(events);
+          action.completer!.complete(result);
         }
       } catch (error) {
-        logError('Error building events from AI response: $error');
-        showToast('Unable to process search results. Please try again.');
+        logError('Error processing AI search result: $error');
+        final errorResult = AiSearchResult.serviceUnavailable();
         store.dispatch(ChatWithAiFailure(error));
         if (action.completer != null) {
-          action.completer!.complete(<EventEntity>[]);
+          action.completer!.complete(errorResult);
         }
+      }
+    }).catchError((error) {
+      logError('AI service call failed: $error');
+      final errorResult = AiSearchResult.serviceUnavailable();
+      store.dispatch(ChatWithAiFailure(error));
+      if (action.completer != null) {
+        action.completer!.complete(errorResult);
       }
     });
 

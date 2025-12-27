@@ -19,7 +19,16 @@ class AiService {
           message, userLatitude, userLongitude, userLocationName);
     } catch (e) {
       logError('AI Service Error: $e');
-      return {'events': []};
+      
+      final errorString = e.toString().toLowerCase();
+      
+      if (errorString.contains('quota') || errorString.contains('rate limit') || errorString.contains('resource_exhausted')) {
+        return {'events': [], 'error': 'rate_limit'};
+      } else if (errorString.contains('network') || errorString.contains('connection')) {
+        return {'events': [], 'error': 'network'};
+      } else {
+        return {'events': [], 'error': 'service_unavailable'};
+      }
     }
   }
 
@@ -30,30 +39,41 @@ class AiService {
     String? userLocationName,
   ) async {
     const primaryModel = 'gemini-2.0-flash';
+    String? lastErrorType;
 
     try {
       final result = await _tryModelRequest(
           primaryModel, message, userLatitude, userLongitude, userLocationName);
       if (result != null) {
-        return result;
-      }
-    } catch (e) {
-      logError('Primary model $primaryModel failed: $e');
-
-      const fallbackModel = 'gemini-1.5-flash';
-      try {
-        final result = await _tryModelRequest(fallbackModel, message,
-            userLatitude, userLongitude, userLocationName);
-        if (result != null) {
+        if (result.containsKey('error')) {
+          lastErrorType = result['error'] as String;
+        } else {
           return result;
         }
-      } catch (e) {
-        logError('Fallback model $fallbackModel failed: $e');
       }
+    } catch (e) {
+      lastErrorType = _getErrorType(e.toString());
+      logError('Primary model $primaryModel failed: $e');
     }
 
-    logError('All AI models failed, returning empty results');
-    return {'events': []};
+    const fallbackModel = 'gemini-1.5-flash';
+    try {
+      final result = await _tryModelRequest(fallbackModel, message,
+          userLatitude, userLongitude, userLocationName);
+      if (result != null) {
+        if (result.containsKey('error')) {
+          lastErrorType = result['error'] as String;
+        } else {
+          return result;
+        }
+      }
+    } catch (e) {
+      lastErrorType = _getErrorType(e.toString());
+      logError('Fallback model $fallbackModel failed: $e');
+    }
+
+    logError('All AI models failed, returning error response');
+    return {'events': [], 'error': lastErrorType ?? 'service_unavailable'};
   }
 
   Future<Map<String, dynamic>?> _tryModelRequest(
@@ -71,6 +91,11 @@ class AiService {
             model: modelName,
             prompt: prompt,
           ));
+
+      if (response.containsKey('error')) {
+        logError('AI service returned error: ${response['error']}');
+        return {'events': [], 'error': response['error']};
+      }
 
       if (response['candidates'] != null &&
           response['candidates'].isNotEmpty &&
@@ -378,19 +403,21 @@ class AiService {
   ) async {
     const maxRetries = 3;
     const baseDelay = Duration(seconds: 2);
+    String? lastErrorType;
 
     for (int attempt = 1; attempt <= maxRetries; attempt++) {
       try {
         return await apiCall();
       } catch (e) {
         final errorString = e.toString();
+        lastErrorType = _getErrorType(errorString);
 
         if (errorString.contains('429') ||
             errorString.toLowerCase().contains('resource exhausted') ||
             errorString.toLowerCase().contains('rate limit')) {
           if (attempt == maxRetries) {
             logError('Max retries reached for rate limiting, giving up');
-            rethrow;
+            return {'candidates': [], 'error': 'rate_limit'};
           }
 
           final delay = Duration(
@@ -403,11 +430,12 @@ class AiService {
           continue;
         }
 
-        rethrow;
+        logError('API call failed: $e');
+        return {'candidates': [], 'error': lastErrorType};
       }
     }
 
-    throw Exception('All retry attempts failed');
+    return {'candidates': [], 'error': lastErrorType ?? 'service_unavailable'};
   }
 
   bool _isValidImageUrl(String url) {
@@ -572,5 +600,17 @@ IMAGES GUIDANCE:
 - Do NOT use generic stock photos or placeholder URLs
 - If no real images available, omit the "images" field completely
 - Events work perfectly without images''';
+  }
+
+  String _getErrorType(String errorString) {
+    final error = errorString.toLowerCase();
+    
+    if (error.contains('quota') || error.contains('rate limit') || error.contains('resource_exhausted') || error.contains('429')) {
+      return 'rate_limit';
+    } else if (error.contains('network') || error.contains('connection') || error.contains('timeout')) {
+      return 'network';
+    } else {
+      return 'service_unavailable';
+    }
   }
 }

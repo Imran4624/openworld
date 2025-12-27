@@ -22,6 +22,7 @@ import 'package:flutter_boilerplate/data/models/models.dart';
 import 'package:flutter_boilerplate/redux/app/app_actions.dart';
 import 'package:flutter_boilerplate/redux/app/app_state.dart';
 import 'package:flutter_boilerplate/redux/event/event_actions.dart';
+import 'package:flutter_boilerplate/services/ai_search_result.dart';
 import 'package:flutter_boilerplate/services/location_service.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
@@ -3429,17 +3430,13 @@ class _EntityListOpwState extends State<EntityListOpw>
         locationName = _userLocation;
       }
 
-      final completer = Completer<List<EventEntity>>();
+      final completer = Completer<AiSearchResult>();
 
-      completer.future.then((events) {
+      completer.future.then((result) {
         if (mounted) {
           _removeLoadingMessage();
 
-          final responseText = events.isNotEmpty
-              ? "I found ${events.length} events matching your search!"
-              : "I couldn't find any events matching your search criteria.";
-
-          _addAIResponse(responseText, events: events);
+          _addAIResponse(result.message, events: result.events);
 
           setState(() {
             _isAiSearching = false;
@@ -3511,17 +3508,22 @@ class _EntityListOpwState extends State<EntityListOpw>
         locationName = _userLocation;
       }
 
-      final completer = Completer<List<EventEntity>>();
+      final completer = Completer<AiSearchResult>();
 
-      completer.future.then((events) {
+      completer.future.then((result) {
         if (mounted) {
           _removeLoadingMessage();
 
-          final responseText = events.isNotEmpty
-              ? "I found ${events.length} ${categoryName.toLowerCase()} events near you!"
-              : "I couldn't find any ${categoryName.toLowerCase()} events in your area right now.";
+          String responseText;
+          if (result.isSuccess) {
+            responseText = result.events.isNotEmpty
+                ? "I found ${result.events.length} ${categoryName.toLowerCase()} events near you!"
+                : "I couldn't find any ${categoryName.toLowerCase()} events in your area right now.";
+          } else {
+            responseText = result.message;
+          }
 
-          _addAIResponse(responseText, events: events);
+          _addAIResponse(responseText, events: result.events);
 
           setState(() {
             _isAiSearching = false;
@@ -3621,17 +3623,22 @@ class _EntityListOpwState extends State<EntityListOpw>
       locationName = _userLocation;
     }
 
-    final completer = Completer<List<EventEntity>>();
+    final completer = Completer<AiSearchResult>();
 
-    completer.future.then((events) {
+    completer.future.then((result) {
       if (mounted) {
         _removeLoadingMessage();
 
-        final responseText = events.isNotEmpty
-            ? "Welcome! I found ${events.length} exciting events happening near you!"
-            : "Welcome! I couldn't find any events in your area right now, but keep checking back for new events.";
+        String responseText;
+        if (result.isSuccess) {
+          responseText = result.events.isNotEmpty
+              ? "Welcome! I found ${result.events.length} exciting events happening near you!"
+              : "Welcome! I couldn't find any events in your area right now, but keep checking back for new events.";
+        } else {
+          responseText = result.message;
+        }
 
-        _addAIResponse(responseText, events: events);
+        _addAIResponse(responseText, events: result.events);
 
         setState(() {
           _isAiSearching = false;

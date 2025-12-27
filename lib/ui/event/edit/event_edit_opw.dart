@@ -1898,53 +1898,51 @@ class _EventEditOpwState extends State<EventEditOpw> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        GestureDetector(
-          onTap: () {
-            setState(() {
-              _selectedTicketType = 'paid';
-            });
-            _onChanged();
-          },
-          child: Stack(
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-                decoration: BoxDecoration(
-                  color: _selectedTicketType == 'paid' 
-                    ? Colors.black
-                    : Colors.white.withOpacity(0.3),
-                  borderRadius: BorderRadius.circular(10),
-                  border: _selectedTicketType == 'paid'
-                    ? Border.all(
-                        color: Colors.black,
-                        width: 1,
-                      )
-                    : null,
-                ),
-                child: Text(
-                  'Paid',
-                  style: TextStyle(
+        Opacity(
+          opacity: 0.5,
+          child: GestureDetector(
+            onTap: null,
+            child: Stack(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+                  decoration: BoxDecoration(
                     color: _selectedTicketType == 'paid' 
-                      ? Colors.white 
-                      : Colors.black54,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14,
+                      ? Colors.black
+                      : Colors.white.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(10),
+                    border: _selectedTicketType == 'paid'
+                      ? Border.all(
+                          color: Colors.black,
+                          width: 1,
+                        )
+                      : null,
                   ),
-                ),
-              ),
-              if (_selectedTicketType != 'paid')
-                Positioned.fill(
-                  child: IgnorePointer(
-                    child: CustomPaint(
-                      painter: SelectiveBorderPainter(
-                        color: Colors.white.withOpacity(0.5),
-                        width: 1.0,
-                        borderRadius: 10.0,
-                      ),
+                  child: Text(
+                    'Paid',
+                    style: TextStyle(
+                      color: _selectedTicketType == 'paid' 
+                        ? Colors.white 
+                        : Colors.black54,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
                     ),
                   ),
                 ),
-            ],
+                if (_selectedTicketType != 'paid')
+                  Positioned.fill(
+                    child: IgnorePointer(
+                      child: CustomPaint(
+                        painter: SelectiveBorderPainter(
+                          color: Colors.white.withOpacity(0.5),
+                          width: 1.0,
+                          borderRadius: 10.0,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
         const SizedBox(width: 10),

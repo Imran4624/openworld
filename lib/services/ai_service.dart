@@ -7,6 +7,25 @@ class AiService {
   const AiService();
 
   final AiClient _aiClient = const AiClient();
+  static List<String>? _availableModels;
+  static DateTime? _lastRateLimitHit;
+  static const Duration _rateLimitCooldown = Duration(minutes: 5);
+
+  bool _isInRateLimitCooldown() {
+    if (_lastRateLimitHit == null) return false;
+    return DateTime.now().difference(_lastRateLimitHit!) < _rateLimitCooldown;
+  }
+
+  void _markRateLimitHit() {
+    _lastRateLimitHit = DateTime.now();
+    logError(
+        'Rate limit hit, entering ${_rateLimitCooldown.inMinutes}min cooldown');
+  }
+
+  Future<List<String>> _getAvailableModels() async {
+    _availableModels ??= await _aiClient.listModels();
+    return _availableModels!;
+  }
 
   Future<Map<String, dynamic>> chatWithAi(
     String message, {
@@ -14,6 +33,14 @@ class AiService {
     double? userLongitude,
     String? userLocationName,
   }) async {
+    if (_isInRateLimitCooldown()) {
+      final remaining =
+          _rateLimitCooldown - DateTime.now().difference(_lastRateLimitHit!);
+      logError(
+          'Still in rate limit cooldown for ${remaining.inMinutes}min ${remaining.inSeconds % 60}s');
+      return {'events': [], 'error': 'rate_limit'};
+    }
+
     try {
       return await _callAiWithFallback(
           message, userLatitude, userLongitude, userLocationName);
@@ -21,10 +48,15 @@ class AiService {
       logError('AI Service Error: $e');
       
       final errorString = e.toString().toLowerCase();
-      
-      if (errorString.contains('quota') || errorString.contains('rate limit') || errorString.contains('resource_exhausted')) {
+
+      if (errorString.contains('quota') ||
+          errorString.contains('rate limit') ||
+          errorString.contains('resource_exhausted') ||
+          errorString.contains('429')) {
+        _markRateLimitHit();
         return {'events': [], 'error': 'rate_limit'};
-      } else if (errorString.contains('network') || errorString.contains('connection')) {
+      } else if (errorString.contains('network') ||
+          errorString.contains('connection')) {
         return {'events': [], 'error': 'network'};
       } else {
         return {'events': [], 'error': 'service_unavailable'};
@@ -38,38 +70,70 @@ class AiService {
     double? userLongitude,
     String? userLocationName,
   ) async {
-    const primaryModel = 'gemini-2.0-flash';
-    String? lastErrorType;
+    final availableModels = await _getAvailableModels();
 
-    try {
-      final result = await _tryModelRequest(
-          primaryModel, message, userLatitude, userLongitude, userLocationName);
-      if (result != null) {
-        if (result.containsKey('error')) {
-          lastErrorType = result['error'] as String;
-        } else {
-          return result;
-        }
-      }
-    } catch (e) {
-      lastErrorType = _getErrorType(e.toString());
-      logError('Primary model $primaryModel failed: $e');
+    final preferredModels = [
+      'gemini-2.5-flash-lite', 
+      'gemini-2.0-flash-lite',
+      'gemini-2.0-flash-lite-001',
+      'gemini-2.5-flash',
+      'gemini-2.0-flash',
+      'gemini-2.0-flash-001',
+      'gemini-2.5-pro', 
+      'gemini-1.5-pro',
+      'gemini-1.5-flash-001',
+      'gemini-1.5-flash',
+      'gemini-pro'
+    ];
+
+    final modelsToTry = preferredModels
+        .where((model) => availableModels.contains(model))
+        .toList();
+
+    if (modelsToTry.isEmpty) {
+      logError('No preferred models available. Available: $availableModels');
+      return {'events': [], 'error': 'no_models_available'};
     }
 
-    const fallbackModel = 'gemini-1.5-flash';
-    try {
-      final result = await _tryModelRequest(fallbackModel, message,
-          userLatitude, userLongitude, userLocationName);
-      if (result != null) {
-        if (result.containsKey('error')) {
-          lastErrorType = result['error'] as String;
-        } else {
-          return result;
+    String? lastErrorType;
+    int rateLimitCount = 0;
+
+    for (int i = 0; i < modelsToTry.length; i++) {
+      final model = modelsToTry[i];
+
+      try {
+        final result = await _tryModelRequest(
+            model, message, userLatitude, userLongitude, userLocationName);
+        if (result != null) {
+          if (result.containsKey('error')) {
+            lastErrorType = result['error'] as String;
+            if (lastErrorType == 'rate_limit') {
+              rateLimitCount++;
+              logError('Model $model hit rate limit (count: $rateLimitCount)');
+
+              if (rateLimitCount >= 2) {
+                logError(
+                    'Multiple models hit rate limits, triggering cooldown');
+                _markRateLimitHit();
+                break;
+              }
+
+              if (i < modelsToTry.length - 1) {
+                continue;
+              }
+            }
+          } else {
+            return result;
+          }
+        }
+      } catch (e) {
+        lastErrorType = _getErrorType(e.toString());
+        logError('Model $model failed: $e');
+
+        if (lastErrorType == 'model_not_found') {
+          _availableModels?.remove(model);
         }
       }
-    } catch (e) {
-      lastErrorType = _getErrorType(e.toString());
-      logError('Fallback model $fallbackModel failed: $e');
     }
 
     logError('All AI models failed, returning error response');
@@ -401,8 +465,8 @@ class AiService {
   Future<Map<String, dynamic>> _callWithRetry(
     Future<Map<String, dynamic>> Function() apiCall,
   ) async {
-    const maxRetries = 3;
-    const baseDelay = Duration(seconds: 2);
+    const maxRetries = 2; // Reduced from 3 to avoid prolonged failures
+    const baseDelay = Duration(seconds: 15); // Increased from 5 seconds
     String? lastErrorType;
 
     for (int attempt = 1; attempt <= maxRetries; attempt++) {
@@ -414,20 +478,30 @@ class AiService {
 
         if (errorString.contains('429') ||
             errorString.toLowerCase().contains('resource exhausted') ||
-            errorString.toLowerCase().contains('rate limit')) {
+            errorString.toLowerCase().contains('rate limit') ||
+            errorString.toLowerCase().contains('too many requests')) {
           if (attempt == maxRetries) {
             logError('Max retries reached for rate limiting, giving up');
             return {'candidates': [], 'error': 'rate_limit'};
           }
 
-          final delay = Duration(
-              milliseconds:
-                  baseDelay.inMilliseconds * math.pow(2, attempt - 1).toInt());
+          // Much longer delays for severe rate limiting
+          final baseDelayMs =
+              baseDelay.inMilliseconds * math.pow(2, attempt - 1).toInt();
+          final jitter =
+              math.Random().nextInt(5000); // Add up to 5 seconds of jitter
+          final delay = Duration(milliseconds: baseDelayMs + jitter);
 
           logError(
               'Rate limit hit, retrying in ${delay.inSeconds}s (attempt $attempt/$maxRetries)');
           await Future.delayed(delay);
           continue;
+        }
+
+        // For 404 errors, don't retry as the model doesn't exist
+        if (errorString.contains('404') || errorString.contains('not found')) {
+          logError('Model not found (404), not retrying: $e');
+          return {'candidates': [], 'error': 'model_not_found'};
         }
 
         logError('API call failed: $e');
@@ -525,15 +599,15 @@ class AiService {
   String _getValidUrl(Map<String, dynamic> event) {
     final eventUrl = event['eventUrl'];
     final url = event['url'];
-    
+
     if (eventUrl != null && _isValidUrl(eventUrl)) {
       return eventUrl;
     }
-    
+
     if (url != null && _isValidUrl(url)) {
       return url;
     }
-    
+
     return '';
   }
 
@@ -604,10 +678,20 @@ IMAGES GUIDANCE:
 
   String _getErrorType(String errorString) {
     final error = errorString.toLowerCase();
-    
-    if (error.contains('quota') || error.contains('rate limit') || error.contains('resource_exhausted') || error.contains('429')) {
+
+    if (error.contains('quota') ||
+        error.contains('rate limit') ||
+        error.contains('resource_exhausted') ||
+        error.contains('429') ||
+        error.contains('too many requests')) {
       return 'rate_limit';
-    } else if (error.contains('network') || error.contains('connection') || error.contains('timeout')) {
+    } else if (error.contains('404') ||
+        error.contains('not found') ||
+        error.contains('model') && error.contains('not found')) {
+      return 'model_not_found';
+    } else if (error.contains('network') ||
+        error.contains('connection') ||
+        error.contains('timeout')) {
       return 'network';
     } else {
       return 'service_unavailable';

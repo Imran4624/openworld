@@ -577,7 +577,7 @@ class StripeService {
         'message': data['message'],
       };
     } catch (e) {
-      logError('DEBUG: processOneTimePayment error: $e');
+      logError('processOneTimePayment error: $e');
       return {
         'success': false,
         'error': e.toString(),

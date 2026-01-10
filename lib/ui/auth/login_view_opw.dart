@@ -36,6 +36,13 @@ class _LoginViewOpwState extends State<LoginViewOpw> {
     super.dispose();
   }
 
+  bool _isValidEmail(String email) {
+    final emailRegExp = RegExp(
+      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+    );
+    return emailRegExp.hasMatch(email);
+  }
+
   void _onGoogleLogin() {
     final Completer<Null> completer = Completer<Null>();
     completer.future.then<Null>((_) {}).catchError((Object error) {
@@ -76,7 +83,13 @@ class _LoginViewOpwState extends State<LoginViewOpw> {
       showToast('Please enter your email');
       return;
     }
-    
+
+    if (!_isValidEmail(_emailController.text.trim())) {
+      showToast(
+          'Please write the complete email');
+      return;
+    }
+
     if (!isEmailLinkAuth && _passwordController.text.isEmpty) {
       showToast('Please enter your password');
       return;

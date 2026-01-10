@@ -1191,6 +1191,12 @@ class _EventEditOpwState extends State<EventEditOpw> {
                               controller: _locationController,
                               hintText: 'Enter event location',
                               suffixIcon: const Icon(Icons.location_on, color: Color.fromARGB(255, 67, 65, 65)),
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return 'Please enter an event location';
+                                }
+                                return null;
+                              },
                               onChanged: (value) {
                                 if (value.isNotEmpty) {
                                   setState(() {
@@ -1557,6 +1563,19 @@ class _EventEditOpwState extends State<EventEditOpw> {
     if (!isValid) {
       return;
     }
+    
+    if (_locationController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter an event location'),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 3),
+        ),
+      );
+      return;
+    }
+    
     _handleSaveEvent(context);
   }
 

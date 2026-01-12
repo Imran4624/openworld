@@ -1069,7 +1069,7 @@ class ProjectConfig {
         return [
           'name',
           'description',
-          'start',
+          'end',
           'callToAction',
           'currency',
           'images',

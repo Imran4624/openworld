@@ -78,7 +78,6 @@ class _EventEditOpwState extends State<EventEditOpw> {
   final _headerImageController = TextEditingController();
 
   DateTime? _startDate;
-  DateTime? _endDate;
   TimeOfDay? _startTime;
   TimeOfDay? _endTime;
   
@@ -161,9 +160,11 @@ class _EventEditOpwState extends State<EventEditOpw> {
     }
 
     if (event.end > 0) {
-      _endDate = DateTime.fromMillisecondsSinceEpoch(event.end * 1000);
-      _endTime = TimeOfDay.fromDateTime(_endDate!);
-      _endController.text = _formatDateTime(_endDate!, _endTime!);
+      final endDate = DateTime.fromMillisecondsSinceEpoch(event.end * 1000);
+      _endTime = TimeOfDay.fromDateTime(endDate);
+      if (_startDate != null) {
+        _endController.text = _formatDateTime(_startDate!, _endTime!);
+      }
     }
 
     _eventSeriesIdController.text = event.eventSeriesId.toString();
@@ -381,11 +382,11 @@ class _EventEditOpwState extends State<EventEditOpw> {
         _startTime!.hour,
         _startTime!.minute,
       );
-    } else if (!isStartTime && _endDate != null && _endTime != null) {
+    } else if (!isStartTime && _startDate != null && _endTime != null) {
       tempDateTime = DateTime(
-        _endDate!.year,
-        _endDate!.month,
-        _endDate!.day,
+        _startDate!.year,
+        _startDate!.month,
+        _startDate!.day,
         _endTime!.hour,
         _endTime!.minute,
       );
@@ -443,8 +444,8 @@ class _EventEditOpwState extends State<EventEditOpw> {
                             }
                           } else {
                             _endTime = selectedTime;
-                            if (_endDate != null) {
-                              _endController.text = _formatDateTime(_endDate!, _endTime!);
+                            if (_startDate != null) {
+                              _endController.text = _formatDateTime(_startDate!, _endTime!);
                             }
                           }
                         });
@@ -508,8 +509,8 @@ class _EventEditOpwState extends State<EventEditOpw> {
           }
         } else {
           _endTime = picked;
-          if (_endDate != null) {
-            _endController.text = _formatDateTime(_endDate!, _endTime!);
+          if (_startDate != null) {
+            _endController.text = _formatDateTime(_startDate!, _endTime!);
           }
         }
       });
@@ -519,6 +520,13 @@ class _EventEditOpwState extends State<EventEditOpw> {
 
   void _onChanged() {
     _debouncer.run(() {
+      final startTimestamp = _startDate != null && _startTime != null
+          ? _dateTimeToTimestamp(_startDate!, _startTime!)
+          : widget.viewModel.event.start;
+      final endTimestamp = _startDate != null && _endTime != null
+          ? _dateTimeToTimestamp(_startDate!, _endTime!)
+          : widget.viewModel.event.end;
+      
       var event = widget.viewModel.event.rebuild((b) => b
         ..name = _nameController.text.trim()
         ..accessCode = widget.viewModel.event.accessCode
@@ -526,12 +534,8 @@ class _EventEditOpwState extends State<EventEditOpw> {
         ..callToAction = _callToActionController.text.trim()
         ..currency = _currencyController.text.trim()
         ..description = _descriptionController.text.trim()
-        ..end = _endDate != null && _endTime != null
-            ? _dateTimeToTimestamp(_endDate!, _endTime!)
-            : widget.viewModel.event.end
-        ..start = _startDate != null && _startTime != null
-            ? _dateTimeToTimestamp(_startDate!, _startTime!)
-            : widget.viewModel.event.start
+        ..end = endTimestamp
+        ..start = startTimestamp
         ..eventSeriesId = _eventSeriesIdController.text.trim()
         ..eventType = _selectedEventType
         ..hidden = _hiddenValue
@@ -1590,7 +1594,8 @@ class _EventEditOpwState extends State<EventEditOpw> {
       await _processDefaultImageForUpload();
       
       final store = StoreProvider.of<AppState>(context);
-      final hasPhotosToUpload = _headerImages.isNotEmpty;
+      final hasPhotosToUpload = _headerImages.isNotEmpty && 
+          _headerImages.any((image) => image['action'] == 'added');
 
       final headerImagesCopy = List<Map<String, dynamic>>.from(_headerImages);
       final eventName = _nameController.text.trim().isNotEmpty
@@ -1794,6 +1799,7 @@ class _EventEditOpwState extends State<EventEditOpw> {
             ];
             _isUsingDefaultImage = false; 
           });
+          _onChanged();
         } catch (e) {
           logError('Error loading asset image: $e');
           if (mounted) {

@@ -162,6 +162,7 @@ flutter:
     - assets/opw/icons/master_card.png
     - assets/opw/icons/solana.png
     - assets/opw/icons/visa_card.png
+    - assets/opw/images/defaultUserThumbnail.jpg
     # - assets/cac/images/logo.jpg
     # OVERRIDE_ASSETS_END
 

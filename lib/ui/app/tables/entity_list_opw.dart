@@ -9,6 +9,7 @@ import 'package:flutter_boilerplate/data/models/static/app_theme.dart';
 import 'package:flutter_boilerplate/project_config.dart';
 import 'package:flutter_boilerplate/ui/app/shared.dart';
 import 'package:flutter_boilerplate/ui/app/app_webview_url.dart' as appView;
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -93,7 +94,7 @@ Future<void> openMapWithLocation({
     mapUrl = 'geo:$latitude,$longitude?q=$latitude,$longitude($query)';
   }
 
-  appView.openUrl(context, mapUrl, 'Open in Maps');
+    await launchUrl(Uri.parse(mapUrl), mode: LaunchMode.externalApplication);
 }
 
 class EntityListOpw extends StatefulWidget {
@@ -4486,7 +4487,7 @@ class _EntityListOpwState extends State<EntityListOpw>
           }
         }
 
-        appView.openUrl(context, url, 'Open in Maps');
+        await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
       } catch (e) {
         logError('Error opening maps: $e');
 

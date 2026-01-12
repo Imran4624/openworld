@@ -26,7 +26,7 @@ import 'package:flutter_boilerplate/ui/app/dialogs/barcode_dialog.dart';
 import 'package:flutter_boilerplate/ui/app/dialogs/request_sent_dialog.dart';
 import 'package:flutter_boilerplate/ui/event/dialogs/attendees_dialog.dart';
 import 'package:flutter_boilerplate/utils/files.dart';
-import 'package:flutter_boilerplate/ui/app/app_webview_url.dart' as appView;
+import 'package:url_launcher/url_launcher.dart';
 // STARTER: import - do not remove comment
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -1594,7 +1594,7 @@ class EventViewOpwState extends State<EventViewOpw>
           }
         }
 
-        appView.openUrl(context, url, 'Open in Maps');
+        await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
       } catch (e) {
         logError('Error opening maps: $e');
 
@@ -1625,7 +1625,7 @@ class EventViewOpwState extends State<EventViewOpw>
             }
           }
 
-          appView.openUrl(context, url, 'Open in Maps');
+          await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
         } catch (e) {
           logError('Error opening maps with location text: $e');
 
